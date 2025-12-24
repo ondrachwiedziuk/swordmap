@@ -37,7 +37,6 @@
     ```
 
 5.  **Game Loop**:
-    To process captures and scores, run the following command once (it runs in a continuous loop):
     ```bash
     python manage.py process_game_state
     ```
