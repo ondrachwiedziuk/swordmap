@@ -117,7 +117,7 @@
             "y": 200,
             "is_base": true,
             "owner": "Yellow",
-            "color": "#FFFF00",
+            "color": "#F6BE00",
             "adjacent_zones": [1, 12, 14]
         },
         {
