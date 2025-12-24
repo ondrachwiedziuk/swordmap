@@ -99,7 +99,7 @@
             "y": 460,
             "is_base": false,
             "color": "#FFFFFF",
-            "adjacent_zones": [10, 12, 16]
+            "adjacent_zones": [10, 12, 15, 16]
         },
         {
             "id": 12,
@@ -136,7 +136,7 @@
             "y": 440,
             "is_base": false,
             "color": "#FFFFFF",
-            "adjacent_zones": [12, 14, 16, 17]
+            "adjacent_zones": [11, 12, 14, 16, 17]
         },
         {
             "id": 16,
