@@ -2,33 +2,31 @@
     "zones": [
         {
             "id": 1,
-            "name": "Yellow Base",
+            "name": "Základní škola",
             "x": 900,
             "y": 200,
-            "is_base": true,
-            "owner": "Yellow",
-            "color": "#FFFF00",
+            "is_base": false,
+            "color": "#FFFFFF",
             "adjacent_zones": [13, 14]
         },
         {
             "id": 2,
-            "name": "Blue Base",
+            "name": "Pod mostem",
             "x": 180,
             "y": 625,
-            "is_base": true,
-            "owner": "Blue",
-            "color": "#0000FF",
+            "is_base": false,
+            "color": "#FFFFFF",
             "adjacent_zones": [4, 7]
         },
         {
             "id": 3,
-            "name": "Black Base",
+            "name": "Strom svobody",
             "x": 900,
             "y": 1080,
             "is_base": true,
             "owner": "Black",
             "color": "#000000",
-            "adjacent_zones": [9, 18]
+            "adjacent_zones": [9, 18, 19]
         },
         {
             "id": 4,
@@ -44,8 +42,9 @@
             "name": "Hřbitov",
             "x": 540,
             "y": 620,
-            "is_base": false,
-            "color": "#FFFFFF",
+            "is_base": true,
+            "owner": "Blue",
+            "color": "#0000FF",
             "adjacent_zones": [4, 6, 7]
         },
         {
@@ -64,7 +63,7 @@
             "y": 870,
             "is_base": false,
             "color": "#FFFFFF",
-            "adjacent_zones": [2, 5, 6, 8]
+            "adjacent_zones": [2, 5, 6, 8, 20]
         },
         {
             "id": 8,
@@ -73,7 +72,7 @@
             "y": 1000,
             "is_base": false,
             "color": "#FFFFFF",
-            "adjacent_zones": [6, 7, 9]
+            "adjacent_zones": [6, 7, 9, 20]
         },
         {
             "id": 9,
@@ -113,11 +112,12 @@
         },
         {
             "id": 13,
-            "name": "Most u nádraží",
+            "name": "Most u hřiště",
             "x": 1040,
             "y": 200,
-            "is_base": false,
-            "color": "#FFFFFF",
+            "is_base": true,
+            "owner": "Yellow",
+            "color": "#FFFF00",
             "adjacent_zones": [1, 12, 14]
         },
         {
@@ -164,6 +164,24 @@
             "is_base": false,
             "color": "#FFFFFF",
             "adjacent_zones": [3, 16, 17]
+        },
+        {
+            "id": 19,
+            "name": "Přejezd",
+            "x": 660,
+            "y": 1270,
+            "is_base": false,
+            "color": "#FFFFFF",
+            "adjacent_zones": [3, 20]
+        },
+        {
+            "id": 20,
+            "name": "Nádraží Desná",
+            "x": 390,
+            "y": 1200,
+            "is_base": false,
+            "color": "#FFFFFF",
+            "adjacent_zones": [7, 8, 19]
         }
     ]
 }
