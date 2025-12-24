@@ -1,0 +1,327 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Swordmap - {{ role|title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            background-color: #333;
+        }
+        #map-scroll-container {
+            position: relative;
+            background-color: #333;
+            width: 100%;
+            overflow: hidden;
+        }
+        .map-container {
+            position: relative;
+            width: 1188px;
+            height: 1373px;
+            background-image: url("{% static 'game/map.png' %}");
+            background-size: cover;
+            transform-origin: top left;
+        }
+        #info-panel {
+            background: #f8f9fa;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .info-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+        }
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Let clicks pass through to zones */
+        }
+        .zone {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 2px solid #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.1;
+        }
+        .zone.base {
+            /* border: 4px solid #FFD700; Gold border for bases - handled in JS/HTML now */
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            width: 60px;
+            height: 60px;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <!-- 1. Map at Top -->
+    <div id="map-scroll-container">
+        <div id="map-wrapper" style="position: relative; width: 100%; overflow: hidden;">
+            <div class="map-container" id="map">
+                <svg>
+                    {% for zone in zones %}
+                        {% for neighbor in zone.adjacent_zones.all %}
+                            {% if zone.id < neighbor.id %}
+                                {% with z_color=zone.owner.color|default:"#FFFFFF" n_color=neighbor.owner.color|default:"#FFFFFF" %}
+                                <!-- Black border/margin -->
+                                <line x1="{{ zone.x_coordinate }}" y1="{{ zone.y_coordinate }}" 
+                                      x2="{{ neighbor.x_coordinate }}" y2="{{ neighbor.y_coordinate }}" 
+                                      stroke="black" 
+                                      stroke-width="6" />
+                                <!-- Inner color -->
+                                <line id="line-inner-{{ zone.id }}-{{ neighbor.id }}"
+                                      x1="{{ zone.x_coordinate }}" y1="{{ zone.y_coordinate }}" 
+                                      x2="{{ neighbor.x_coordinate }}" y2="{{ neighbor.y_coordinate }}" 
+                                      stroke="{% if z_color == n_color %}{{ z_color }}{% else %}white{% endif %}" 
+                                      stroke-width="4" />
+                                {% endwith %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </svg>
+
+                {% for zone in zones %}
+                {% with zone_color=zone.owner.color|default:zone.default_color %}
+                <div class="zone {% if zone.is_base %}base{% endif %}" 
+                     id="zone-{{ zone.id }}"
+                     style="left: {{ zone.x_coordinate }}px; top: {{ zone.y_coordinate }}px; 
+                            background-color: {{ zone_color }};
+                            color: {% if zone_color == 'BLACK' or zone_color == 'BLUE' or zone_color == '#000000' or zone_color == '#0000FF' %}white{% else %}black{% endif %};
+                            {% if zone.is_base %}
+                                {% if zone.owner.name|lower == role|lower %}
+                                    border: 4px solid darkgreen;
+                                {% else %}
+                                    border: 4px solid darkred;
+                                {% endif %}
+                            {% else %}
+                                border: 2px solid #333;
+                            {% endif %}"
+                     onclick="handleZoneClick({{ zone.id }})">
+                    {{ zone.name }}
+                </div>
+                {% endwith %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Info Panel (Scores, Logs, etc.) -->
+    <div id="info-panel">
+        <div class="info-row">
+            <div>
+                <h2 style="margin: 0;">Team: {{ role|title }}</h2>
+                <!-- <div id="game-status">Status: <span id="status-text">Active</span></div> -->
+            </div>
+            {% if role == 'admin' %}
+            <div class="info-box" style="flex: 1; display: flex; justify-content: center;">
+                <form method="post" style="display: flex; gap: 10px; align-items: center; width: 100%; max-width: 600px;">
+                    {% csrf_token %}
+                    <input type="datetime-local" name="start_time" value="{{ game.start_time|date:'Y-m-d\TH:i' }}" required style="flex: 1; min-width: 0;">
+                    <input type="number" name="duration" value="{{ game.duration_minutes }}" required style="width: 70px;" placeholder="Min">
+                    <button type="submit">Set</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Scores -->
+        <div class="info-box">
+            <h3 style="margin-top: 0;">Scores</h3>
+            <ul id="scores-list" style="list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 15px;">
+                {% for team in teams %}
+                <li style="color: {{ team.color }}; font-weight: bold;">
+                    {{ team.name }}: <span id="score-{{ team.name }}">{{ team.score }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Active Captures (Log) -->
+        <div class="info-box" style="flex: 1;">
+            <h3 style="margin-top: 0;">Active Captures</h3>
+            <div id="captures-list">
+            {% if capturing_zones %}
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                {% for zone in capturing_zones %}
+                    <li style="margin-bottom: 5px;">
+                        <strong>{{ zone.name }}</strong>: 
+                        <span style="color: {{ zone.capturing_team.color }}; font-weight: bold;">{{ zone.capturing_team.name }}</span>
+                        <br><small>Started: {{ zone.capture_started_at|time:"H:i:s" }}</small>
+                    </li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <p style="margin: 0;">No active captures.</p>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const role = "{{ role }}";
+        
+        function handleZoneClick(zoneId) {
+            console.log(`Clicked zone ${zoneId} as ${role}`);
+            fetch(`/api/zone/${zoneId}/click/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ role: role })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    updateGameState(); // Update immediately instead of reload
+                }
+            });
+        }
+
+        function updateGameState() {
+            fetch('{% url "game_state" %}')
+            .then(r => r.json())
+            .then(data => {
+                // Update Zones
+                for (const [id, zone] of Object.entries(data.zones)) {
+                    const el = document.getElementById(`zone-${id}`);
+                    if (el) {
+                        el.style.backgroundColor = zone.color;
+                        if (['BLACK', 'BLUE', '#000000', '#0000FF'].includes(zone.color)) {
+                            el.style.color = 'white';
+                        } else {
+                            el.style.color = 'black';
+                        }
+                        
+                        // Handle capturing border
+                        if (zone.is_capturing && zone.capturing_color) {
+                            el.style.border = `5px solid ${zone.capturing_color}`;
+                        } else {
+                            // Reset border
+                            if (zone.is_base) {
+                                if (zone.owner && zone.owner.toLowerCase() === role.toLowerCase()) {
+                                     el.style.border = '4px solid darkgreen';
+                                } else {
+                                     el.style.border = '4px solid darkred';
+                                }
+                            } else {
+                                el.style.border = '2px solid #333';
+                            }
+                        }
+                    }
+                }
+                
+                // Update Lines
+                const lines = document.querySelectorAll('line[id^="line-inner-"]');
+                lines.forEach(line => {
+                    const parts = line.id.split('-');
+                    const id1 = parts[2];
+                    const id2 = parts[3];
+                    if (data.zones[id1] && data.zones[id2]) {
+                        const c1 = data.zones[id1].color;
+                        const c2 = data.zones[id2].color;
+                        line.setAttribute('stroke', c1 === c2 ? c1 : 'white');
+                    }
+                });
+
+                // Update Capturing Log
+                const logContainer = document.getElementById('captures-list');
+                if (logContainer) {
+                     let html = '';
+                     if (data.capturing.length > 0) {
+                         html = '<ul style="list-style: none; padding: 0;">';
+                         data.capturing.forEach(cap => {
+                             html += `<li style="margin-bottom: 5px;">
+                                    <strong>${cap.name}</strong>: 
+                                    <span style="color: ${cap.team_color}; font-weight: bold;">${cap.team_name}</span>
+                                    <br><small>Capturing in: ${cap.remaining_seconds}s</small>
+                                </li>`;
+                         });
+                         html += '</ul>';
+                     } else {
+                         html = '<p>No active captures.</p>';
+                     }
+                     logContainer.innerHTML = html;
+                }
+
+                // Update Scores
+                if (data.scores) {
+                    const sortedScores = Object.entries(data.scores)
+                        .map(([name, info]) => ({name, ...info}))
+                        .sort((a, b) => b.score - a.score);
+
+                    const scoresList = document.getElementById('scores-list');
+                    if (scoresList) {
+                        let html = '';
+                        sortedScores.forEach((team, index) => {
+                            html += `<li style="margin-bottom: 5px; color: ${team.color}; font-weight: bold;">
+                                <span style="color: black; margin-right: 5px;">${index + 1}.</span>
+                                ${team.name}: <span id="score-${team.name}">${team.score}</span>
+                            </li>`;
+                        });
+                        scoresList.innerHTML = html;
+                    }
+                }
+            });
+        }
+
+        // Poll every second
+        setInterval(updateGameState, 1000);
+
+        // Responsive Map Scaling
+        function resizeMap() {
+            const map = document.getElementById('map');
+            const wrapper = document.getElementById('map-wrapper');
+            const container = document.getElementById('map-scroll-container');
+            
+            if (!map || !wrapper || !container) return;
+            
+            const originalWidth = 1188;
+            const originalHeight = 1373;
+            
+            // Calculate scale to fit width
+            // Use getBoundingClientRect for precise sub-pixel width
+            const availableWidth = container.getBoundingClientRect().width;
+            const scale = availableWidth / originalWidth;
+            
+            map.style.transform = `scale(${scale})`;
+            
+            // Adjust wrapper height to match scaled map so it takes up correct space
+            wrapper.style.height = `${originalHeight * scale}px`;
+        }
+
+        window.addEventListener('resize', resizeMap);
+        window.addEventListener('load', resizeMap);
+        // Initial call
+        resizeMap();
+    </script>
+</body>
+</html>

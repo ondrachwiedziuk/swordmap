@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Swordmap - Select Team</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #222;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+        .team-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 320px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .btn {
+            display: block;
+            padding: 15px 20px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            border: 2px solid rgba(255,255,255,0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            filter: brightness(1.1);
+        }
+        .btn:active {
+            transform: translateY(0);
+        }
+        .btn-yellow {
+            background-color: #FFD700;
+            color: #000;
+            text-shadow: none;
+            border-color: #E6C200;
+        }
+        .btn-blue {
+            background-color: #0044FF;
+            border-color: #0033CC;
+        }
+        .btn-black {
+            background-color: #1a1a1a;
+            border-color: #333;
+        }
+        .btn-admin {
+            background-color: #444;
+            margin-top: 20px;
+            font-size: 1rem;
+            border-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Swordmap</h1>
+    <p>Choose your allegiance:</p>
+    <div class="team-container">
+        {% for team in teams %}
+        <a href="{% url 'map' team.name|lower %}" class="btn" style="background-color: {{ team.color }}; border-color: {{ team.color }}; color: {% if team.color == '#FFFF00' or team.color == 'YELLOW' %}black{% else %}white{% endif %};">
+            {{ team.name }} Team
+        </a>
+        {% endfor %}
+        
+        <a href="{% url 'map' 'admin' %}" class="btn btn-admin">Admin Dashboard</a>
+    </div>
+</body>
+</html>
