@@ -9,28 +9,35 @@
     pip install -r requirements.txt
     ```
 
-2.  **Database Configuration**:
-    -   Ensure you have MariaDB installed and running.
-    -   Create a database named `swordmap`.
-    -   Update `.env` file with your database credentials.
-
-3.  **Configuration**:
+2.  **Configuration**:
     -   Edit `game_config.json` to define zones, bases, and their coordinates.
-    -   Place your map image at `game/static/game/map.png` (already done if you followed instructions).
+        ```json
+            "id": <number>,
+            "name": <string>,
+            "x": <number>,
+            "y": <number>,
+            "is_base": <bool>,
+            "owner": <string>, # Name of team, only when is_base is true
+            "color": <color>, # Hex code, should be #FFFFFF, if neutral, else color of team
+            "adjacent_zones": <list(number)> # List of ids of adjacent zones 
+        ```
+    -   Teams are automatically created based on zones marked as `is_base: true`. The `owner` field determines the team name, and the `color` field determines the team color.
+    -   Running `init_game_data` will reset all team scores to 0.
+    -   Place your map image at `game/static/game/map.png`.
 
-4.  **Initialize Database**:
+3.  **Initialize Database**:
     ```bash
     python manage.py migrate
     python manage.py init_game_data
     ```
 
-5.  **Run Server**:
+4.  **Run Server**:
     ```bash
     python manage.py runserver
     ```
 
-6.  **Game Loop**:
-    To process captures and scores, you need to run the following command periodically (e.g., every 10 seconds) or in a loop:
+5.  **Game Loop**:
+    To process captures and scores, run the following command once (it runs in a continuous loop):
     ```bash
     python manage.py process_game_state
     ```
