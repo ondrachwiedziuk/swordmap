@@ -135,6 +135,7 @@
         <div class="info-row">
             <div>
                 <h2 style="margin: 0;">Team: {{ role|title }}</h2>
+                <div id="game-timer" style="font-size: 1.2em; font-weight: bold; margin-top: 5px;">Time: <span id="time-remaining">--:--</span></div>
                 <!-- <div id="game-status">Status: <span id="status-text">Active</span></div> -->
             </div>
             {% if role == 'admin' %}
@@ -288,6 +289,21 @@
                             </li>`;
                         });
                         scoresList.innerHTML = html;
+                    }
+                }
+
+                // Update Game Timer
+                const timeEl = document.getElementById('time-remaining');
+                if (timeEl && data.game_remaining_seconds !== undefined) {
+                    const seconds = data.game_remaining_seconds;
+                    if (seconds <= 0) {
+                        timeEl.innerText = "ENDED";
+                        timeEl.style.color = "red";
+                    } else {
+                        const m = Math.floor(seconds / 60);
+                        const s = seconds % 60;
+                        timeEl.innerText = `${m}:${s.toString().padStart(2, '0')}`;
+                        timeEl.style.color = seconds < 60 ? "red" : "black";
                     }
                 }
             });
