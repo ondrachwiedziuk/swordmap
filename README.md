@@ -43,7 +43,9 @@
 
 ## Usage
 
--   Go to `http://localhost:8000/`
+![In-game screenshot](assets/ingame.png)
+
+-   Go to `http://localhost:8000/` (default).
 -   Choose your role (Admin, Yellow, Blue, Black).
 -   Click on zones to capture/defend.
 
