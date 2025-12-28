@@ -125,7 +125,7 @@ def zone_click(request, zone_id):
         if now < game.start_time:
              return JsonResponse({'error': f'Game has not started yet. Start: {game.start_time}, Now: {now}'}, status=400)
         if now > game.end_time:
-             return JsonResponse({'error': f'Game has ended. End: {game.end_time}, Now: {now}'}, status=400)
+             return JsonResponse({'error': f'Game is over. End: {game.end_time}, Now: {now}'}, status=400)
             
         try:
             team = Team.objects.get(name__iexact=role)
