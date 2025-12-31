@@ -7,7 +7,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./db.sqlite3:/app/db.sqlite3
+      - ./data:/app/data
       - ./game_config.json:/app/game_config.json
       - ./assets:/app/assets
     env_file:
@@ -17,7 +17,7 @@ services:
     build: .
     command: python manage.py process_game_state
     volumes:
-      - ./db.sqlite3:/app/db.sqlite3
+      - ./data:/app/data
       - ./game_config.json:/app/game_config.json
     env_file:
       - .env
