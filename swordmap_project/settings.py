@@ -30,6 +30,7 @@ SECRET_KEY = 'django-insecure-17fm!5nj(gzjv)u6)yg^eo0whgi_(5f3q8c7=az_17rs9@2t1f
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = ['https://swordmap.stastnyjakub.com']
 
 
 # Application definition
