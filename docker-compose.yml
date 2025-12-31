@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: gunicorn swordmap_project.wsgi:application --bind 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./db.sqlite3:/app/db.sqlite3
+      - ./game_config.json:/app/game_config.json
+      - ./assets:/app/assets
+    env_file:
+      - .env
+
+  game_loop:
+    build: .
+    command: python manage.py process_game_state
+    volumes:
+      - ./db.sqlite3:/app/db.sqlite3
+      - ./game_config.json:/app/game_config.json
+    env_file:
+      - .env
+    depends_on:
+      - web
