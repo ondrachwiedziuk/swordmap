@@ -14,6 +14,12 @@ class Game(models.Model):
     start_time = models.DateTimeField(null=True, blank=True)
     end_time = models.DateTimeField(null=True, blank=True)
     duration_minutes = models.IntegerField(default=60)
+    mode = models.CharField(max_length=8, choices=[('STANDARD', 'Standard'), ('FREE', 'Free')], default='STANDARD')
+    accepted_distance = models.FloatField(default=5)
+    top_left_longitude = models.FloatField(default=0.0)
+    top_left_latitude = models.FloatField(default=0.0)
+    bottom_right_longitude = models.FloatField(default=0.0)
+    bottom_right_latitude = models.FloatField(default=0.0)
 
     def __str__(self):
         return f"Game {self.id} ({'Active' if self.is_active else 'Inactive'})"
@@ -27,8 +33,8 @@ class Zone(models.Model):
     ]
 
     name = models.CharField(max_length=100)
-    x_coordinate = models.FloatField(default=0.0)
-    y_coordinate = models.FloatField(default=0.0)
+    longitude = models.FloatField(default=0.0)
+    latitude = models.FloatField(default=0.0)
     is_base = models.BooleanField(default=False)
     adjacent_zones = models.ManyToManyField('self', blank=True, symmetrical=True)
     

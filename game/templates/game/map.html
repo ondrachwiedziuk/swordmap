@@ -1,120 +1,140 @@
 {% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
     <title>Swordmap - {{ role|title }}</title>
-    <link rel="icon" type="image/svg+xml" href="{% static 'game/favicon.svg' %}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="{% static 'game/favicon.svg' %}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: sans-serif;
-            background-color: #333;
-        }
-        #map-scroll-container {
-            position: relative;
-            background-color: #333;
-            width: 100%;
-            overflow: hidden;
-        }
-        .map-container {
-            position: relative;
-            width: 1188px;
-            height: 1373px;
-            background-image: url("{% static 'game/map.png' %}");
-            background-size: cover;
-            transform-origin: top left;
-        }
-        #info-panel {
-            background: #f8f9fa;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .info-box {
-            border: 1px solid #ccc;
-            padding: 10px;
-            background: white;
-            border-radius: 4px;
-        }
-        svg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none; /* Let clicks pass through to zones */
-        }
-        .zone {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            border: 2px solid #333;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            text-align: center;
-            font-size: 12px;
-            line-height: 1.1;
-            -webkit-user-select: none; /* Safari */
-            -moz-user-select: none; /* Firefox */
-            -ms-user-select: none; /* IE10+/Edge */
-            user-select: none; /* Standard */
-        }
-        .zone.base {
-            /* border: 4px solid #FFD700; Gold border for bases - handled in JS/HTML now */
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
-            width: 60px;
-            height: 60px;
-            z-index: 10;
-        }
-    </style>
-</head>
-<body>
-    <!-- 1. Map at Top -->
-    <div id="map-scroll-container">
-        <div id="map-wrapper" style="position: relative; width: 100%; overflow: hidden;">
-            <div class="map-container" id="map">
-                <svg>
-                    {% for zone in zones %}
-                        {% for neighbor in zone.adjacent_zones.all %}
-                            {% if zone.id < neighbor.id %}
-                                {% with z_color=zone.owner.color|default:"#FFFFFF" n_color=neighbor.owner.color|default:"#FFFFFF" %}
-                                <!-- Black border/margin -->
-                                <line x1="{{ zone.x_coordinate }}" y1="{{ zone.y_coordinate }}" 
-                                      x2="{{ neighbor.x_coordinate }}" y2="{{ neighbor.y_coordinate }}" 
-                                      stroke="#333" 
-                                      stroke-width="6" />
-                                <!-- Inner color -->
-                                <line id="line-inner-{{ zone.id }}-{{ neighbor.id }}"
-                                      x1="{{ zone.x_coordinate }}" y1="{{ zone.y_coordinate }}" 
-                                      x2="{{ neighbor.x_coordinate }}" y2="{{ neighbor.y_coordinate }}" 
-                                      stroke="{% if z_color == n_color %}{{ z_color }}{% else %}white{% endif %}" 
-                                      stroke-width="4" />
-                                {% endwith %}
-                            {% endif %}
-                        {% endfor %}
-                    {% endfor %}
-                </svg>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+        background-color: #333;
+      }
+      #map-scroll-container {
+        position: relative;
+        background-color: #333;
+        width: 100%;
+        overflow: hidden;
+      }
+      .map-container {
+        position: relative;
+        width: 1189px;
+        height: 1140px;
+        background-image: url("{% static 'game/map.png' %}");
+        background-size: cover;
+        transform-origin: top left;
+      }
+      #info-panel {
+        background: #f8f9fa;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .info-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background: white;
+        border-radius: 4px;
+      }
+      svg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+      .zone {
+        position: absolute;
+        width: {{ game.diameter }}px;
+        height: {{ game.diameter }}px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        border: 2px solid #333;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        text-align: center;
+        font-size: 8px;
+        line-height: 1.1;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      .zone.base {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        width: 60px;
+        height: 60px;
+        z-index: 10;
+      }
 
-                {% for zone in zones %}
-                {% with zone_color=zone.owner.color|default:zone.default_color %}
-                <div class="zone {% if zone.is_base %}base{% endif %}" 
-                     id="zone-{{ zone.id }}"
-                     style="left: {{ zone.x_coordinate }}px; top: {{ zone.y_coordinate }}px; 
+      /* GPS marker */
+      #player-location {
+        position: absolute;
+        width: 9px;
+        height: 9px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background: #1e90ff;
+        border: 3px solid white;
+        box-shadow:
+          0 0 0 2px #1e90ff,
+          0 0 12px rgba(30, 144, 255, 0.7);
+        z-index: 1000;
+        pointer-events: none;
+        display: none;
+      }
+
+      #player-location::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 36px;
+        height: 36px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background: rgba(30, 144, 255, 0.18);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map-scroll-container">
+      <div id="map-wrapper" style="position: relative; width: 100%">
+        <div class="map-container" id="map">
+          <svg>
+            {% for zone in zones %} {% for neighbor in zone.adjacent_zones.all %} {% if zone.id < neighbor.id %} {% with z_color=zone.owner.color|default:"#FFFFFF" n_color=neighbor.owner.color|default:"#FFFFFF" %}
+            <line x1="{{ zone.x_coordinate }}" y1="{{ zone.y_coordinate }}" x2="{{ neighbor.x_coordinate }}" y2="{{ neighbor.y_coordinate }}" stroke="#333" stroke-width="6" />
+            <line
+              id="line-inner-{{ zone.id }}-{{ neighbor.id }}"
+              x1="{{ zone.x_coordinate }}"
+              y1="{{ zone.y_coordinate }}"
+              x2="{{ neighbor.x_coordinate }}"
+              y2="{{ neighbor.y_coordinate }}"
+              stroke="{% if z_color == n_color %}{{ z_color }}{% else %}white{% endif %}"
+              stroke-width="4"
+            />
+            {% endwith %} {% endif %} {% endfor %} {% endfor %}
+          </svg>
+
+          {% for zone in zones %} {% with zone_color=zone.owner.color|default:zone.default_color %}
+          <div
+            class="zone {% if zone.is_base %}base{% endif %}"
+            id="zone-{{ zone.id }}"
+            style="left: {{ zone.x_coordinate }}px; top: {{ zone.y_coordinate }}px; 
                             background-color: {{ zone_color }};
                             color: {% if zone_color == 'BLACK' or zone_color == 'BLUE' or zone_color == '#000000' or zone_color == '#0000FF' %}white{% else %}black{% endif %};
                             {% if zone.is_base %}
@@ -126,223 +146,284 @@
                             {% else %}
                                 border: 2px solid #333;
                             {% endif %}"
-                     onclick="handleZoneClick({{ zone.id }})">
-                    {{ zone.name }}
-                </div>
-                {% endwith %}
-                {% endfor %}
-            </div>
+            onclick="handleZoneClick({{ zone.id }})"
+          >
+            {{ zone.name }}
+          </div>
+          {% endwith %} {% endfor %}
+
+          <!-- GPS marker -->
+          <div id="player-location" title="Your location"></div>
         </div>
+      </div>
     </div>
 
-    <!-- 2. Info Panel (Scores, Logs, etc.) -->
     <div id="info-panel">
-        <div class="info-row">
-            <div>
-                <h2 style="margin: 0;">Team: {{ role|title }}</h2>
-                <div id="game-timer" style="font-size: 1.2em; font-weight: bold; margin-top: 5px;">Time: <span id="time-remaining">--:--</span></div>
-                <!-- <div id="game-status">Status: <span id="status-text">Active</span></div> -->
-            </div>
-            {% if role == 'admin' %}
-            <div class="info-box" style="flex: 1; display: flex; justify-content: center;">
-                <form method="post" style="display: flex; gap: 10px; align-items: center; width: 100%; max-width: 600px;">
-                    {% csrf_token %}
-                    <input type="datetime-local" name="start_time" value="{{ game.start_time|date:'Y-m-d\TH:i' }}" required style="flex: 1; min-width: 0;">
-                    <input type="number" name="duration" value="{{ game.duration_minutes }}" required style="width: 70px;" placeholder="Min">
-                    <button type="submit">Set</button>
-                </form>
-            </div>
-            {% endif %}
+      <div class="info-row">
+        <div>
+          <h2 style="margin: 0">Team: {{ role|title }}</h2>
+          <div id="game-timer" style="font-size: 1.2em; font-weight: bold; margin-top: 5px">Time: <span id="time-remaining">--:--</span></div>
         </div>
+        {% if role == 'admin' %}
+        <div class="info-box" style="flex: 1; display: flex; justify-content: center">
+          <form method="post" style="display: flex; gap: 10px; align-items: center; width: 100%; max-width: 600px">
+            {% csrf_token %}
+            <input type="datetime-local" name="start_time" value="{{ game.start_time|date:'Y-m-d\TH:i' }}" required style="flex: 1; min-width: 0" />
+            <input type="number" name="duration" value="{{ game.duration_minutes }}" required style="width: 70px" placeholder="Min" />
+            <button type="submit">Set</button>
+          </form>
+        </div>
+        {% endif %}
+      </div>
 
-        <!-- Scores -->
-        <div class="info-box">
-            <h3 style="margin-top: 0;">Scores</h3>
-            <ul id="scores-list" style="list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 15px;">
-                {% for team in teams %}
-                <li style="color: {{ team.color }}; font-weight: bold;">
-                    {{ team.name }}: <span id="score-{{ team.name }}">{{ team.score }}</span>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
+      <div class="info-box">
+        <h3 style="margin-top: 0">Scores</h3>
+        <ul id="scores-list" style="list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 15px">
+          {% for team in teams %}
+          <li style="color: {{ team.color }}; font-weight: bold;">{{ team.name }}: <span id="score-{{ team.name }}">{{ team.score }}</span></li>
+          {% endfor %}
+        </ul>
+      </div>
 
-        <!-- Active Captures (Log) -->
-        <div class="info-box" style="flex: 1;">
-            <h3 style="margin-top: 0;">Active Captures</h3>
-            <div id="captures-list">
-            {% if capturing_zones %}
-                <ul style="list-style: none; padding: 0; margin: 0;">
-                {% for zone in capturing_zones %}
-                    <li style="margin-bottom: 5px;">
-                        <strong>{{ zone.name }}</strong>: 
-                        <span style="color: {{ zone.capturing_team.color }}; font-weight: bold;">{{ zone.capturing_team.name }}</span>
-                        <br><small>Started: {{ zone.capture_started_at|time:"H:i:s" }}</small>
-                    </li>
-                {% endfor %}
-                </ul>
-            {% else %}
-                <p style="margin: 0;">No active captures.</p>
-            {% endif %}
-            </div>
+      <div class="info-box" style="flex: 1">
+        <h3 style="margin-top: 0">Active Captures</h3>
+        <div id="captures-list">
+          {% if capturing_zones %}
+          <ul style="list-style: none; padding: 0; margin: 0">
+            {% for zone in capturing_zones %}
+            <li style="margin-bottom: 5px">
+              <strong>{{ zone.name }}</strong>:
+              <span style="color: {{ zone.capturing_team.color }}; font-weight: bold;">{{ zone.capturing_team.name }}</span>
+              <br /><small>Started: {{ zone.capture_started_at|time:"H:i:s" }}</small>
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p style="margin: 0">No active captures.</p>
+          {% endif %}
         </div>
+      </div>
     </div>
 
     <script>
-        const role = "{{ role }}";
-        
-        function handleZoneClick(zoneId) {
-            console.log(`Clicked zone ${zoneId} as ${role}`);
-            fetch(`/api/zone/${zoneId}/click/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: JSON.stringify({ role: role })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                if (data.error) {
-                    alert(data.error);
+      const role = "{{ role }}";
+
+      // Map GPS bounds from Django
+      const MAP_TOP_LEFT_LAT = parseFloat("{{ game.top_left_latitude|default:'0' }}");
+      const MAP_TOP_LEFT_LNG = parseFloat("{{ game.top_left_longitude|default:'0' }}");
+      const MAP_BOTTOM_RIGHT_LAT = parseFloat("{{ game.bottom_right_latitude|default:'0' }}");
+      const MAP_BOTTOM_RIGHT_LNG = parseFloat("{{ game.bottom_right_longitude|default:'0' }}");
+
+      const MAP_WIDTH = 1189;
+      const MAP_HEIGHT = 1140;
+
+      let currentLatitude = null;
+      let currentLongitude = null;
+
+      function handleZoneClick(zoneId) {
+        if (currentLatitude === null || currentLongitude === null) {
+          alert("Waiting for GPS location...");
+          return;
+        }
+
+        fetch(`/api/zone/${zoneId}/click/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}",
+          },
+          body: JSON.stringify({
+            role: role,
+            latitude: currentLatitude,
+            longitude: currentLongitude,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            if (data.error) {
+              alert(data.error);
+            } else {
+              updateGameState();
+            }
+          });
+      }
+
+      function updateGameState() {
+        fetch('{% url "game_state" %}')
+          .then((r) => r.json())
+          .then((data) => {
+            for (const [id, zone] of Object.entries(data.zones)) {
+              const el = document.getElementById(`zone-${id}`);
+              if (el) {
+                el.style.backgroundColor = zone.color;
+                if (["BLACK", "BLUE", "#000000", "#0000FF"].includes(zone.color)) {
+                  el.style.color = "white";
                 } else {
-                    updateGameState(); // Update immediately instead of reload
-                }
-            });
-        }
-
-        function updateGameState() {
-            fetch('{% url "game_state" %}')
-            .then(r => r.json())
-            .then(data => {
-                // Update Zones
-                for (const [id, zone] of Object.entries(data.zones)) {
-                    const el = document.getElementById(`zone-${id}`);
-                    if (el) {
-                        el.style.backgroundColor = zone.color;
-                        if (['BLACK', 'BLUE', '#000000', '#0000FF'].includes(zone.color)) {
-                            el.style.color = 'white';
-                        } else {
-                            el.style.color = 'black';
-                        }
-                        
-                        // Handle capturing border
-                        if (zone.is_capturing && zone.capturing_color) {
-                            el.style.border = `5px solid ${zone.capturing_color}`;
-                        } else {
-                            // Reset border
-                            if (zone.is_base) {
-                                if (zone.owner && zone.owner.toLowerCase() === role.toLowerCase()) {
-                                     el.style.border = '4px solid darkgreen';
-                                } else {
-                                     el.style.border = '4px solid darkred';
-                                }
-                            } else {
-                                el.style.border = '2px solid #333';
-                            }
-                        }
-                    }
-                }
-                
-                // Update Lines
-                const lines = document.querySelectorAll('line[id^="line-inner-"]');
-                lines.forEach(line => {
-                    const parts = line.id.split('-');
-                    const id1 = parts[2];
-                    const id2 = parts[3];
-                    if (data.zones[id1] && data.zones[id2]) {
-                        const c1 = data.zones[id1].color;
-                        const c2 = data.zones[id2].color;
-                        line.setAttribute('stroke', c1 === c2 ? c1 : 'white');
-                    }
-                });
-
-                // Update Capturing Log
-                const logContainer = document.getElementById('captures-list');
-                if (logContainer) {
-                     let html = '';
-                     if (data.capturing.length > 0) {
-                         html = '<ul style="list-style: none; padding: 0;">';
-                         data.capturing.forEach(cap => {
-                             html += `<li style="margin-bottom: 5px;">
-                                    <strong>${cap.name}</strong>: 
-                                    <span style="color: ${cap.team_color}; font-weight: bold;">${cap.team_name}</span>
-                                    <br><small>Capturing in: ${cap.remaining_seconds}s</small>
-                                </li>`;
-                         });
-                         html += '</ul>';
-                     } else {
-                         html = '<p>No active captures.</p>';
-                     }
-                     logContainer.innerHTML = html;
+                  el.style.color = "black";
                 }
 
-                // Update Scores
-                if (data.scores) {
-                    const sortedScores = Object.entries(data.scores)
-                        .map(([name, info]) => ({name, ...info}))
-                        .sort((a, b) => b.score - a.score);
-
-                    const scoresList = document.getElementById('scores-list');
-                    if (scoresList) {
-                        let html = '';
-                        sortedScores.forEach((team, index) => {
-                            html += `<li style="margin-bottom: 5px; color: ${team.color}; font-weight: bold;">
-                                <span style="color: black; margin-right: 5px;">${index + 1}.</span>
-                                ${team.name}: <span id="score-${team.name}">${team.score}</span>
-                            </li>`;
-                        });
-                        scoresList.innerHTML = html;
-                    }
-                }
-
-                // Update Game Timer
-                const timeEl = document.getElementById('time-remaining');
-                if (timeEl && data.game_remaining_seconds !== undefined) {
-                    const seconds = data.game_remaining_seconds;
-                    if (seconds <= 0) {
-                        timeEl.innerText = "ENDED";
-                        timeEl.style.color = "red";
+                if (zone.is_capturing && zone.capturing_color) {
+                  el.style.border = `5px solid ${zone.capturing_color}`;
+                } else {
+                  if (zone.is_base) {
+                    if (zone.owner && zone.owner.toLowerCase() === role.toLowerCase()) {
+                      el.style.border = "4px solid darkgreen";
                     } else {
-                        const m = Math.floor(seconds / 60);
-                        const s = seconds % 60;
-                        timeEl.innerText = `${m}:${s.toString().padStart(2, '0')}`;
-                        timeEl.style.color = seconds < 60 ? "red" : "black";
+                      el.style.border = "4px solid darkred";
                     }
+                  } else {
+                    el.style.border = "2px solid #333";
+                  }
                 }
+              }
+            }
+
+            const lines = document.querySelectorAll('line[id^="line-inner-"]');
+            lines.forEach((line) => {
+              const parts = line.id.split("-");
+              const id1 = parts[2];
+              const id2 = parts[3];
+              if (data.zones[id1] && data.zones[id2]) {
+                const c1 = data.zones[id1].color;
+                const c2 = data.zones[id2].color;
+                line.setAttribute("stroke", c1 === c2 ? c1 : "white");
+              }
             });
+
+            const logContainer = document.getElementById("captures-list");
+            if (logContainer) {
+              let html = "";
+              if (data.capturing.length > 0) {
+                html = '<ul style="list-style: none; padding: 0;">';
+                data.capturing.forEach((cap) => {
+                  html += `<li style="margin-bottom: 5px;">
+                    <strong>${cap.name}</strong>: 
+                    <span style="color: ${cap.team_color}; font-weight: bold;">${cap.team_name}</span>
+                    <br><small>Capturing in: ${cap.remaining_seconds}s</small>
+                  </li>`;
+                });
+                html += "</ul>";
+              } else {
+                html = "<p>No active captures.</p>";
+              }
+              logContainer.innerHTML = html;
+            }
+
+            if (data.scores) {
+              const sortedScores = Object.entries(data.scores)
+                .map(([name, info]) => ({ name, ...info }))
+                .sort((a, b) => b.score - a.score);
+
+              const scoresList = document.getElementById("scores-list");
+              if (scoresList) {
+                let html = "";
+                sortedScores.forEach((team, index) => {
+                  html += `<li style="margin-bottom: 5px; color: ${team.color}; font-weight: bold;">
+                    <span style="color: black; margin-right: 5px;">${index + 1}.</span>
+                    ${team.name}: <span id="score-${team.name}">${team.score}</span>
+                  </li>`;
+                });
+                scoresList.innerHTML = html;
+              }
+            }
+
+            const timeEl = document.getElementById("time-remaining");
+            if (timeEl && data.game_remaining_seconds !== undefined) {
+              const seconds = data.game_remaining_seconds;
+              if (seconds <= 0) {
+                timeEl.innerText = "ENDED";
+                timeEl.style.color = "red";
+              } else {
+                const m = Math.floor(seconds / 60);
+                const s = seconds % 60;
+                timeEl.innerText = `${m}:${s.toString().padStart(2, "0")}`;
+                timeEl.style.color = seconds < 60 ? "red" : "black";
+              }
+            }
+          });
+      }
+
+      function clamp(value, min, max) {
+        return Math.min(Math.max(value, min), max);
+      }
+
+      function gpsToMapCoordinates(latitude, longitude) {
+        const latRange = MAP_TOP_LEFT_LAT - MAP_BOTTOM_RIGHT_LAT;
+        const lngRange = MAP_BOTTOM_RIGHT_LNG - MAP_TOP_LEFT_LNG;
+
+        if (latRange === 0 || lngRange === 0) {
+          return null;
         }
 
-        // Poll every second
-        setInterval(updateGameState, 1000);
+        const xRatio = (longitude - MAP_TOP_LEFT_LNG) / lngRange;
+        const yRatio = (MAP_TOP_LEFT_LAT - latitude) / latRange;
 
-        // Responsive Map Scaling
-        function resizeMap() {
-            const map = document.getElementById('map');
-            const wrapper = document.getElementById('map-wrapper');
-            const container = document.getElementById('map-scroll-container');
-            
-            if (!map || !wrapper || !container) return;
-            
-            const originalWidth = 1188;
-            const originalHeight = 1373;
-            
-            // Calculate scale to fit width
-            // Use getBoundingClientRect for precise sub-pixel width
-            const availableWidth = container.getBoundingClientRect().width;
-            const scale = availableWidth / originalWidth;
-            
-            map.style.transform = `scale(${scale})`;
-            
-            // Adjust wrapper height to match scaled map so it takes up correct space
-            wrapper.style.height = `${originalHeight * scale}px`;
+        const x = clamp(xRatio, 0, 1) * MAP_WIDTH;
+        const y = clamp(yRatio, 0, 1) * MAP_HEIGHT;
+
+        return { x, y };
+      }
+
+      function drawPlayerLocation(latitude, longitude) {
+        const marker = document.getElementById("player-location");
+        const point = gpsToMapCoordinates(latitude, longitude);
+
+        if (!marker || !point) return;
+
+        marker.style.left = `${point.x}px`;
+        marker.style.top = `${point.y}px`;
+        marker.style.display = "block";
+      }
+
+      function startGpsTracking() {
+        if (!navigator.geolocation) {
+          console.warn("Geolocation is not supported by this browser.");
+          return;
         }
 
-        window.addEventListener('resize', resizeMap);
-        window.addEventListener('load', resizeMap);
-        // Initial call
+        navigator.geolocation.watchPosition(
+          (position) => {
+            currentLatitude = position.coords.latitude;
+            currentLongitude = position.coords.longitude;
+
+            drawPlayerLocation(currentLatitude, currentLongitude);
+          },
+          (error) => {
+            console.warn("Geolocation error:", error);
+          },
+          {
+            enableHighAccuracy: true,
+            maximumAge: 5000,
+            timeout: 10000,
+          },
+        );
+      }
+
+      setInterval(updateGameState, 1000);
+
+      function resizeMap() {
+        const map = document.getElementById("map");
+        const wrapper = document.getElementById("map-wrapper");
+        const container = document.getElementById("map-scroll-container");
+
+        if (!map || !wrapper || !container) return;
+
+        const originalWidth = 1189;
+        const originalHeight = 1140;
+        const availableWidth = container.getBoundingClientRect().width;
+        const scale = availableWidth / originalWidth;
+
+        map.style.transform = `scale(${scale})`;
+        wrapper.style.height = `${originalHeight * scale}px`;
+      }
+
+      window.addEventListener("resize", resizeMap);
+      window.addEventListener("load", () => {
         resizeMap();
+        startGpsTracking();
+      });
+      resizeMap();
     </script>
-</body>
+  </body>
 </html>
