@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Map Marker Tool</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      #container {
+        position: relative;
+        display: inline-block;
+      }
+      #map {
+        display: block;
+        max-width: 100%;
+      }
+      .marker {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: red;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        cursor: pointer;
+      }
+      #controls {
+        margin-top: 15px;
+      }
+      textarea {
+        width: 100%;
+        height: 120px;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Map Marker Tool</h2>
+
+    <div id="container">
+      <img id="map" src="map.png" width="1189" height="1140" />
+    </div>
+
+    <div id="controls">
+      <button onclick="exportCSV()">Write GPS</button>
+      <button onclick="copyCSV()">Copy CSV</button>
+      <button onclick="downloadCSV()">Download CSV</button>
+      <textarea id="output" placeholder="CSV output..."></textarea>
+    </div>
+
+    <script>
+      const map = document.getElementById("map");
+      const container = document.getElementById("container");
+
+      const topLeft = {
+        lat: 49.2166536,
+        lon: 16.5895847,
+      };
+
+      const bottomRight = {
+        lat: 49.2006639,
+        lon: 16.6150014,
+      };
+
+      const imgWidth = 1189;
+      const imgHeight = 1140;
+
+      let points = [];
+
+      function pixelToGPS(x, y) {
+        const lon = topLeft.lon + (x / imgWidth) * (bottomRight.lon - topLeft.lon);
+        const lat = topLeft.lat + (y / imgHeight) * (bottomRight.lat - topLeft.lat);
+        return { lat, lon };
+      }
+
+      function addMarker(x, y) {
+        const marker = document.createElement("div");
+        marker.className = "marker";
+        marker.style.left = x + "px";
+        marker.style.top = y + "px";
+
+        const gps = pixelToGPS(x, y);
+        marker.dataset.lat = gps.lat;
+        marker.dataset.lon = gps.lon;
+
+        marker.addEventListener("click", (e) => {
+          e.stopPropagation();
+          container.removeChild(marker);
+          points = points.filter((p) => !(p.lat === gps.lat && p.lon === gps.lon));
+        });
+
+        container.appendChild(marker);
+        points.push(gps);
+      }
+
+      container.addEventListener("click", (e) => {
+        const rect = container.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        addMarker(x, y);
+      });
+
+      function exportCSV() {
+        const csv = points.map((p) => `${p.lon},${p.lat}`).join("\n");
+        document.getElementById("output").value = csv;
+      }
+
+      function copyCSV() {
+        const textarea = document.getElementById("output");
+        textarea.select();
+        document.execCommand("copy");
+      }
+
+      function downloadCSV() {
+        const text = document.getElementById("output").value;
+        const blob = new Blob([text], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "map_points.csv";
+        a.click();
+
+        URL.revokeObjectURL(url);
+      }
+    </script>
+  </body>
+</html>
