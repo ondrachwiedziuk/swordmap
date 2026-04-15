@@ -35,7 +35,7 @@ def map_view(request, role):
 
     game.diameter = 2 * round(game.accepted_distance * math.sqrt(map_height**2 + map_width**2) / haversine(game.top_left_latitude, game.top_left_longitude, game.bottom_right_latitude, game.bottom_right_longitude))
 
-    if role == 'admin' and request.method == 'POST':
+    if role == 'admin2536' and request.method == 'POST':
         start_time_str = request.POST.get('start_time')
         duration = request.POST.get('duration')
         
@@ -155,7 +155,7 @@ def zone_click(request, zone_id):
         latitude = data.get('latitude')
 
         
-        if role == 'admin':
+        if role == 'admin2536':
             # Admin logic (e.g., change color)
             return JsonResponse({'status': 'admin_action'})
         
