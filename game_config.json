@@ -1,6 +1,6 @@
 {
   "mode": "Free",
-  "accepted_distance": 15,
+  "accepted_distance": 25,
   "topLeft": {
     "latitude": 49.2166536,
     "longitude": 16.5895847
@@ -30,7 +30,8 @@
     { "name": "skrabani", "color": "#808000" },
     { "name": "tecenamdobot", "color": "#7b3f00" },
     { "name": "tikterinevi", "color": "#4682b4" },
-    { "name": "uhloprickyavasek", "color": "#000000" }
+    { "name": "uhloprickyavasek", "color": "#000000" },
+    { "name": "mama", "color": "#e60073" }
   ],
   "zones": [
     {
