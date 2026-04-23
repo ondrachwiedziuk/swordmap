@@ -341,14 +341,15 @@
       }
 
       function onQrScanSuccess(decodedText) {
-        if (lastDecodedText === decodedText) {
-          if (new Date() - lastDecodedTime < 3000) {
-            return;
-          }
+        if (!qrScanActive) {
+          return;
         }
+        qrScanActive = false;
 
-        lastDecodedTime = new Date();
-        lastDecodedText = decodedText;
+        if (qrScanner) {
+          qrScanner.clear().catch(() => {});
+          qrScanner = null;
+        }
 
         submitQrCapture(decodedText.trim());
       }
