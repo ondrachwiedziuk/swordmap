@@ -30,7 +30,7 @@
       "latitude": 50.628296,
       "longitude": 15.605501,
       "is_base": true,
-      "color": "#FFFFFF",
+      "color": "#dc143c",
       "adjacent_zones": [
         2,
         3,
@@ -139,7 +139,7 @@
       "latitude": 50.627647,
       "longitude": 15.610147,
       "is_base": true,
-      "color": "#FFFFFF",
+      "color": "#daa520",
       "adjacent_zones": [
         8,
         10,
@@ -245,7 +245,7 @@
       "latitude": 50.624195,
       "longitude": 15.608305,
       "is_base": true,
-      "color": "#FFFFFF",
+      "color": "#4169e1",
       "adjacent_zones": [
         16,
         15,
