@@ -83,8 +83,10 @@ WSGI_APPLICATION = 'swordmap_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'data' / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'swordmap',
+        'USER': 'jksp2026-bojovka',
+        'HOST': '',  # empty string = Unix domain socket
     }
 }
 
