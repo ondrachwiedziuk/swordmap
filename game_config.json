@@ -11,7 +11,7 @@
   },
   "teams": [
     {
-      "name": "Matúš Půll",
+      "name": "Matúš Púll",
       "color": "#dc143c"
     },
     {
@@ -26,7 +26,7 @@
   "zones": [
     {
       "id": 1,
-      "name": "Matúš Půll",
+      "name": "Matúš Púll",
       "latitude": 50.628296,
       "longitude": 15.605501,
       "is_base": true,
