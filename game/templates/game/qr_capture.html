@@ -1,0 +1,77 @@
+{% load static %}
+<!doctype html>
+<html>
+  <head>
+    <title>Swordmap - Capture Zone</title>
+    <link rel="icon" type="image/svg+xml" href="{% static 'game/favicon.svg' %}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #222;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+      h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+      .zone-name { font-size: 1.5rem; margin-bottom: 1.5rem; opacity: 0.9; }
+      .error { color: #ff6b6b; font-size: 1.1rem; margin-bottom: 1rem; }
+      .team-container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+        max-width: 320px;
+      }
+      .btn {
+        display: block;
+        padding: 15px 20px;
+        text-align: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        color: white;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+      }
+      .btn:active { transform: translateY(1px); }
+    </style>
+  </head>
+  <body>
+    <h1>Swordmap</h1>
+
+    {% if error %}
+      <p class="error">{{ error }}</p>
+      {% if not teams %}
+        <a href="/" style="color: #aaa;">Back to home</a>
+      {% endif %}
+    {% endif %}
+
+    {% if zone %}
+      <p class="zone-name">Zone: <strong>{{ zone.name }}</strong></p>
+    {% endif %}
+
+    {% if teams and code %}
+      <p>Select your team to capture this zone:</p>
+      <div class="team-container">
+        {% for team in teams %}
+        <form method="post" action="{% url 'qr_link' code %}" style="margin: 0;">
+          {% csrf_token %}
+          <input type="hidden" name="team" value="{{ team.name }}" />
+          <button type="submit" class="btn" style="width: 100%; background-color: {{ team.color }}; {% if team.color == '#FFFF00' or team.color == 'YELLOW' %}color: black; text-shadow: none;{% endif %}">
+            {{ team.name }}
+          </button>
+        </form>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </body>
+</html>

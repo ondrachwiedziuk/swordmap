@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script src="{% static 'game/html5-qrcode.min.js' %}"></script>
     <style>
       body {
         margin: 0;
@@ -57,10 +58,8 @@
         overflow: hidden;
         border: 1px solid #444;
       }
-      #qr-video {
+      #qr-reader {
         width: 100%;
-        height: auto;
-        background: #000;
       }
       #qr-scanner-toolbar {
         display: flex;
@@ -87,7 +86,7 @@
         </div>
         <div class="info-box" style="display: flex; align-items: center; gap: 8px">
           <button type="button" id="scan-qr-btn" onclick="scanQrAndCapture()" style="display: none">Scan QR</button>
-          <small id="scan-qr-hint" style="display: none; color: #555">Use scanned value like ZONE-12.</small>
+          <small id="scan-qr-hint" style="display: none; color: #555">Scan zone QR code to capture.</small>
         </div>
         {% if role == 'admin2536' %}
         <div class="info-box" style="flex: 1; display: flex; justify-content: center">
@@ -132,7 +131,7 @@
 
     <div id="qr-scanner-modal">
       <div id="qr-scanner-panel">
-        <video id="qr-video" autoplay playsinline muted></video>
+        <div id="qr-reader"></div>
         <div id="qr-scanner-toolbar">
           <span id="qr-status">Point camera at a zone QR code.</span>
           <button type="button" onclick="stopQrScanner()">Close</button>
@@ -182,9 +181,10 @@
       let currentLongitude = null;
       let playerMarker = null;
       let playerAccuracy = null;
-      let qrStream = null;
+      let qrScanner = null;
       let qrScanActive = false;
-      let qrScanBusy = false;
+      let lastDecodedText = "";
+      let lastDecodedTime = new Date();
 
       function isDarkColor(color) {
         const c = (color || "").toUpperCase();
@@ -306,138 +306,56 @@
         openQrScanner();
       }
 
-      async function openQrScanner() {
+      function openQrScanner() {
         const modal = document.getElementById("qr-scanner-modal");
-        const video = document.getElementById("qr-video");
         const status = document.getElementById("qr-status");
-        if (!modal || !video || !status) {
+        if (!modal || !status) {
           return;
         }
 
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-          alert("Camera is not available in this browser.");
-          return;
-        }
-
-        try {
-          qrStream = await navigator.mediaDevices.getUserMedia({
-            video: {
-              facingMode: { ideal: "environment" },
-            },
-            audio: false,
-          });
-        } catch (err) {
-          alert("Unable to access camera. Check camera permissions.");
-          return;
-        }
-
-        video.srcObject = qrStream;
         modal.style.display = "flex";
         status.textContent = "Point camera at a zone QR code.";
         qrScanActive = true;
-        qrScanBusy = false;
-        requestAnimationFrame(scanQrFrame);
+
+        const config = {
+          fps: 10,
+          qrbox: function (width, height) {
+            return { width: width - 20, height: height - 20 };
+          },
+          rememberLastUsedCamera: true,
+          supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
+          formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
+        };
+
+        qrScanner = new Html5QrcodeScanner("qr-reader", config);
+        qrScanner.render(onQrScanSuccess);
+      }
+
+      function onQrScanSuccess(decodedText) {
+        if (lastDecodedText === decodedText) {
+          if (new Date() - lastDecodedTime < 3000) {
+            return;
+          }
+        }
+
+        lastDecodedTime = new Date();
+        lastDecodedText = decodedText;
+
+        submitQrCapture(decodedText.trim());
       }
 
       function stopQrScanner() {
         const modal = document.getElementById("qr-scanner-modal");
-        const video = document.getElementById("qr-video");
         qrScanActive = false;
 
-        if (qrStream) {
-          qrStream.getTracks().forEach((track) => track.stop());
-          qrStream = null;
-        }
-
-        if (video) {
-          video.srcObject = null;
+        if (qrScanner) {
+          qrScanner.clear().catch(() => {});
+          qrScanner = null;
         }
 
         if (modal) {
           modal.style.display = "none";
         }
-      }
-
-      async function scanQrFrame() {
-        if (!qrScanActive) {
-          return;
-        }
-
-        const video = document.getElementById("qr-video");
-        const status = document.getElementById("qr-status");
-
-        if (!video) {
-          stopQrScanner();
-          return;
-        }
-
-        if (video.readyState < 2 || qrScanBusy) {
-          requestAnimationFrame(scanQrFrame);
-          return;
-        }
-
-        qrScanBusy = true;
-
-        const canvas = document.createElement("canvas");
-        const targetWidth = 640;
-        const scale = targetWidth / Math.max(video.videoWidth || targetWidth, 1);
-        const targetHeight = Math.max(1, Math.round((video.videoHeight || 360) * scale));
-        canvas.width = targetWidth;
-        canvas.height = targetHeight;
-        const ctx = canvas.getContext("2d");
-        if (ctx) {
-          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-          const imageData = canvas.toDataURL("image/jpeg", 0.75);
-          submitQrFrame(imageData, status);
-        } else {
-          qrScanBusy = false;
-        }
-
-        requestAnimationFrame(scanQrFrame);
-      }
-
-      function submitQrFrame(imageData, statusEl) {
-        fetch(`/api/zone/scan-qr/`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrfToken,
-          },
-          body: JSON.stringify({
-            role: role,
-            image_data: imageData,
-          }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (!qrScanActive) {
-              return;
-            }
-
-            if (data.status === "qr_not_detected") {
-              if (statusEl) {
-                statusEl.textContent = "Scanning...";
-              }
-              return;
-            }
-
-            if (data.error) {
-              alert(data.error);
-              stopQrScanner();
-              return;
-            }
-
-            updateGameState();
-            stopQrScanner();
-          })
-          .catch(() => {
-            if (qrScanActive && statusEl) {
-              statusEl.textContent = "Scan request failed, retrying...";
-            }
-          })
-          .finally(() => {
-            qrScanBusy = false;
-          });
       }
 
       function submitQrCapture(qrValue) {

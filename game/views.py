@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
@@ -6,8 +6,7 @@ from .models import Zone, Team, Game
 import math
 import json
 import re
-import base64
-import binascii
+import hashlib
 
 map_width, map_height = 1189, 1140  # Example dimensions for coordinate calculations
 
@@ -211,50 +210,47 @@ def process_zone_interaction(team, zone):
     return JsonResponse({'status': 'ok'})
 
 
+QR_SECRET = "swordmap-tajny-klic"
+QR_BASE_URL = "https://smazeny.pull.cz/c/"
+
+
+def make_signature(zone_id: str) -> str:
+    return hashlib.sha256(f"{zone_id}-{QR_SECRET}".encode()).hexdigest()[:3].upper()
+
+
 def parse_zone_id_from_qr(qr_code):
+    """Parse a QR URL like https://smazeny.pull.cz/c/<zone_id><3-char-signature>.
+
+    Returns the integer zone_id on success, None on failure.
+    """
     if not qr_code:
         return None
 
     raw = str(qr_code).strip()
-    if raw.isdigit():
-        return int(raw)
 
-    # Accept common formats like ZONE-12, ZONE:12, zone/12.
-    match = re.search(r'zone\s*[-:/]?\s*(\d+)', raw, flags=re.IGNORECASE)
-    if match:
-        return int(match.group(1))
+    # Strip the base URL prefix.
+    if raw.startswith(QR_BASE_URL):
+        raw = raw[len(QR_BASE_URL):]
+    elif raw.startswith("http"):
+        # Wrong domain / path – reject.
+        return None
+
+    if len(raw) < 4:
+        # Need at least 1 char zone_id + 3 char signature.
+        return None
+
+    zone_id_part = raw[:-3]
+    sig_part = raw[-3:]
+
+    expected_sig = make_signature(zone_id_part)
+    if sig_part.upper() != expected_sig:
+        return None
+
+    # zone_id_part may be a plain integer or a spare code like "S1".
+    if zone_id_part.isdigit():
+        return int(zone_id_part)
 
     return None
-
-
-def decode_qr_from_image_data(image_data):
-    if not image_data:
-        return None
-
-    payload = str(image_data).strip()
-    if ',' in payload:
-        payload = payload.split(',', 1)[1]
-
-    try:
-        image_bytes = base64.b64decode(payload, validate=True)
-    except (binascii.Error, ValueError):
-        return None
-
-    try:
-        import cv2
-        import numpy as np
-    except ImportError as exc:
-        raise RuntimeError('Missing QR decoding dependency. Install opencv-python-headless.') from exc
-
-    image_np = np.frombuffer(image_bytes, dtype=np.uint8)
-    frame = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
-    if frame is None:
-        return None
-
-    detector = cv2.QRCodeDetector()
-    decoded_value, _, _ = detector.detectAndDecode(frame)
-    decoded_value = (decoded_value or '').strip()
-    return decoded_value or None
 
 def zone_click(request, zone_id):
     if request.method == 'POST':
@@ -318,19 +314,9 @@ def zone_scan_qr(request):
         return JsonResponse({'error': 'Invalid JSON payload'}, status=400)
     role = data.get('role')
     qr_code = data.get('qr_code')
-    image_data = data.get('image_data')
 
     if role == 'admin2536':
         return JsonResponse({'status': 'admin_action'})
-
-    if not qr_code and image_data:
-        try:
-            qr_code = decode_qr_from_image_data(image_data)
-        except RuntimeError as exc:
-            return JsonResponse({'error': str(exc)}, status=500)
-
-        if not qr_code:
-            return JsonResponse({'status': 'qr_not_detected'})
 
     if not qr_code:
         return JsonResponse({'error': 'Missing QR code value'}, status=400)
@@ -354,7 +340,7 @@ def zone_scan_qr(request):
 
     zone_id = parse_zone_id_from_qr(qr_code)
     if zone_id is None:
-        return JsonResponse({'error': 'Invalid QR code format. Expected ZONE-<id>.'}, status=400)
+        return JsonResponse({'error': 'Invalid QR code – bad URL or signature.'}, status=400)
 
     zone = get_object_or_404(Zone, id=zone_id)
 
@@ -366,3 +352,76 @@ def zone_scan_qr(request):
 
     return process_zone_interaction(team, zone)
 
+
+def qr_link(request, code):
+    """Handle direct QR link opened from an external QR scanner app.
+
+    URL: /c/<zone_id><signature>
+    GET  -> show team-selection page
+    POST -> perform the zone capture for the chosen team
+    """
+    qr_url = QR_BASE_URL + code
+    zone_id = parse_zone_id_from_qr(qr_url)
+
+    if zone_id is None:
+        return render(request, 'game/qr_capture.html', {
+            'error': 'Invalid QR code.',
+        })
+
+    zone = get_object_or_404(Zone, id=zone_id)
+    teams = Team.objects.all()
+
+    game = Game.objects.first()
+    now = timezone.now()
+
+    # Validate game state.
+    game_error = None
+    if not game or not game.start_time or not game.end_time:
+        game_error = 'Game not configured.'
+    elif now < game.start_time:
+        game_error = 'Game has not started yet.'
+    elif now > game.end_time:
+        game_error = 'Game is over.'
+    elif game.mode != 'QR':
+        game_error = 'QR capture is not active right now.'
+
+    if game_error:
+        return render(request, 'game/qr_capture.html', {
+            'error': game_error,
+            'zone': zone,
+        })
+
+    if zone.is_base:
+        return render(request, 'game/qr_capture.html', {
+            'error': 'Cannot capture a base zone.',
+            'zone': zone,
+        })
+
+    if request.method == 'POST':
+        team_name = request.POST.get('team', '').strip()
+        try:
+            team = Team.objects.get(name__iexact=team_name)
+        except Team.DoesNotExist:
+            return render(request, 'game/qr_capture.html', {
+                'error': 'Invalid team.',
+                'zone': zone,
+                'teams': teams,
+                'code': code,
+            })
+
+        if not can_interact(team, zone, game.mode):
+            return render(request, 'game/qr_capture.html', {
+                'error': 'Zone is not reachable from your base!',
+                'zone': zone,
+                'teams': teams,
+                'code': code,
+            })
+
+        process_zone_interaction(team, zone)
+        return redirect('map', role=team.name.lower())
+
+    return render(request, 'game/qr_capture.html', {
+        'zone': zone,
+        'teams': teams,
+        'code': code,
+    })
