@@ -3,7 +3,7 @@ from django.utils import timezone
 
 class Team(models.Model):
     name = models.CharField(max_length=50, unique=True)
-    color = models.CharField(max_length=20, unique=True)
+    color = models.CharField(max_length=20)
     score = models.IntegerField(default=0)
 
     def __str__(self):
@@ -14,7 +14,11 @@ class Game(models.Model):
     start_time = models.DateTimeField(null=True, blank=True)
     end_time = models.DateTimeField(null=True, blank=True)
     duration_minutes = models.IntegerField(default=60)
-    mode = models.CharField(max_length=8, choices=[('STANDARD', 'Standard'), ('FREE', 'Free')], default='STANDARD')
+    mode = models.CharField(
+        max_length=8,
+        choices=[('STANDARD', 'Standard'), ('FREE', 'Free'), ('QR', 'QR')],
+        default='STANDARD',
+    )
     accepted_distance = models.FloatField(default=5)
     top_left_longitude = models.FloatField(default=0.0)
     top_left_latitude = models.FloatField(default=0.0)

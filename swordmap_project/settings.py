@@ -31,6 +31,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = ['https://swordmap.stastnyjakub.com','https://intersob.stastnyjakub.com']
+# OSM tile servers require an HTTP Referer for usage policy compliance.
+SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
 
 
 # Application definition

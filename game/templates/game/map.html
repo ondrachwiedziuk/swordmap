@@ -5,6 +5,8 @@
     <title>Swordmap - {{ role|title }}</title>
     <link rel="icon" type="image/svg+xml" href="{% static 'game/favicon.svg' %}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
     <style>
       body {
         margin: 0;
@@ -12,19 +14,10 @@
         font-family: sans-serif;
         background-color: #333;
       }
-      #map-scroll-container {
-        position: relative;
-        background-color: #333;
+      #map {
         width: 100%;
-        overflow: hidden;
-      }
-      .map-container {
-        position: relative;
-        width: 1189px;
-        height: 1140px;
-        background-image: url("{% static 'game/map.png' %}");
-        background-size: cover;
-        transform-origin: top left;
+        height: 70vh;
+        min-height: 420px;
       }
       #info-panel {
         background: #f8f9fa;
@@ -46,123 +39,55 @@
         background: white;
         border-radius: 4px;
       }
-      svg {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-      }
-      .zone {
-        position: absolute;
-        width: {{ game.diameter }}px;
-        height: {{ game.diameter }}px;
-        transform: translate(-50%, -50%);
-        border-radius: 50%;
-        border: 2px solid #333;
-        cursor: pointer;
-        display: flex;
+      #qr-scanner-modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 3000;
+        display: none;
         align-items: center;
         justify-content: center;
-        font-weight: bold;
-        text-align: center;
-        font-size: 8px;
-        line-height: 1.1;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
+        padding: 16px;
       }
-      .zone.base {
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        width: 60px;
-        height: 60px;
-        z-index: 10;
+      #qr-scanner-panel {
+        width: min(520px, 100%);
+        background: #111;
+        color: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid #444;
       }
-
-      /* GPS marker */
-      #player-location {
-        position: absolute;
-        width: 9px;
-        height: 9px;
-        transform: translate(-50%, -50%);
-        border-radius: 50%;
-        background: #1e90ff;
-        border: 3px solid white;
-        box-shadow:
-          0 0 0 2px #1e90ff,
-          0 0 12px rgba(30, 144, 255, 0.7);
-        z-index: 1000;
-        pointer-events: none;
-        display: none;
+      #qr-video {
+        width: 100%;
+        height: auto;
+        background: #000;
       }
-
-      #player-location::after {
-        content: "";
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        width: 36px;
-        height: 36px;
-        transform: translate(-50%, -50%);
-        border-radius: 50%;
-        background: rgba(30, 144, 255, 0.18);
+      #qr-scanner-toolbar {
+        display: flex;
+        gap: 8px;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+      }
+      #qr-status {
+        font-size: 0.9em;
+        color: #ddd;
       }
     </style>
   </head>
   <body>
-    <div id="map-scroll-container">
-      <div id="map-wrapper" style="position: relative; width: 100%">
-        <div class="map-container" id="map">
-          <svg>
-            {% for zone in zones %} {% for neighbor in zone.adjacent_zones.all %} {% if zone.id < neighbor.id %} {% with z_color=zone.owner.color|default:"#FFFFFF" n_color=neighbor.owner.color|default:"#FFFFFF" %}
-            <line x1="{{ zone.x_coordinate }}" y1="{{ zone.y_coordinate }}" x2="{{ neighbor.x_coordinate }}" y2="{{ neighbor.y_coordinate }}" stroke="#333" stroke-width="6" />
-            <line
-              id="line-inner-{{ zone.id }}-{{ neighbor.id }}"
-              x1="{{ zone.x_coordinate }}"
-              y1="{{ zone.y_coordinate }}"
-              x2="{{ neighbor.x_coordinate }}"
-              y2="{{ neighbor.y_coordinate }}"
-              stroke="{% if z_color == n_color %}{{ z_color }}{% else %}white{% endif %}"
-              stroke-width="4"
-            />
-            {% endwith %} {% endif %} {% endfor %} {% endfor %}
-          </svg>
-
-          {% for zone in zones %} {% with zone_color=zone.owner.color|default:zone.default_color %}
-          <div
-            class="zone {% if zone.is_base %}base{% endif %}"
-            id="zone-{{ zone.id }}"
-            style="left: {{ zone.x_coordinate }}px; top: {{ zone.y_coordinate }}px; 
-                            background-color: {{ zone_color }};
-                            color: {% if zone_color == 'BLACK' or zone_color == 'BLUE' or zone_color == '#000000' or zone_color == '#0000FF' %}white{% else %}black{% endif %};
-                            {% if zone.is_base %}
-                                {% if zone.owner.name|lower == role|lower %}
-                                    border: 4px solid darkgreen;
-                                {% else %}
-                                    border: 4px solid darkred;
-                                {% endif %}
-                            {% else %}
-                                border: 2px solid #333;
-                            {% endif %}"
-            onclick="handleZoneClick({{ zone.id }})"
-          >
-            {{ zone.name }}
-          </div>
-          {% endwith %} {% endfor %}
-
-          <!-- GPS marker -->
-          <div id="player-location" title="Your location"></div>
-        </div>
-      </div>
-    </div>
+    <div id="map"></div>
 
     <div id="info-panel">
       <div class="info-row">
         <div>
           <h2 style="margin: 0">Team: {{ role|title }}</h2>
+          <div style="font-size: 0.95em; margin-top: 4px">Mode: <strong id="game-mode">{{ game.mode }}</strong></div>
           <div id="game-timer" style="font-size: 1.2em; font-weight: bold; margin-top: 5px">Time: <span id="time-remaining">--:--</span></div>
+        </div>
+        <div class="info-box" style="display: flex; align-items: center; gap: 8px">
+          <button type="button" id="scan-qr-btn" onclick="scanQrAndCapture()" style="display: none">Scan QR</button>
+          <small id="scan-qr-hint" style="display: none; color: #555">Use scanned value like ZONE-12.</small>
         </div>
         {% if role == 'admin2536' %}
         <div class="info-box" style="flex: 1; display: flex; justify-content: center">
@@ -205,22 +130,354 @@
       </div>
     </div>
 
+    <div id="qr-scanner-modal">
+      <div id="qr-scanner-panel">
+        <video id="qr-video" autoplay playsinline muted></video>
+        <div id="qr-scanner-toolbar">
+          <span id="qr-status">Point camera at a zone QR code.</span>
+          <button type="button" onclick="stopQrScanner()">Close</button>
+        </div>
+      </div>
+    </div>
+
     <script>
       const role = "{{ role }}";
+      const GAME_MODE = "{{ game.mode|default:'STANDARD' }}";
+      const csrfToken = "{{ csrf_token }}";
 
-      // Map GPS bounds from Django
-      const MAP_TOP_LEFT_LAT = parseFloat("{{ game.top_left_latitude|default:'0' }}");
-      const MAP_TOP_LEFT_LNG = parseFloat("{{ game.top_left_longitude|default:'0' }}");
-      const MAP_BOTTOM_RIGHT_LAT = parseFloat("{{ game.bottom_right_latitude|default:'0' }}");
-      const MAP_BOTTOM_RIGHT_LNG = parseFloat("{{ game.bottom_right_longitude|default:'0' }}");
+      const zoneSeed = [
+        {% for zone in zones %}
+          {
+            id: {{ zone.id }},
+            name: "{{ zone.name|escapejs }}",
+            lat: {{ zone.latitude }},
+            lng: {{ zone.longitude }},
+            is_base: {% if zone.is_base %}true{% else %}false{% endif %},
+            owner: {% if zone.owner %}"{{ zone.owner.name|escapejs }}"{% else %}null{% endif %},
+            color: "{{ zone.owner.color|default:zone.default_color }}",
+            adjacent: [{% for neighbor in zone.adjacent_zones.all %}{{ neighbor.id }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+          }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+      ];
 
-      const MAP_WIDTH = 1189;
-      const MAP_HEIGHT = 1140;
+      const map = L.map("map", {
+        zoomControl: true,
+      });
+      const bounds = [
+        [parseFloat("{{ game.bottom_right_latitude|default:'0' }}"), parseFloat("{{ game.top_left_longitude|default:'0' }}")],
+        [parseFloat("{{ game.top_left_latitude|default:'0' }}"), parseFloat("{{ game.bottom_right_longitude|default:'0' }}")],
+      ];
+      map.fitBounds(bounds, { padding: [10, 10] });
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 20,
+        attribution: "&copy; OpenStreetMap contributors",
+      }).addTo(map);
+
+      const zoneLayers = new Map();
+      const zoneMeta = new Map();
+      const edgeLayers = new Map();
 
       let currentLatitude = null;
       let currentLongitude = null;
+      let playerMarker = null;
+      let playerAccuracy = null;
+      let qrStream = null;
+      let qrScanActive = false;
+      let qrScanBusy = false;
+
+      function isDarkColor(color) {
+        const c = (color || "").toUpperCase();
+        return ["BLACK", "BLUE", "#000000", "#0000FF"].includes(c);
+      }
+
+      function getZoneStyle(zone, state) {
+        const fillColor = state && state.color ? state.color : zone.color;
+        let strokeColor = "#333";
+        let strokeWeight = zone.is_base ? 4 : 2;
+
+        if (state && state.is_capturing && state.capturing_color) {
+          strokeColor = state.capturing_color;
+          strokeWeight = 5;
+        } else if (zone.is_base) {
+          const ownerName = (state && state.owner ? state.owner : zone.owner) || "";
+          if (ownerName && ownerName.toLowerCase() === role.toLowerCase()) {
+            strokeColor = "darkgreen";
+          } else {
+            strokeColor = "darkred";
+          }
+        }
+
+        return {
+          color: strokeColor,
+          weight: strokeWeight,
+          fillColor: fillColor,
+          fillOpacity: 0.9,
+          radius: zone.is_base ? 16 : 11,
+        };
+      }
+
+      function drawEdges() {
+        const seen = new Set();
+        zoneSeed.forEach((zone) => {
+          zone.adjacent.forEach((otherId) => {
+            const a = Math.min(zone.id, otherId);
+            const b = Math.max(zone.id, otherId);
+            const key = `${a}-${b}`;
+            if (seen.has(key)) {
+              return;
+            }
+            seen.add(key);
+
+            const other = zoneMeta.get(otherId);
+            if (!other) {
+              return;
+            }
+
+            const outer = L.polyline(
+              [
+                [zone.lat, zone.lng],
+                [other.lat, other.lng],
+              ],
+              {
+                color: "#333",
+                weight: 6,
+                opacity: 0.9,
+              },
+            ).addTo(map);
+
+            const inner = L.polyline(
+              [
+                [zone.lat, zone.lng],
+                [other.lat, other.lng],
+              ],
+              {
+                color: "#fff",
+                weight: 4,
+                opacity: 0.95,
+              },
+            ).addTo(map);
+
+            edgeLayers.set(key, { outer, inner, a, b });
+          });
+        });
+      }
+
+      function drawZones() {
+        zoneSeed.forEach((zone) => {
+          zoneMeta.set(zone.id, zone);
+          const layer = L.circleMarker([zone.lat, zone.lng], getZoneStyle(zone)).addTo(map);
+          layer.bindTooltip(zone.name, {
+            direction: "top",
+            offset: [0, -10],
+            permanent: true,
+            className: "zone-label",
+          });
+          layer.on("click", () => handleZoneClick(zone.id));
+          zoneLayers.set(zone.id, layer);
+        });
+      }
+
+      drawZones();
+      drawEdges();
+
+      function setupModeUi() {
+        const scanBtn = document.getElementById("scan-qr-btn");
+        const scanHint = document.getElementById("scan-qr-hint");
+        if (!scanBtn || !scanHint) {
+          return;
+        }
+
+        if (GAME_MODE === "QR") {
+          scanBtn.style.display = "inline-block";
+          scanHint.style.display = "inline";
+        } else {
+          scanBtn.style.display = "none";
+          scanHint.style.display = "none";
+        }
+      }
+
+      function scanQrAndCapture() {
+        if (GAME_MODE !== "QR") {
+          alert("QR scan is available only in QR mode.");
+          return;
+        }
+
+        openQrScanner();
+      }
+
+      async function openQrScanner() {
+        const modal = document.getElementById("qr-scanner-modal");
+        const video = document.getElementById("qr-video");
+        const status = document.getElementById("qr-status");
+        if (!modal || !video || !status) {
+          return;
+        }
+
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          alert("Camera is not available in this browser.");
+          return;
+        }
+
+        try {
+          qrStream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              facingMode: { ideal: "environment" },
+            },
+            audio: false,
+          });
+        } catch (err) {
+          alert("Unable to access camera. Check camera permissions.");
+          return;
+        }
+
+        video.srcObject = qrStream;
+        modal.style.display = "flex";
+        status.textContent = "Point camera at a zone QR code.";
+        qrScanActive = true;
+        qrScanBusy = false;
+        requestAnimationFrame(scanQrFrame);
+      }
+
+      function stopQrScanner() {
+        const modal = document.getElementById("qr-scanner-modal");
+        const video = document.getElementById("qr-video");
+        qrScanActive = false;
+
+        if (qrStream) {
+          qrStream.getTracks().forEach((track) => track.stop());
+          qrStream = null;
+        }
+
+        if (video) {
+          video.srcObject = null;
+        }
+
+        if (modal) {
+          modal.style.display = "none";
+        }
+      }
+
+      async function scanQrFrame() {
+        if (!qrScanActive) {
+          return;
+        }
+
+        const video = document.getElementById("qr-video");
+        const status = document.getElementById("qr-status");
+
+        if (!video) {
+          stopQrScanner();
+          return;
+        }
+
+        if (video.readyState < 2 || qrScanBusy) {
+          requestAnimationFrame(scanQrFrame);
+          return;
+        }
+
+        qrScanBusy = true;
+
+        const canvas = document.createElement("canvas");
+        const targetWidth = 640;
+        const scale = targetWidth / Math.max(video.videoWidth || targetWidth, 1);
+        const targetHeight = Math.max(1, Math.round((video.videoHeight || 360) * scale));
+        canvas.width = targetWidth;
+        canvas.height = targetHeight;
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+          const imageData = canvas.toDataURL("image/jpeg", 0.75);
+          submitQrFrame(imageData, status);
+        } else {
+          qrScanBusy = false;
+        }
+
+        requestAnimationFrame(scanQrFrame);
+      }
+
+      function submitQrFrame(imageData, statusEl) {
+        fetch(`/api/zone/scan-qr/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken,
+          },
+          body: JSON.stringify({
+            role: role,
+            image_data: imageData,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (!qrScanActive) {
+              return;
+            }
+
+            if (data.status === "qr_not_detected") {
+              if (statusEl) {
+                statusEl.textContent = "Scanning...";
+              }
+              return;
+            }
+
+            if (data.error) {
+              alert(data.error);
+              stopQrScanner();
+              return;
+            }
+
+            updateGameState();
+            stopQrScanner();
+          })
+          .catch(() => {
+            if (qrScanActive && statusEl) {
+              statusEl.textContent = "Scan request failed, retrying...";
+            }
+          })
+          .finally(() => {
+            qrScanBusy = false;
+          });
+      }
+
+      function submitQrCapture(qrValue) {
+        if (!qrValue) {
+          stopQrScanner();
+          return;
+        }
+
+        fetch(`/api/zone/scan-qr/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken,
+          },
+          body: JSON.stringify({
+            role: role,
+            qr_code: qrValue,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.error) {
+              alert(data.error);
+            } else {
+              updateGameState();
+            }
+            stopQrScanner();
+          })
+          .catch(() => {
+            alert("QR capture request failed.");
+            stopQrScanner();
+          });
+      }
 
       function handleZoneClick(zoneId) {
+        if (GAME_MODE === "QR") {
+          alert("QR mode is active. Capture by scanning a QR code.");
+          return;
+        }
+
         if (currentLatitude === null || currentLongitude === null) {
           alert("Waiting for GPS location...");
           return;
@@ -230,7 +487,7 @@
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "X-CSRFToken": "{{ csrf_token }}",
+            "X-CSRFToken": csrfToken,
           },
           body: JSON.stringify({
             role: role,
@@ -253,41 +510,21 @@
         fetch('{% url "game_state" %}')
           .then((r) => r.json())
           .then((data) => {
-            for (const [id, zone] of Object.entries(data.zones)) {
-              const el = document.getElementById(`zone-${id}`);
-              if (el) {
-                el.style.backgroundColor = zone.color;
-                if (["BLACK", "BLUE", "#000000", "#0000FF"].includes(zone.color)) {
-                  el.style.color = "white";
-                } else {
-                  el.style.color = "black";
-                }
-
-                if (zone.is_capturing && zone.capturing_color) {
-                  el.style.border = `5px solid ${zone.capturing_color}`;
-                } else {
-                  if (zone.is_base) {
-                    if (zone.owner && zone.owner.toLowerCase() === role.toLowerCase()) {
-                      el.style.border = "4px solid darkgreen";
-                    } else {
-                      el.style.border = "4px solid darkred";
-                    }
-                  } else {
-                    el.style.border = "2px solid #333";
-                  }
-                }
+            for (const [idStr, state] of Object.entries(data.zones)) {
+              const id = Number(idStr);
+              const zone = zoneMeta.get(id);
+              const layer = zoneLayers.get(id);
+              if (!zone || !layer) {
+                continue;
               }
+              layer.setStyle(getZoneStyle(zone, state));
             }
 
-            const lines = document.querySelectorAll('line[id^="line-inner-"]');
-            lines.forEach((line) => {
-              const parts = line.id.split("-");
-              const id1 = parts[2];
-              const id2 = parts[3];
-              if (data.zones[id1] && data.zones[id2]) {
-                const c1 = data.zones[id1].color;
-                const c2 = data.zones[id2].color;
-                line.setAttribute("stroke", c1 === c2 ? c1 : "white");
+            edgeLayers.forEach((edge) => {
+              const s1 = data.zones[String(edge.a)];
+              const s2 = data.zones[String(edge.b)];
+              if (s1 && s2) {
+                edge.inner.setStyle({ color: s1.color === s2.color ? s1.color : "#ffffff" });
               }
             });
 
@@ -348,32 +585,31 @@
         return Math.min(Math.max(value, min), max);
       }
 
-      function gpsToMapCoordinates(latitude, longitude) {
-        const latRange = MAP_TOP_LEFT_LAT - MAP_BOTTOM_RIGHT_LAT;
-        const lngRange = MAP_BOTTOM_RIGHT_LNG - MAP_TOP_LEFT_LNG;
-
-        if (latRange === 0 || lngRange === 0) {
-          return null;
+      function drawPlayerLocation(latitude, longitude) {
+        const latLng = [latitude, longitude];
+        if (!playerMarker) {
+          playerMarker = L.circleMarker(latLng, {
+            radius: 7,
+            color: "#fff",
+            weight: 2,
+            fillColor: "#1e90ff",
+            fillOpacity: 1,
+          }).addTo(map);
+        } else {
+          playerMarker.setLatLng(latLng);
         }
 
-        const xRatio = (longitude - MAP_TOP_LEFT_LNG) / lngRange;
-        const yRatio = (MAP_TOP_LEFT_LAT - latitude) / latRange;
-
-        const x = clamp(xRatio, 0, 1) * MAP_WIDTH;
-        const y = clamp(yRatio, 0, 1) * MAP_HEIGHT;
-
-        return { x, y };
-      }
-
-      function drawPlayerLocation(latitude, longitude) {
-        const marker = document.getElementById("player-location");
-        const point = gpsToMapCoordinates(latitude, longitude);
-
-        if (!marker || !point) return;
-
-        marker.style.left = `${point.x}px`;
-        marker.style.top = `${point.y}px`;
-        marker.style.display = "block";
+        if (!playerAccuracy) {
+          playerAccuracy = L.circle(latLng, {
+            radius: 18,
+            color: "#1e90ff",
+            weight: 1,
+            fillColor: "#1e90ff",
+            fillOpacity: 0.2,
+          }).addTo(map);
+        } else {
+          playerAccuracy.setLatLng(latLng);
+        }
       }
 
       function startGpsTracking() {
@@ -401,29 +637,14 @@
       }
 
       setInterval(updateGameState, 1000);
-
-      function resizeMap() {
-        const map = document.getElementById("map");
-        const wrapper = document.getElementById("map-wrapper");
-        const container = document.getElementById("map-scroll-container");
-
-        if (!map || !wrapper || !container) return;
-
-        const originalWidth = 1189;
-        const originalHeight = 1140;
-        const availableWidth = container.getBoundingClientRect().width;
-        const scale = availableWidth / originalWidth;
-
-        map.style.transform = `scale(${scale})`;
-        wrapper.style.height = `${originalHeight * scale}px`;
-      }
-
-      window.addEventListener("resize", resizeMap);
       window.addEventListener("load", () => {
-        resizeMap();
+        setupModeUi();
         startGpsTracking();
+        updateGameState();
       });
-      resizeMap();
+      window.addEventListener("resize", () => {
+        map.invalidateSize();
+      });
     </script>
   </body>
 </html>

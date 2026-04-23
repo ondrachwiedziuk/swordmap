@@ -5,6 +5,9 @@ from django.utils import timezone
 from .models import Zone, Team, Game
 import math
 import json
+import re
+import base64
+import binascii
 
 map_width, map_height = 1189, 1140  # Example dimensions for coordinate calculations
 
@@ -33,7 +36,20 @@ def map_view(request, role):
     mean_lat = (game.top_left_latitude + game.bottom_right_latitude) / 2
     scale = math.cos(math.radians(mean_lat))
 
-    game.diameter = 2 * round(game.accepted_distance * math.sqrt(map_height**2 + map_width**2) / haversine(game.top_left_latitude, game.top_left_longitude, game.bottom_right_latitude, game.bottom_right_longitude))
+    map_diagonal_distance = haversine(
+        game.top_left_latitude,
+        game.top_left_longitude,
+        game.bottom_right_latitude,
+        game.bottom_right_longitude,
+    )
+    if map_diagonal_distance > 0:
+        game.diameter = 2 * round(
+            game.accepted_distance
+            * math.sqrt(map_height**2 + map_width**2)
+            / map_diagonal_distance
+        )
+    else:
+        game.diameter = 0
 
     if role == 'admin2536' and request.method == 'POST':
         start_time_str = request.POST.get('start_time')
@@ -54,18 +70,26 @@ def map_view(request, role):
                 pass
 
     zones = Zone.objects.all()
+    longitude_span = (game.bottom_right_longitude - game.top_left_longitude) * scale
+    latitude_span = game.top_left_latitude - game.bottom_right_latitude
     for zone in zones:
-        zone.x_coordinate = (
-            (zone.longitude - game.top_left_longitude) * scale
-            / ((game.bottom_right_longitude - game.top_left_longitude) * scale)
-            * map_width
-        )
+        if longitude_span:
+            zone.x_coordinate = (
+                (zone.longitude - game.top_left_longitude) * scale
+                / longitude_span
+                * map_width
+            )
+        else:
+            zone.x_coordinate = map_width / 2
 
-        zone.y_coordinate = (
-            (game.top_left_latitude - zone.latitude)
-            / (game.top_left_latitude - game.bottom_right_latitude)
-            * map_height
-        )    
+        if latitude_span:
+            zone.y_coordinate = (
+                (game.top_left_latitude - zone.latitude)
+                / latitude_span
+                * map_height
+            )
+        else:
+            zone.y_coordinate = map_height / 2
         
     capturing_zones = Zone.objects.filter(status='CAPTURING')
     teams = Team.objects.all()
@@ -147,9 +171,97 @@ def can_interact(team, zone, game_mode='standard'):
     
     return is_adjacent_to_connected
 
+
+def process_zone_interaction(team, zone):
+    # Game logic shared by GPS and QR flows.
+    if zone.status == 'NEUTRAL':
+        zone.status = 'CAPTURING'
+        zone.capturing_team = team
+        zone.capture_started_at = timezone.now()
+        zone.save()
+        return JsonResponse({'status': 'capturing_started', 'team': team.name})
+
+    if zone.status == 'CAPTURING':
+        if zone.capturing_team == team:
+            return JsonResponse({'status': 'already_capturing'})
+
+        # Hostile team stops it
+        if zone.owner:
+            zone.status = 'OWNED'
+        else:
+            zone.status = 'NEUTRAL'
+
+        zone.capturing_team = None
+        zone.capture_started_at = None
+        zone.save()
+        return JsonResponse({'status': 'capture_stopped'})
+
+    if zone.status == 'OWNED':
+        if zone.owner == team:
+            return JsonResponse({'status': 'already_owned'})
+
+        # Hostile team attacks owned zone
+        zone.status = 'CAPTURING'
+        # Owner remains until capture is complete
+        zone.capturing_team = team
+        zone.capture_started_at = timezone.now()
+        zone.save()
+        return JsonResponse({'status': 'capturing_started', 'team': team.name})
+
+    return JsonResponse({'status': 'ok'})
+
+
+def parse_zone_id_from_qr(qr_code):
+    if not qr_code:
+        return None
+
+    raw = str(qr_code).strip()
+    if raw.isdigit():
+        return int(raw)
+
+    # Accept common formats like ZONE-12, ZONE:12, zone/12.
+    match = re.search(r'zone\s*[-:/]?\s*(\d+)', raw, flags=re.IGNORECASE)
+    if match:
+        return int(match.group(1))
+
+    return None
+
+
+def decode_qr_from_image_data(image_data):
+    if not image_data:
+        return None
+
+    payload = str(image_data).strip()
+    if ',' in payload:
+        payload = payload.split(',', 1)[1]
+
+    try:
+        image_bytes = base64.b64decode(payload, validate=True)
+    except (binascii.Error, ValueError):
+        return None
+
+    try:
+        import cv2
+        import numpy as np
+    except ImportError as exc:
+        raise RuntimeError('Missing QR decoding dependency. Install opencv-python-headless.') from exc
+
+    image_np = np.frombuffer(image_bytes, dtype=np.uint8)
+    frame = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
+    if frame is None:
+        return None
+
+    detector = cv2.QRCodeDetector()
+    decoded_value, _, _ = detector.detectAndDecode(frame)
+    decoded_value = (decoded_value or '').strip()
+    return decoded_value or None
+
 def zone_click(request, zone_id):
     if request.method == 'POST':
-        data = json.loads(request.body)
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON payload'}, status=400)
         role = data.get('role')
         longitude = data.get('longitude')
         latitude = data.get('latitude')
@@ -171,6 +283,9 @@ def zone_click(request, zone_id):
              return JsonResponse({'error': f'Game has not started yet. Start: {game.start_time}, Now: {now}'}, status=400)
         if now > game.end_time:
              return JsonResponse({'error': f'Game is over. End: {game.end_time}, Now: {now}'}, status=400)
+
+        if game.mode == 'QR':
+            return JsonResponse({'error': 'QR mode is active. Capture zones by scanning QR codes.'}, status=400)
             
         try:
             team = Team.objects.get(name__iexact=role)
@@ -189,41 +304,65 @@ def zone_click(request, zone_id):
         if not can_interact(team, zone, game.mode):
              return JsonResponse({'error': 'Zone is not reachable from your base!'}, status=400)
 
-        # Game logic
-        if zone.status == 'NEUTRAL':
-            zone.status = 'CAPTURING'
-            zone.capturing_team = team
-            zone.capture_started_at = timezone.now()
-            zone.save()
-            return JsonResponse({'status': 'capturing_started', 'team': team.name})
-            
-        elif zone.status == 'CAPTURING':
-            if zone.capturing_team == team:
-                return JsonResponse({'status': 'already_capturing'})
-            else:
-                # Hostile team stops it
-                if zone.owner:
-                    zone.status = 'OWNED'
-                else:
-                    zone.status = 'NEUTRAL'
-                
-                zone.capturing_team = None
-                zone.capture_started_at = None
-                zone.save()
-                return JsonResponse({'status': 'capture_stopped'})
-                
-        elif zone.status == 'OWNED':
-            if zone.owner == team:
-                return JsonResponse({'status': 'already_owned'})
-            else:
-                # Hostile team attacks owned zone
-                zone.status = 'CAPTURING'
-                # Owner remains until capture is complete
-                zone.capturing_team = team
-                zone.capture_started_at = timezone.now()
-                zone.save()
-                return JsonResponse({'status': 'capturing_started', 'team': team.name})
-                
-        return JsonResponse({'status': 'ok'})
+        return process_zone_interaction(team, zone)
     return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+
+def zone_scan_qr(request):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON payload'}, status=400)
+    role = data.get('role')
+    qr_code = data.get('qr_code')
+    image_data = data.get('image_data')
+
+    if role == 'admin2536':
+        return JsonResponse({'status': 'admin_action'})
+
+    if not qr_code and image_data:
+        try:
+            qr_code = decode_qr_from_image_data(image_data)
+        except RuntimeError as exc:
+            return JsonResponse({'error': str(exc)}, status=500)
+
+        if not qr_code:
+            return JsonResponse({'status': 'qr_not_detected'})
+
+    if not qr_code:
+        return JsonResponse({'error': 'Missing QR code value'}, status=400)
+
+    game = Game.objects.first()
+    now = timezone.now()
+    if not game or not game.start_time or not game.end_time:
+        return JsonResponse({'error': 'Game not configured'}, status=400)
+    if now < game.start_time:
+        return JsonResponse({'error': f'Game has not started yet. Start: {game.start_time}, Now: {now}'}, status=400)
+    if now > game.end_time:
+        return JsonResponse({'error': f'Game is over. End: {game.end_time}, Now: {now}'}, status=400)
+
+    if game.mode != 'QR':
+        return JsonResponse({'error': 'QR capture is available only when game mode is QR.'}, status=400)
+
+    try:
+        team = Team.objects.get(name__iexact=role)
+    except Team.DoesNotExist:
+        return JsonResponse({'error': 'Invalid team'}, status=400)
+
+    zone_id = parse_zone_id_from_qr(qr_code)
+    if zone_id is None:
+        return JsonResponse({'error': 'Invalid QR code format. Expected ZONE-<id>.'}, status=400)
+
+    zone = get_object_or_404(Zone, id=zone_id)
+
+    if zone.is_base:
+        return JsonResponse({'error': 'Cannot capture base'}, status=400)
+
+    if not can_interact(team, zone, game.mode):
+        return JsonResponse({'error': 'Zone is not reachable from your base!'}, status=400)
+
+    return process_zone_interaction(team, zone)
 
