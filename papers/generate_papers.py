@@ -31,7 +31,7 @@ def generate_tex(config_path: str, num_spare: int) -> str:
         r"\hbox to \hsize{"
         r"\vbox{\hsize=0.7\hsize " + notice + r"}"
         r"\hfil"
-        r"\vbox to 0pt{\vss\pdfrefximage\hippoimg\vss}"
+        r"\vbox{\pdfrefximage\hippoimg}"
         r"}"
     )
 

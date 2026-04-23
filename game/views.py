@@ -7,6 +7,7 @@ import math
 import json
 import re
 import hashlib
+from urllib.parse import quote, unquote
 
 map_width, map_height = 1189, 1140  # Example dimensions for coordinate calculations
 
@@ -102,7 +103,10 @@ def map_view(request, role):
         'teams': teams,
         'TIME_ZONE': settings.TIME_ZONE,
     }
-    return render(request, 'game/map.html', context)
+    response = render(request, 'game/map.html', context)
+    if role != 'admin2536':
+        response.set_cookie('swordmap_team', quote(role), max_age=60 * 60 * 24)
+    return response
 
 def is_connected_to_base(team, target_zone):
     """
@@ -351,7 +355,7 @@ def zone_scan_qr(request):
         return JsonResponse({'error': 'Zone is not reachable from your base!'}, status=400)
 
     response = process_zone_interaction(team, zone)
-    response.set_cookie('swordmap_team', team.name, max_age=60 * 60 * 24)
+    response.set_cookie('swordmap_team', quote(team.name), max_age=60 * 60 * 24)
     return response
 
 
@@ -362,7 +366,7 @@ def _do_qr_capture(team, zone, game):
 
     process_zone_interaction(team, zone)
     response = redirect('map', role=team.name.lower())
-    response.set_cookie('swordmap_team', team.name, max_age=60 * 60 * 24)
+    response.set_cookie('swordmap_team', quote(team.name), max_age=60 * 60 * 24)
     return response, None
 
 
@@ -413,7 +417,7 @@ def qr_link(request, code):
 
     # --- Try cached team (cookie) on GET ---
     if request.method == 'GET':
-        cached_team_name = request.COOKIES.get('swordmap_team', '').strip()
+        cached_team_name = unquote(request.COOKIES.get('swordmap_team', '')).strip()
         if cached_team_name:
             try:
                 team = Team.objects.get(name__iexact=cached_team_name)
