@@ -162,6 +162,10 @@
       const map = L.map("map", {
         zoomControl: true,
       });
+      map.createPane("edgesPane");
+      map.getPane("edgesPane").style.zIndex = 410;
+      map.createPane("zonesPane");
+      map.getPane("zonesPane").style.zIndex = 420;
       const bounds = [
         [parseFloat("{{ game.bottom_right_latitude|default:'0' }}"), parseFloat("{{ game.top_left_longitude|default:'0' }}")],
         [parseFloat("{{ game.top_left_latitude|default:'0' }}"), parseFloat("{{ game.bottom_right_longitude|default:'0' }}")],
@@ -240,6 +244,7 @@
                 [other.lat, other.lng],
               ],
               {
+                pane: "edgesPane",
                 color: "#333",
                 weight: 6,
                 opacity: 0.9,
@@ -252,6 +257,7 @@
                 [other.lat, other.lng],
               ],
               {
+                pane: "edgesPane",
                 color: "#fff",
                 weight: 4,
                 opacity: 0.95,
@@ -266,7 +272,10 @@
       function drawZones() {
         zoneSeed.forEach((zone) => {
           zoneMeta.set(zone.id, zone);
-          const layer = L.circleMarker([zone.lat, zone.lng], getZoneStyle(zone)).addTo(map);
+          const layer = L.circleMarker([zone.lat, zone.lng], {
+            ...getZoneStyle(zone),
+            pane: "zonesPane",
+          }).addTo(map);
           layer.bindTooltip(zone.name, {
             direction: "top",
             offset: [0, -10],
