@@ -4,8 +4,8 @@
 		<ele>486.851166</ele>
 		<name>Matúš Půll</name>
 	</wpt>
-	<wpt lat="50.628890" lon="15.605981">
-		<ele>485.380066</ele>
+	<wpt lat="50.628920" lon="15.606036">
+		<ele>485.411560</ele>
 		<name>Klášter</name>
 	</wpt>
 	<wpt lat="50.627975" lon="15.606620">
@@ -36,8 +36,8 @@
 		<ele>480.163666</ele>
 		<name>Zdenda Půlříše</name>
 	</wpt>
-	<wpt lat="50.626846" lon="15.609551">
-		<ele>480.000000</ele>
+	<wpt lat="50.626884" lon="15.609747">
+		<ele>479.856537</ele>
 		<name>Okruh</name>
 	</wpt>
 	<wpt lat="50.626595" lon="15.608661">
@@ -48,8 +48,8 @@
 		<ele>478.400055</ele>
 		<name>Křižovatka</name>
 	</wpt>
-	<wpt lat="50.625748" lon="15.608757">
-		<ele>478.477020</ele>
+	<wpt lat="50.625760" lon="15.608683">
+		<ele>478.444763</ele>
 		<name>U jezera</name>
 	</wpt>
 	<wpt lat="50.625725" lon="15.610160">
@@ -60,33 +60,45 @@
 		<ele>478.958313</ele>
 		<name>Cesta</name>
 	</wpt>
-	<wpt lat="50.625023" lon="15.607738">
-		<ele>483.531616</ele>
+	<wpt lat="50.625088" lon="15.607833">
+		<ele>481.787781</ele>
 		<name>U zdi</name>
 	</wpt>
-	<wpt lat="50.624126" lon="15.608403">
-		<ele>480.121155</ele>
+	<wpt lat="50.624195" lon="15.608305">
+		<ele>480.200043</ele>
 		<name>Jan Tuňák</name>
 	</wpt>
-	<wpt lat="50.624530" lon="15.609427">
-		<ele>478.394592</ele>
+	<wpt lat="50.624530" lon="15.609673">
+		<ele>478.000000</ele>
 		<name>Jih</name>
 	</wpt>
 	<wpt lat="50.624360" lon="15.611810">
 		<ele>475.200012</ele>
 		<name>Hálka</name>
 	</wpt>
-	<wpt lat="50.625140" lon="15.611885">
-		<ele>474.864868</ele>
+	<wpt lat="50.625362" lon="15.612019">
+		<ele>475.000000</ele>
 		<name>Průchod</name>
 	</wpt>
-	<wpt lat="50.626300" lon="15.611625">
-		<ele>477.081604</ele>
+	<wpt lat="50.626390" lon="15.611632">
+		<ele>477.200043</ele>
 		<name>Krbalova</name>
 	</wpt>
-	<wpt lat="50.627052" lon="15.611018">
-		<ele>478.798187</ele>
+	<wpt lat="50.627110" lon="15.611044">
+		<ele>478.960358</ele>
 		<name>Čecha</name>
+	</wpt>
+	<wpt lat="50.626240" lon="15.607338">
+		<ele>482.490417</ele>
+		<name>Socha</name>
+	</wpt>
+	<wpt lat="50.625164" lon="15.610713">
+		<ele>476.967407</ele>
+		<name>Před průchodem</name>
+	</wpt>
+	<wpt lat="50.628475" lon="15.607767">
+		<ele>482.282196</ele>
+		<name>Parkoviště</name>
 	</wpt>
 </gpx>
 

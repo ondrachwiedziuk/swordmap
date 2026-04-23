@@ -2,17 +2,26 @@
   "mode": "QR",
   "accepted_distance": 25,
   "topLeft": {
-    "latitude": 50.62889,
+    "latitude": 50.62892,
     "longitude": 15.605501
   },
   "bottomRight": {
-    "latitude": 50.624126,
-    "longitude": 15.611885
+    "latitude": 50.624195,
+    "longitude": 15.612019
   },
   "teams": [
-    { "name": "Matůš Púúúl", "color": "#dc143c" },
-    { "name": "Jan Tuňák", "color": "#4169e1" },
-    { "name": "Zdenda Půlříše", "color": "#daa520" }
+    {
+      "name": "Mat\u016f\u0161 P\u00fa\u00fa\u00fal",
+      "color": "#dc143c"
+    },
+    {
+      "name": "Jan Tu\u0148\u00e1k",
+      "color": "#4169e1"
+    },
+    {
+      "name": "Zdenda P\u016fl\u0159\u00ed\u0161e",
+      "color": "#daa520"
+    }
   ],
   "zones": [
     {
@@ -22,16 +31,16 @@
       "longitude": 15.605501,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [2, 3, 5]
     },
     {
       "id": 2,
       "name": "Kl\u00e1\u0161ter",
-      "latitude": 50.62889,
-      "longitude": 15.605981,
+      "latitude": 50.62892,
+      "longitude": 15.606036,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [1, 3, 25]
     },
     {
       "id": 3,
@@ -40,7 +49,7 @@
       "longitude": 15.60662,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [1, 2, 4]
     },
     {
       "id": 4,
@@ -49,7 +58,7 @@
       "longitude": 15.607298,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [3, 5, 6, 7]
     },
     {
       "id": 5,
@@ -58,7 +67,7 @@
       "longitude": 15.606515,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [1, 4, 6]
     },
     {
       "id": 6,
@@ -67,7 +76,7 @@
       "longitude": 15.607789,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [4, 5, 7, 23]
     },
     {
       "id": 7,
@@ -76,7 +85,7 @@
       "longitude": 15.60877,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [4, 6, 8, 10, 11]
     },
     {
       "id": 8,
@@ -85,7 +94,7 @@
       "longitude": 15.609119,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [7, 9, 25]
     },
     {
       "id": 9,
@@ -94,16 +103,16 @@
       "longitude": 15.610147,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [8, 10, 22]
     },
     {
       "id": 10,
       "name": "Okruh",
-      "latitude": 50.626846,
-      "longitude": 15.609551,
+      "latitude": 50.626884,
+      "longitude": 15.609747,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [7, 9, 11, 14]
     },
     {
       "id": 11,
@@ -112,7 +121,7 @@
       "longitude": 15.608661,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [7, 10, 12]
     },
     {
       "id": 12,
@@ -121,16 +130,16 @@
       "longitude": 15.608298,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [11, 13, 23]
     },
     {
       "id": 13,
       "name": "U jezera",
-      "latitude": 50.625748,
-      "longitude": 15.608757,
+      "latitude": 50.62576,
+      "longitude": 15.608683,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [12, 14,15,16]
     },
     {
       "id": 14,
@@ -139,7 +148,7 @@
       "longitude": 15.61016,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [10, 13,14]
     },
     {
       "id": 15,
@@ -148,34 +157,34 @@
       "longitude": 15.609155,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [13, 17, 18]
     },
     {
       "id": 16,
       "name": "U zdi",
-      "latitude": 50.625023,
-      "longitude": 15.607738,
+      "latitude": 50.625088,
+      "longitude": 15.607833,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [23, 13, 17]
     },
     {
       "id": 17,
       "name": "Jan Tu\u0148\u00e1k",
-      "latitude": 50.624126,
-      "longitude": 15.608403,
+      "latitude": 50.624195,
+      "longitude": 15.608305,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [16, 15, 18, 19]
     },
     {
       "id": 18,
       "name": "Jih",
       "latitude": 50.62453,
-      "longitude": 15.609427,
+      "longitude": 15.609673,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [17, 15, 24]
     },
     {
       "id": 19,
@@ -184,34 +193,61 @@
       "longitude": 15.61181,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [17, 20]
     },
     {
       "id": 20,
       "name": "Pr\u016fchod",
-      "latitude": 50.62514,
-      "longitude": 15.611885,
+      "latitude": 50.625362,
+      "longitude": 15.612019,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [24, 19, 21]
     },
     {
       "id": 21,
       "name": "Krbalova",
-      "latitude": 50.6263,
-      "longitude": 15.611625,
+      "latitude": 50.62639,
+      "longitude": 15.611632,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [20, 22]
     },
     {
       "id": 22,
       "name": "\u010cecha",
-      "latitude": 50.627052,
-      "longitude": 15.611018,
+      "latitude": 50.62711,
+      "longitude": 15.611044,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [21, 9]
+    },
+    {
+      "id": 23,
+      "name": "Socha",
+      "latitude": 50.62624,
+      "longitude": 15.607338,
+      "is_base": false,
+      "color": "#FFFFFF",
+      "adjacent_zones": [6, 12,16]
+    },
+    {
+      "id": 24,
+      "name": "P\u0159ed pr\u016fchodem",
+      "latitude": 50.625164,
+      "longitude": 15.610713,
+      "is_base": false,
+      "color": "#FFFFFF",
+      "adjacent_zones": [14, 20, 18]
+    },
+    {
+      "id": 25,
+      "name": "Parkovi\u0161t\u011b",
+      "latitude": 50.628475,
+      "longitude": 15.607767,
+      "is_base": false,
+      "color": "#FFFFFF",
+      "adjacent_zones": [2,8]
     }
   ]
 }
