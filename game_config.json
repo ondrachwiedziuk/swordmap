@@ -11,36 +11,44 @@
   },
   "teams": [
     {
-      "name": "Mat\u016f\u0161 P\u00fa\u00fa\u00fal",
+      "name": "Matúš Půll",
       "color": "#dc143c"
     },
     {
-      "name": "Jan Tu\u0148\u00e1k",
+      "name": "Jan Tuňák",
       "color": "#4169e1"
     },
     {
-      "name": "Zdenda P\u016fl\u0159\u00ed\u0161e",
+      "name": "Zdenda Půlříše",
       "color": "#daa520"
     }
   ],
   "zones": [
     {
       "id": 1,
-      "name": "Mat\u00fa\u0161 P\u016fll",
+      "name": "Matúš Půll",
       "latitude": 50.628296,
       "longitude": 15.605501,
-      "is_base": false,
+      "is_base": true,
       "color": "#FFFFFF",
-      "adjacent_zones": [2, 3, 5]
+      "adjacent_zones": [
+        2,
+        3,
+        5
+      ]
     },
     {
       "id": 2,
-      "name": "Kl\u00e1\u0161ter",
+      "name": "Klášter",
       "latitude": 50.62892,
       "longitude": 15.606036,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": [1, 3, 25]
+      "adjacent_zones": [
+        1,
+        3,
+        25
+      ]
     },
     {
       "id": 3,
@@ -49,16 +57,25 @@
       "longitude": 15.60662,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": [1, 2, 4]
+      "adjacent_zones": [
+        1,
+        2,
+        4
+      ]
     },
     {
       "id": 4,
-      "name": "U jez\u00edrka",
+      "name": "U jezírka",
       "latitude": 50.627453,
       "longitude": 15.607298,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": [3, 5, 6, 7]
+      "adjacent_zones": [
+        3,
+        5,
+        6,
+        7
+      ]
     },
     {
       "id": 5,
@@ -67,7 +84,12 @@
       "longitude": 15.606515,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": [1, 4, 6, 23]
+      "adjacent_zones": [
+        1,
+        4,
+        6,
+        23
+      ]
     },
     {
       "id": 6,
@@ -76,34 +98,53 @@
       "longitude": 15.607789,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": [4, 5, 7, 23]
+      "adjacent_zones": [
+        4,
+        5,
+        7,
+        23
+      ]
     },
     {
       "id": 7,
-      "name": "Z\u00e1mek",
+      "name": "Zámek",
       "latitude": 50.627262,
       "longitude": 15.60877,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": [4, 6, 8, 10, 11]
+      "adjacent_zones": [
+        4,
+        6,
+        8,
+        10,
+        11
+      ]
     },
     {
       "id": 8,
-      "name": "Betl\u00e9m",
+      "name": "Betlém",
       "latitude": 50.6279,
       "longitude": 15.609119,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": [7, 9, 25]
+      "adjacent_zones": [
+        7,
+        9,
+        25
+      ]
     },
     {
       "id": 9,
-      "name": "Zdenda P\u016fl\u0159\u00ed\u0161e",
+      "name": "Zdenda Půlříše",
       "latitude": 50.627647,
       "longitude": 15.610147,
-      "is_base": false,
+      "is_base": true,
       "color": "#FFFFFF",
-      "adjacent_zones": [8, 10, 22]
+      "adjacent_zones": [
+        8,
+        10,
+        22
+      ]
     },
     {
       "id": 10,
@@ -112,25 +153,38 @@
       "longitude": 15.609747,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": [7, 9, 11, 14]
+      "adjacent_zones": [
+        7,
+        9,
+        11,
+        14
+      ]
     },
     {
       "id": 11,
-      "name": "Za z\u00e1mkem",
+      "name": "Za zámkem",
       "latitude": 50.626595,
       "longitude": 15.608661,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": [7, 10, 12]
+      "adjacent_zones": [
+        7,
+        10,
+        12
+      ]
     },
     {
       "id": 12,
-      "name": "K\u0159i\u017eovatka",
+      "name": "Křižovatka",
       "latitude": 50.626102,
       "longitude": 15.608298,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": [11, 13, 23]
+      "adjacent_zones": [
+        11,
+        13,
+        23
+      ]
     },
     {
       "id": 13,
@@ -139,16 +193,25 @@
       "longitude": 15.608683,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": [12, 14,15,16]
+      "adjacent_zones": [
+        12,
+        14,
+        15,
+        16
+      ]
     },
     {
       "id": 14,
-      "name": "Rozcest\u00ed",
+      "name": "Rozcestí",
       "latitude": 50.625725,
       "longitude": 15.61016,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": [10, 13,14]
+      "adjacent_zones": [
+        10,
+        13,
+        14
+      ]
     },
     {
       "id": 15,
@@ -157,7 +220,11 @@
       "longitude": 15.609155,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": [13, 17, 18]
+      "adjacent_zones": [
+        13,
+        17,
+        18
+      ]
     },
     {
       "id": 16,
@@ -166,16 +233,25 @@
       "longitude": 15.607833,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": [23, 13, 17]
+      "adjacent_zones": [
+        23,
+        13,
+        17
+      ]
     },
     {
       "id": 17,
-      "name": "Jan Tu\u0148\u00e1k",
+      "name": "Jan Tuňák",
       "latitude": 50.624195,
       "longitude": 15.608305,
-      "is_base": false,
+      "is_base": true,
       "color": "#FFFFFF",
-      "adjacent_zones": [16, 15, 18, 19]
+      "adjacent_zones": [
+        16,
+        15,
+        18,
+        19
+      ]
     },
     {
       "id": 18,
@@ -184,25 +260,36 @@
       "longitude": 15.609673,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": [17, 15, 24]
+      "adjacent_zones": [
+        17,
+        15,
+        24
+      ]
     },
     {
       "id": 19,
-      "name": "H\u00e1lka",
+      "name": "Hálka",
       "latitude": 50.62436,
       "longitude": 15.61181,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": [17, 20]
+      "adjacent_zones": [
+        17,
+        20
+      ]
     },
     {
       "id": 20,
-      "name": "Pr\u016fchod",
+      "name": "Průchod",
       "latitude": 50.625362,
       "longitude": 15.612019,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": [24, 19, 21]
+      "adjacent_zones": [
+        24,
+        19,
+        21
+      ]
     },
     {
       "id": 21,
@@ -211,16 +298,22 @@
       "longitude": 15.611632,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": [20, 22]
+      "adjacent_zones": [
+        20,
+        22
+      ]
     },
     {
       "id": 22,
-      "name": "\u010cecha",
+      "name": "Čecha",
       "latitude": 50.62711,
       "longitude": 15.611044,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": [21, 9]
+      "adjacent_zones": [
+        21,
+        9
+      ]
     },
     {
       "id": 23,
@@ -229,25 +322,37 @@
       "longitude": 15.607338,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": [5,6,12,16]
+      "adjacent_zones": [
+        5,
+        6,
+        12,
+        16
+      ]
     },
     {
       "id": 24,
-      "name": "P\u0159ed pr\u016fchodem",
+      "name": "Před průchodem",
       "latitude": 50.625164,
       "longitude": 15.610713,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": [14, 20, 18]
+      "adjacent_zones": [
+        14,
+        20,
+        18
+      ]
     },
     {
       "id": 25,
-      "name": "Parkovi\u0161t\u011b",
+      "name": "Parkoviště",
       "latitude": 50.628475,
       "longitude": 15.607767,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": [2,8]
+      "adjacent_zones": [
+        2,
+        8
+      ]
     }
   ]
 }
