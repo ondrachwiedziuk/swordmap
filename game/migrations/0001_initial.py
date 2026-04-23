@@ -20,6 +20,12 @@ class Migration(migrations.Migration):
                 ('start_time', models.DateTimeField(blank=True, null=True)),
                 ('end_time', models.DateTimeField(blank=True, null=True)),
                 ('duration_minutes', models.IntegerField(default=60)),
+                ('mode', models.CharField(choices=[('STANDARD', 'Standard'), ('FREE', 'Free')], default='STANDARD', max_length=8)),
+                ('top_left_longitude', models.FloatField(default=0.0)),
+                ('top_left_latitude', models.FloatField(default=0.0)),
+                ('bottom_right_longitude', models.FloatField(default=0.0)),
+                ('bottom_right_latitude', models.FloatField(default=0.0)),
+                ('accepted_distance', models.FloatField(default=5)),
             ],
         ),
         migrations.CreateModel(
@@ -27,7 +33,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=50, unique=True)),
-                ('color', models.CharField(choices=[('YELLOW', 'Yellow'), ('BLUE', 'Blue'), ('BLACK', 'Black')], max_length=20, unique=True)),
+                ('color', models.CharField(max_length=20, unique=True)),
                 ('score', models.IntegerField(default=0)),
             ],
         ),
@@ -36,8 +42,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=100)),
-                ('x_coordinate', models.FloatField(default=0.0)),
-                ('y_coordinate', models.FloatField(default=0.0)),
+                ('longitude', models.FloatField(default=0.0)),
+                ('latitude', models.FloatField(default=0.0)),
                 ('default_color', models.CharField(default='#FFFFFF', max_length=20)),
                 ('status', models.CharField(choices=[('NEUTRAL', 'Neutral'), ('CAPTURING', 'Capturing'), ('OWNED', 'Owned'), ('CONTESTED', 'Contested')], default='NEUTRAL', max_length=20)),
                 ('capture_started_at', models.DateTimeField(blank=True, null=True)),

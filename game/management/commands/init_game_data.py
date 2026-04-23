@@ -8,33 +8,38 @@ class Command(BaseCommand):
     help = 'Initialize game data'
 
     def handle(self, *args, **kwargs):
-        # Ensure Game instance exists
-        Game.objects.get_or_create(id=1)
-        self.stdout.write(self.style.SUCCESS("Game instance created/exists"))
-
         # Load zones from config
         config_path = os.path.join(settings.BASE_DIR, 'game_config.json')
         if not os.path.exists(config_path):
             self.stdout.write(self.style.ERROR(f"Config file not found at {config_path}"))
             return
-
         with open(config_path, 'r') as f:
             config = json.load(f)
 
+        # Ensure Game instance exists
+        Game.objects.get_or_create(
+            id=1,
+            mode=config.get('mode', 'Standard'),
+            top_left_longitude=config.get('topLeft', {}).get('longitude', 0.0),
+            top_left_latitude=config.get('topLeft', {}).get('latitude', 0.0),
+            bottom_right_longitude=config.get('bottomRight', {}).get('longitude', 0.0),
+            bottom_right_latitude=config.get('bottomRight', {}).get('latitude', 0.0),
+            accepted_distance=config.get('accepted_distance', 5)
+        )
+        self.stdout.write(self.style.SUCCESS("Game instance created/exists"))
+
         # 1. Extract Teams from Bases
-        teams_config = {}
         for zone_data in config.get('zones', []):
             if zone_data.get('is_base') and zone_data.get('owner'):
                 team_name = zone_data['owner']
                 team_color = zone_data.get('color', '#FFFFFF') # Use base color as team color
-                teams_config[team_name] = team_color
 
         # 2. Create/Update Teams
         current_team_names = []
-        for name, color in teams_config.items():
-            Team.objects.update_or_create(name=name, defaults={'color': color, 'score': 0})
-            current_team_names.append(name)
-            self.stdout.write(self.style.SUCCESS(f"Team {name} processed (Score reset)"))
+        for team_data in config['teams']:
+            Team.objects.update_or_create(name=team_data["name"], defaults={'color': team_data["color"], 'score': 0})
+            current_team_names.append(team_data["name"])
+            self.stdout.write(self.style.SUCCESS(f"Team {team_data['name']} processed (Score reset)"))
 
         # Delete teams that are no longer in the config
         deleted_teams_count, _ = Team.objects.exclude(name__in=current_team_names).delete()
@@ -44,9 +49,9 @@ class Command(BaseCommand):
         processed_zone_names = []
         for zone_data in config.get('zones', []):
             defaults = {
-                'x_coordinate': zone_data['x'],
-                'y_coordinate': zone_data['y'],
                 'default_color': zone_data['color'],
+                'longitude': zone_data['longitude'],
+                'latitude': zone_data['latitude'],
                 'is_base': zone_data.get('is_base', False),
                 # Reset game state
                 'owner': None,

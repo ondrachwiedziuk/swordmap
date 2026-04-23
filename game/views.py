@@ -3,7 +3,26 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from .models import Zone, Team, Game
+import math
 import json
+
+map_width, map_height = 1189, 1140  # Example dimensions for coordinate calculations
+
+
+def haversine(lat1, lon1, lat2, lon2):
+    R = 6371  # Earth radius in kilometers
+
+    phi1 = math.radians(lat1)
+    phi2 = math.radians(lat2)
+    dphi = math.radians(lat2 - lat1)
+    dlambda = math.radians(lon2 - lon1)
+
+    a = math.sin(dphi / 2)**2 + \
+        math.cos(phi1) * math.cos(phi2) * math.sin(dlambda / 2)**2
+
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+    return R * c  * 1000 # distance in m
 
 def index(request):
     teams = Team.objects.all()
@@ -11,8 +30,12 @@ def index(request):
 
 def map_view(request, role):
     game, _ = Game.objects.get_or_create(id=1)
+    mean_lat = (game.top_left_latitude + game.bottom_right_latitude) / 2
+    scale = math.cos(math.radians(mean_lat))
 
-    if role == 'admin' and request.method == 'POST':
+    game.diameter = 2 * round(game.accepted_distance * math.sqrt(map_height**2 + map_width**2) / haversine(game.top_left_latitude, game.top_left_longitude, game.bottom_right_latitude, game.bottom_right_longitude))
+
+    if role == 'admin2536' and request.method == 'POST':
         start_time_str = request.POST.get('start_time')
         duration = request.POST.get('duration')
         
@@ -31,6 +54,19 @@ def map_view(request, role):
                 pass
 
     zones = Zone.objects.all()
+    for zone in zones:
+        zone.x_coordinate = (
+            (zone.longitude - game.top_left_longitude) * scale
+            / ((game.bottom_right_longitude - game.top_left_longitude) * scale)
+            * map_width
+        )
+
+        zone.y_coordinate = (
+            (game.top_left_latitude - zone.latitude)
+            / (game.top_left_latitude - game.bottom_right_latitude)
+            * map_height
+        )    
+        
     capturing_zones = Zone.objects.filter(status='CAPTURING')
     teams = Team.objects.all()
     
@@ -71,12 +107,15 @@ def is_connected_to_base(team, target_zone):
                 
     return target_zone.id in reachable_zones
 
-def can_interact(team, zone):
+def can_interact(team, zone, game_mode='standard'):
     """
     Determines if a team can interact with a zone (attack or defend).
     Rule: Teams can attack only places adjacent to their ones which are path connected with their base.
           Same for defending (must be connected to base).
     """
+    if game_mode.lower() == 'free':
+        return True  # In free mode, any interaction is allowed
+    
     # 1. Calculate the set of all zones owned by team that are connected to a base
     bases = Zone.objects.filter(owner=team, is_base=True)
     if not bases.exists():
@@ -112,10 +151,16 @@ def zone_click(request, zone_id):
     if request.method == 'POST':
         data = json.loads(request.body)
         role = data.get('role')
+        longitude = data.get('longitude')
+        latitude = data.get('latitude')
+
         
-        if role == 'admin':
+        if role == 'admin2536':
             # Admin logic (e.g., change color)
             return JsonResponse({'status': 'admin_action'})
+        
+        if longitude is None or latitude is None:
+            return JsonResponse({'error': 'Missing GPS coordinates'}, status=400)
         
         # Check Game Time
         game = Game.objects.first()
@@ -133,12 +178,15 @@ def zone_click(request, zone_id):
             return JsonResponse({'error': 'Invalid team'}, status=400)
             
         zone = get_object_or_404(Zone, id=zone_id)
+
+        if haversine(latitude, longitude, zone.latitude, zone.longitude) > game.accepted_distance:
+            return JsonResponse({'error': 'You are too far from the zone to interact'}, status=400)
         
         if zone.is_base:
-             return JsonResponse({'error': 'Cannot capture base'}, status=400)
+            return JsonResponse({'error': 'Cannot capture base'}, status=400)
 
         # Check connectivity rules
-        if not can_interact(team, zone):
+        if not can_interact(team, zone, game.mode):
              return JsonResponse({'error': 'Zone is not reachable from your base!'}, status=400)
 
         # Game logic
