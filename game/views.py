@@ -350,15 +350,29 @@ def zone_scan_qr(request):
     if not can_interact(team, zone, game.mode):
         return JsonResponse({'error': 'Zone is not reachable from your base!'}, status=400)
 
-    return process_zone_interaction(team, zone)
+    response = process_zone_interaction(team, zone)
+    response.set_cookie('swordmap_team', team.name, max_age=60 * 60 * 24)
+    return response
+
+
+def _do_qr_capture(team, zone, game):
+    """Attempt capture and return a redirect response to the map (with team cookie set)."""
+    if not can_interact(team, zone, game.mode):
+        return None, 'Zone is not reachable from your base!'
+
+    process_zone_interaction(team, zone)
+    response = redirect('map', role=team.name.lower())
+    response.set_cookie('swordmap_team', team.name, max_age=60 * 60 * 24)
+    return response, None
 
 
 def qr_link(request, code):
     """Handle direct QR link opened from an external QR scanner app.
 
     URL: /c/<zone_id><signature>
-    GET  -> show team-selection page
-    POST -> perform the zone capture for the chosen team
+
+    If the team is cached in a cookie, capture immediately and redirect to map.
+    Otherwise show team-selection; on POST store the cookie and redirect to map.
     """
     qr_url = QR_BASE_URL + code
     zone_id = parse_zone_id_from_qr(qr_url)
@@ -397,6 +411,27 @@ def qr_link(request, code):
             'zone': zone,
         })
 
+    # --- Try cached team (cookie) on GET ---
+    if request.method == 'GET':
+        cached_team_name = request.COOKIES.get('swordmap_team', '').strip()
+        if cached_team_name:
+            try:
+                team = Team.objects.get(name__iexact=cached_team_name)
+                response, error = _do_qr_capture(team, zone, game)
+                if response:
+                    return response
+                # Capture failed (unreachable) – fall through to team picker
+                # with the error so the user sees what happened.
+                return render(request, 'game/qr_capture.html', {
+                    'error': error,
+                    'zone': zone,
+                    'teams': teams,
+                    'code': code,
+                })
+            except Team.DoesNotExist:
+                pass  # stale cookie – fall through to team picker
+
+    # --- POST: explicit team selection ---
     if request.method == 'POST':
         team_name = request.POST.get('team', '').strip()
         try:
@@ -409,17 +444,17 @@ def qr_link(request, code):
                 'code': code,
             })
 
-        if not can_interact(team, zone, game.mode):
-            return render(request, 'game/qr_capture.html', {
-                'error': 'Zone is not reachable from your base!',
-                'zone': zone,
-                'teams': teams,
-                'code': code,
-            })
+        response, error = _do_qr_capture(team, zone, game)
+        if response:
+            return response
+        return render(request, 'game/qr_capture.html', {
+            'error': error,
+            'zone': zone,
+            'teams': teams,
+            'code': code,
+        })
 
-        process_zone_interaction(team, zone)
-        return redirect('map', role=team.name.lower())
-
+    # GET without cached team – show team picker.
     return render(request, 'game/qr_capture.html', {
         'zone': zone,
         'teams': teams,
