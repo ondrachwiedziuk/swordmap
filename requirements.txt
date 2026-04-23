@@ -1,5 +1,5 @@
 Django==4.2.*
-pymysql
+psycopg2-binary
 python-dotenv
 whitenoise
 opencv-python-headless

@@ -10,9 +10,9 @@
     "longitude": 16.6150014
   },
   "teams": [
-    { "name": "Blue", "color": "#0000ff" },
-    { "name": "Red", "color": "#ff0000" },
-    { "name": "Yellow", "color": "#ffff00" }
+    { "name": "Matůš Púúúl", "color": "#dc143c" },
+    { "name": "Jan Tuňák", "color": "#4169e1" },
+    { "name": "Zdenda Půlříše", "color": "#daa520" }
   ],
   "zones": [
     {
