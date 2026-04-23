@@ -67,7 +67,7 @@
       "longitude": 15.606515,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": [1, 4, 6]
+      "adjacent_zones": [1, 4, 6, 23]
     },
     {
       "id": 6,
@@ -229,7 +229,7 @@
       "longitude": 15.607338,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": [6, 12,16]
+      "adjacent_zones": [5,6,12,16]
     },
     {
       "id": 24,
