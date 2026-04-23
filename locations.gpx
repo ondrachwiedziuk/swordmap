@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="https://mapy.com/">
+	<wpt lat="50.628296" lon="15.605501">
+		<ele>486.851166</ele>
+		<name>Matúš Půll</name>
+	</wpt>
+	<wpt lat="50.628890" lon="15.605981">
+		<ele>485.380066</ele>
+		<name>Klášter</name>
+	</wpt>
+	<wpt lat="50.627975" lon="15.606620">
+		<ele>482.400024</ele>
+		<name>Zahrada</name>
+	</wpt>
+	<wpt lat="50.627453" lon="15.607298">
+		<ele>481.599945</ele>
+		<name>U jezírka</name>
+	</wpt>
+	<wpt lat="50.626945" lon="15.606515">
+		<ele>485.195160</ele>
+		<name>KRNAP</name>
+	</wpt>
+	<wpt lat="50.626877" lon="15.607789">
+		<ele>480.704651</ele>
+		<name>Pod stromy</name>
+	</wpt>
+	<wpt lat="50.627262" lon="15.608770">
+		<ele>480.641296</ele>
+		<name>Zámek</name>
+	</wpt>
+	<wpt lat="50.627900" lon="15.609119">
+		<ele>481.331848</ele>
+		<name>Betlém</name>
+	</wpt>
+	<wpt lat="50.627647" lon="15.610147">
+		<ele>480.163666</ele>
+		<name>Zdenda Půlříše</name>
+	</wpt>
+	<wpt lat="50.626846" lon="15.609551">
+		<ele>480.000000</ele>
+		<name>Okruh</name>
+	</wpt>
+	<wpt lat="50.626595" lon="15.608661">
+		<ele>480.309265</ele>
+		<name>Za zámkem</name>
+	</wpt>
+	<wpt lat="50.626102" lon="15.608298">
+		<ele>478.400055</ele>
+		<name>Křižovatka</name>
+	</wpt>
+	<wpt lat="50.625748" lon="15.608757">
+		<ele>478.477020</ele>
+		<name>U jezera</name>
+	</wpt>
+	<wpt lat="50.625725" lon="15.610160">
+		<ele>477.799988</ele>
+		<name>Rozcestí</name>
+	</wpt>
+	<wpt lat="50.625110" lon="15.609155">
+		<ele>478.958313</ele>
+		<name>Cesta</name>
+	</wpt>
+	<wpt lat="50.625023" lon="15.607738">
+		<ele>483.531616</ele>
+		<name>U zdi</name>
+	</wpt>
+	<wpt lat="50.624126" lon="15.608403">
+		<ele>480.121155</ele>
+		<name>Jan Tuňák</name>
+	</wpt>
+	<wpt lat="50.624530" lon="15.609427">
+		<ele>478.394592</ele>
+		<name>Jih</name>
+	</wpt>
+	<wpt lat="50.624360" lon="15.611810">
+		<ele>475.200012</ele>
+		<name>Hálka</name>
+	</wpt>
+	<wpt lat="50.625140" lon="15.611885">
+		<ele>474.864868</ele>
+		<name>Průchod</name>
+	</wpt>
+	<wpt lat="50.626300" lon="15.611625">
+		<ele>477.081604</ele>
+		<name>Krbalova</name>
+	</wpt>
+	<wpt lat="50.627052" lon="15.611018">
+		<ele>478.798187</ele>
+		<name>Čecha</name>
+	</wpt>
+</gpx>
+
