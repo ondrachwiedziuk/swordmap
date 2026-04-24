@@ -48,7 +48,7 @@ Každý hráč má za kalhotami šátek v barvě svého týmu.
 - Hráč je vyřazen, pokud mu soupeř vytrhne šátek.
 - Hráč je vyřazen i tehdy, pokud mu šátek samovolně vypadne, soupeř si toho všimne a upozorní na to.
 
-V případě, že by měl souboj probíhat na chodníku mimo zámecký park (týká se to předeším severní, východní a jižní hrany herní plochy), je nahrazen soubojem ve hře "Kámen, nůžky, papír".
+V případě, že by měl souboj probíhat na chodníku mimo zámecký park (týká se to předeším severní, východní a jižní hrany herní plochy), je nahrazen soubojem ve hře "Kámen, nůžky, papír". Chodníky obecně fungují jako jednosměrky pro členy různých týmů.
 
 Vyřazený hráč:
 

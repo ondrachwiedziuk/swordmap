@@ -7,60 +7,104 @@
   },
   "bottomRight": {
     "latitude": 50.623955,
-    "longitude": 15.612311
+    "longitude": 15.612298
   },
   "play_area_vertices": [
     {
-      "latitude": 50.628315,
-      "longitude": 15.605578
+      "latitude": 50.628845,
+      "longitude": 15.604924
     },
     {
       "latitude": 50.629044,
       "longitude": 15.605987
     },
     {
-      "latitude": 50.62897,
-      "longitude": 15.607569
+      "latitude": 50.629005,
+      "longitude": 15.606931
     },
     {
-      "latitude": 50.62867,
-      "longitude": 15.608336
+      "latitude": 50.62895,
+      "longitude": 15.607631
     },
     {
-      "latitude": 50.62827,
-      "longitude": 15.609103
+      "latitude": 50.628628,
+      "longitude": 15.608325
     },
     {
-      "latitude": 50.62802,
+      "latitude": 50.628254,
+      "longitude": 15.609161
+    },
+    {
+      "latitude": 50.628006,
+      "longitude": 15.609398
+    },
+    {
+      "latitude": 50.627953,
       "longitude": 15.610064
+    },
+    {
+      "latitude": 50.627407,
+      "longitude": 15.610767
     },
     {
       "latitude": 50.62693,
       "longitude": 15.611196
     },
     {
+      "latitude": 50.626373,
+      "longitude": 15.611662
+    },
+    {
       "latitude": 50.62571,
       "longitude": 15.611915
     },
     {
-      "latitude": 50.624313,
-      "longitude": 15.612311
+      "latitude": 50.62501,
+      "longitude": 15.612126
+    },
+    {
+      "latitude": 50.62429,
+      "longitude": 15.612298
+    },
+    {
+      "latitude": 50.6242,
+      "longitude": 15.610672
     },
     {
       "latitude": 50.623955,
       "longitude": 15.60877
     },
     {
-      "latitude": 50.624138,
-      "longitude": 15.608245
+      "latitude": 50.624107,
+      "longitude": 15.608272
     },
     {
-      "latitude": 50.626274,
-      "longitude": 15.607097
+      "latitude": 50.624912,
+      "longitude": 15.607947
     },
     {
-      "latitude": 50.62722,
-      "longitude": 15.605821
+      "latitude": 50.625435,
+      "longitude": 15.607492
+    },
+    {
+      "latitude": 50.62661,
+      "longitude": 15.606759
+    },
+    {
+      "latitude": 50.62622,
+      "longitude": 15.607119
+    },
+    {
+      "latitude": 50.626972,
+      "longitude": 15.606379
+    },
+    {
+      "latitude": 50.627373,
+      "longitude": 15.605772
+    },
+    {
+      "latitude": 50.62811,
+      "longitude": 15.605303
     }
   ],
   "teams": [

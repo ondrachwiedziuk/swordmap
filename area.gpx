@@ -8,6 +8,10 @@
 		<ele>485.820007</ele>
 		<name>Nový bod</name>
 	</wpt>
+	<wpt lat="50.629005" lon="15.606931">
+		<ele>484.114655</ele>
+		<name>Nový bod</name>
+	</wpt>
 	<wpt lat="50.628950" lon="15.607631">
 		<ele>483.541260</ele>
 		<name>Nový bod</name>
@@ -20,8 +24,16 @@
 		<ele>481.785004</ele>
 		<name>Nový bod</name>
 	</wpt>
+	<wpt lat="50.628006" lon="15.609398">
+		<ele>481.327881</ele>
+		<name>Nový bod</name>
+	</wpt>
 	<wpt lat="50.627953" lon="15.610064">
 		<ele>480.397430</ele>
+		<name>Nový bod</name>
+	</wpt>
+	<wpt lat="50.627407" lon="15.610767">
+		<ele>479.814148</ele>
 		<name>Nový bod</name>
 	</wpt>
 	<wpt lat="50.626930" lon="15.611196">
@@ -36,16 +48,28 @@
 		<ele>475.781555</ele>
 		<name>Nový bod</name>
 	</wpt>
-	<wpt lat="50.624313" lon="15.612311">
-		<ele>474.327332</ele>
+	<wpt lat="50.625010" lon="15.612126">
+		<ele>474.584961</ele>
+		<name>Nový bod</name>
+	</wpt>
+	<wpt lat="50.624290" lon="15.612298">
+		<ele>474.402588</ele>
+		<name>Nový bod</name>
+	</wpt>
+	<wpt lat="50.624200" lon="15.610672">
+		<ele>476.400024</ele>
 		<name>Nový bod</name>
 	</wpt>
 	<wpt lat="50.623955" lon="15.608770">
 		<ele>479.467926</ele>
 		<name>Nový bod</name>
 	</wpt>
-	<wpt lat="50.624138" lon="15.608245">
-		<ele>480.342896</ele>
+	<wpt lat="50.624107" lon="15.608272">
+		<ele>480.368835</ele>
+		<name>Nový bod</name>
+	</wpt>
+	<wpt lat="50.624912" lon="15.607947">
+		<ele>481.030975</ele>
 		<name>Nový bod</name>
 	</wpt>
 	<wpt lat="50.625435" lon="15.607492">
@@ -56,8 +80,20 @@
 		<ele>487.669098</ele>
 		<name>Nový bod</name>
 	</wpt>
-	<wpt lat="50.627220" lon="15.605821">
-		<ele>489.373657</ele>
+	<wpt lat="50.626220" lon="15.607119">
+		<ele>486.081696</ele>
+		<name>Nový bod</name>
+	</wpt>
+	<wpt lat="50.626972" lon="15.606379">
+		<ele>486.397949</ele>
+		<name>Nový bod</name>
+	</wpt>
+	<wpt lat="50.627373" lon="15.605772">
+		<ele>488.167572</ele>
+		<name>Nový bod</name>
+	</wpt>
+	<wpt lat="50.628110" lon="15.605303">
+		<ele>488.646912</ele>
 		<name>Nový bod</name>
 	</wpt>
 </gpx>
