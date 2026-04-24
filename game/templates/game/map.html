@@ -256,6 +256,7 @@
       const role = "{{ role }}";
       const GAME_MODE = "{{ game.mode|default:'STANDARD' }}";
       const csrfToken = "{{ csrf_token }}";
+      const GAME_AREA_VERTICES = JSON.parse("{{ play_area_vertices_json|escapejs }}");
 
       const zoneSeed = [
         {% for zone in zones %}
@@ -275,6 +276,8 @@
       const map = L.map("map", {
         zoomControl: true,
       });
+      map.createPane("playAreaPane");
+      map.getPane("playAreaPane").style.zIndex = 390;
       map.createPane("edgesPane");
       map.getPane("edgesPane").style.zIndex = 410;
       map.createPane("zonesPane");
@@ -293,6 +296,72 @@
       const zoneLayers = new Map();
       const zoneMeta = new Map();
       const edgeLayers = new Map();
+
+      function getConvexHull(points) {
+        if (points.length <= 1) {
+          return points;
+        }
+
+        const sorted = [...points].sort((a, b) => {
+          if (a.lng !== b.lng) {
+            return a.lng - b.lng;
+          }
+          return a.lat - b.lat;
+        });
+
+        const cross = (o, a, b) => (a.lng - o.lng) * (b.lat - o.lat) - (a.lat - o.lat) * (b.lng - o.lng);
+        const lower = [];
+        for (const p of sorted) {
+          while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], p) <= 0) {
+            lower.pop();
+          }
+          lower.push(p);
+        }
+
+        const upper = [];
+        for (let i = sorted.length - 1; i >= 0; i -= 1) {
+          const p = sorted[i];
+          while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], p) <= 0) {
+            upper.pop();
+          }
+          upper.push(p);
+        }
+
+        lower.pop();
+        upper.pop();
+        return lower.concat(upper);
+      }
+
+      function drawPlayArea() {
+        if (!Array.isArray(GAME_AREA_VERTICES) || GAME_AREA_VERTICES.length < 3) {
+          return;
+        }
+
+        const points = GAME_AREA_VERTICES
+          .map((v) => ({ lat: Number(v.latitude), lng: Number(v.longitude) }))
+          .filter((v) => Number.isFinite(v.lat) && Number.isFinite(v.lng));
+
+        if (points.length < 3) {
+          return;
+        }
+
+        const hull = getConvexHull(points);
+        if (hull.length < 3) {
+          return;
+        }
+
+        L.polygon(
+          hull.map((p) => [p.lat, p.lng]),
+          {
+            pane: "playAreaPane",
+            color: "#777",
+            weight: 1,
+            fillColor: "#9aa0a6",
+            fillOpacity: 0.28,
+            interactive: false,
+          },
+        ).addTo(map);
+      }
 
       let currentLatitude = null;
       let currentLongitude = null;
@@ -400,6 +469,7 @@
         });
       }
 
+      drawPlayArea();
       drawZones();
       drawEdges();
 

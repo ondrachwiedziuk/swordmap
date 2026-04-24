@@ -179,6 +179,29 @@ def map_view(request, role):
         
     capturing_zones = Zone.objects.filter(status='CAPTURING')
     teams = Team.objects.all()
+
+    play_area_vertices = []
+    config_path = Path(__file__).resolve().parent.parent / 'game_config.json'
+    try:
+        config_data = json.loads(config_path.read_text(encoding='utf-8'))
+        raw_vertices = config_data.get('play_area_vertices', [])
+        if isinstance(raw_vertices, list):
+            for vertex in raw_vertices:
+                if not isinstance(vertex, dict):
+                    continue
+                lat = vertex.get('latitude')
+                lng = vertex.get('longitude')
+                if lat is None or lng is None:
+                    continue
+                try:
+                    play_area_vertices.append({
+                        'latitude': float(lat),
+                        'longitude': float(lng),
+                    })
+                except (TypeError, ValueError):
+                    continue
+    except (OSError, json.JSONDecodeError):
+        play_area_vertices = []
     
     from django.conf import settings
     context = {
@@ -188,6 +211,7 @@ def map_view(request, role):
         'game': game,
         'teams': teams,
         'TIME_ZONE': settings.TIME_ZONE,
+        'play_area_vertices_json': json.dumps(play_area_vertices),
     }
     response = render(request, 'game/map.html', context)
     if role != 'admin2536':

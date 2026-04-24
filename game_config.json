@@ -9,6 +9,60 @@
     "latitude": 50.624195,
     "longitude": 15.612019
   },
+  "play_area_vertices": [
+    {
+      "latitude": 50.628845,
+      "longitude": 15.604924
+    },
+    {
+      "latitude": 50.629044,
+      "longitude": 15.605987
+    },
+    {
+      "latitude": 50.62897,
+      "longitude": 15.607569
+    },
+    {
+      "latitude": 50.62867,
+      "longitude": 15.608336
+    },
+    {
+      "latitude": 50.62827,
+      "longitude": 15.609103
+    },
+    {
+      "latitude": 50.62802,
+      "longitude": 15.610064
+    },
+    {
+      "latitude": 50.62693,
+      "longitude": 15.611196
+    },
+    {
+      "latitude": 50.62571,
+      "longitude": 15.611915
+    },
+    {
+      "latitude": 50.624313,
+      "longitude": 15.612311
+    },
+    {
+      "latitude": 50.623955,
+      "longitude": 15.60877
+    },
+    {
+      "latitude": 50.624138,
+      "longitude": 15.608245
+    },
+    {
+      "latitude": 50.626274,
+      "longitude": 15.607097
+    },
+    {
+      "latitude": 50.62722,
+      "longitude": 15.605821
+    }
+  ],
   "teams": [
     {
       "name": "Matúš Púll",
