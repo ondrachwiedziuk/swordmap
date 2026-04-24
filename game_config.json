@@ -2,12 +2,12 @@
   "mode": "QR",
   "accepted_distance": 25,
   "topLeft": {
-    "latitude": 50.62892,
-    "longitude": 15.605501
+    "latitude": 50.629044,
+    "longitude": 15.604924
   },
   "bottomRight": {
-    "latitude": 50.624195,
-    "longitude": 15.612019
+    "latitude": 50.623955,
+    "longitude": 15.612311
   },
   "play_area_vertices": [
     {
@@ -19,24 +19,28 @@
       "longitude": 15.605987
     },
     {
-      "latitude": 50.62897,
-      "longitude": 15.607569
+      "latitude": 50.62895,
+      "longitude": 15.607631
     },
     {
-      "latitude": 50.62867,
-      "longitude": 15.608336
+      "latitude": 50.628628,
+      "longitude": 15.608325
     },
     {
-      "latitude": 50.62827,
-      "longitude": 15.609103
+      "latitude": 50.628254,
+      "longitude": 15.609161
     },
     {
-      "latitude": 50.62802,
+      "latitude": 50.627953,
       "longitude": 15.610064
     },
     {
       "latitude": 50.62693,
       "longitude": 15.611196
+    },
+    {
+      "latitude": 50.626373,
+      "longitude": 15.611662
     },
     {
       "latitude": 50.62571,
@@ -55,8 +59,12 @@
       "longitude": 15.608245
     },
     {
-      "latitude": 50.626274,
-      "longitude": 15.607097
+      "latitude": 50.625435,
+      "longitude": 15.607492
+    },
+    {
+      "latitude": 50.62661,
+      "longitude": 15.606759
     },
     {
       "latitude": 50.62722,

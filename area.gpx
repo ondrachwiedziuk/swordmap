@@ -8,24 +8,28 @@
 		<ele>485.820007</ele>
 		<name>Nový bod</name>
 	</wpt>
-	<wpt lat="50.628970" lon="15.607569">
-		<ele>483.600739</ele>
+	<wpt lat="50.628950" lon="15.607631">
+		<ele>483.541260</ele>
 		<name>Nový bod</name>
 	</wpt>
-	<wpt lat="50.628670" lon="15.608336">
-		<ele>482.556641</ele>
+	<wpt lat="50.628628" lon="15.608325">
+		<ele>482.438416</ele>
 		<name>Nový bod</name>
 	</wpt>
-	<wpt lat="50.628270" lon="15.609103">
-		<ele>481.799988</ele>
+	<wpt lat="50.628254" lon="15.609161">
+		<ele>481.785004</ele>
 		<name>Nový bod</name>
 	</wpt>
-	<wpt lat="50.628020" lon="15.610064">
-		<ele>480.526764</ele>
+	<wpt lat="50.627953" lon="15.610064">
+		<ele>480.397430</ele>
 		<name>Nový bod</name>
 	</wpt>
 	<wpt lat="50.626930" lon="15.611196">
 		<ele>478.202148</ele>
+		<name>Nový bod</name>
+	</wpt>
+	<wpt lat="50.626373" lon="15.611662">
+		<ele>477.200012</ele>
 		<name>Nový bod</name>
 	</wpt>
 	<wpt lat="50.625710" lon="15.611915">
@@ -44,8 +48,12 @@
 		<ele>480.342896</ele>
 		<name>Nový bod</name>
 	</wpt>
-	<wpt lat="50.626274" lon="15.607097">
-		<ele>486.288666</ele>
+	<wpt lat="50.625435" lon="15.607492">
+		<ele>486.454498</ele>
+		<name>Nový bod</name>
+	</wpt>
+	<wpt lat="50.626610" lon="15.606759">
+		<ele>487.669098</ele>
 		<name>Nový bod</name>
 	</wpt>
 	<wpt lat="50.627220" lon="15.605821">
