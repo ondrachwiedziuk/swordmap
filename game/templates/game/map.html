@@ -9,23 +9,67 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
     <script src="{% static 'game/html5-qrcode.min.js' %}"></script>
     <style>
+      :root {
+        --bg: #222;
+        --panel: #111;
+        --panel-border: #444;
+        --text: #f1f5f9;
+        --muted: #cbd5e1;
+        --tab-bg: #2d2d2d;
+        --tab-active: #4a4a4a;
+      }
       body {
         margin: 0;
-        padding: 0;
-        font-family: sans-serif;
-        background-color: #333;
+        padding: 20px;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--bg);
+        color: var(--text);
+        box-sizing: border-box;
+      }
+      *, *::before, *::after {
+        box-sizing: inherit;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+      .tab {
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: 1px solid #555;
+        background: var(--tab-bg);
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .tab.active {
+        background: var(--tab-active);
+        border-color: #7a7a7a;
+      }
+      .map-panel {
+        border: 1px solid var(--panel-border);
+        border-radius: 10px;
+        overflow: hidden;
       }
       #map {
         width: 100%;
-        height: 70vh;
+        height: 68vh;
         min-height: 420px;
       }
       #info-panel {
-        background: #f8f9fa;
-        padding: 10px;
+        background: var(--panel);
+        padding: 14px;
         display: flex;
         flex-direction: column;
         gap: 10px;
+        border: 1px solid var(--panel-border);
+        border-radius: 10px;
+        margin-top: 12px;
       }
       .info-row {
         display: flex;
@@ -35,10 +79,45 @@
         gap: 10px;
       }
       .info-box {
-        border: 1px solid #ccc;
+        border: 1px solid var(--panel-border);
         padding: 10px;
-        background: white;
-        border-radius: 4px;
+        background: #1a1a1a;
+        border-radius: 8px;
+      }
+      .info-box h3,
+      .info-box strong,
+      .info-box li,
+      .info-box p,
+      .info-box small,
+      .info-box span,
+      #game-timer,
+      #game-mode {
+        color: var(--text);
+      }
+      #scan-qr-hint {
+        color: var(--muted) !important;
+      }
+      button,
+      input[type="datetime-local"],
+      input[type="number"] {
+        border-radius: 8px;
+        border: 1px solid #555;
+        background: #202020;
+        color: #fff;
+        padding: 8px 10px;
+        font-family: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      button:hover {
+        filter: brightness(1.08);
+      }
+      #game-mode {
+        padding: 2px 8px;
+        border-radius: 999px;
+        border: 1px solid #555;
+        background: #202020;
       }
       #qr-scanner-modal {
         position: fixed;
@@ -94,7 +173,17 @@
     </style>
   </head>
   <body>
-    <div id="map"></div>
+    <div class="container">
+      <div class="tabs">
+        <a href="{% url 'index' %}" class="tab">Týmy</a>
+        <a href="{% url 'rules' %}" class="tab">Pravidla</a>
+        <a href="{% url 'stats' %}" class="tab">Statistiky</a>
+        <span class="tab active">Hra: {{ role|title }}</span>
+      </div>
+
+      <div class="map-panel">
+        <div id="map"></div>
+      </div>
 
     <div id="info-panel">
       <div class="info-row">
@@ -146,6 +235,7 @@
           {% endif %}
         </div>
       </div>
+    </div>
     </div>
 
     <div id="qr-scanner-modal">
@@ -536,7 +626,7 @@
                 let html = "";
                 sortedScores.forEach((team, index) => {
                   html += `<li style="margin-bottom: 5px; color: ${team.color}; font-weight: bold;">
-                    <span style="color: black; margin-right: 5px;">${index + 1}.</span>
+                    <span style="color: #e5e7eb; margin-right: 5px;">${index + 1}.</span>
                     ${team.name}: <span id="score-${team.name}">${team.score}</span>
                   </li>`;
                 });
@@ -554,7 +644,7 @@
                 const m = Math.floor(seconds / 60);
                 const s = seconds % 60;
                 timeEl.innerText = `${m}:${s.toString().padStart(2, "0")}`;
-                timeEl.style.color = seconds < 60 ? "red" : "black";
+                timeEl.style.color = seconds < 60 ? "red" : "#e5e7eb";
               }
             }
           });
