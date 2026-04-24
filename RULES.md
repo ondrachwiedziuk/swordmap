@@ -9,8 +9,9 @@ Hráči jsou rozděleni do 3 týmů. Cílem je obsazovat a držet stanoviště, 
 
 ## Herní plocha a bezpečnost
 
-Hra probíhá v zámeckém parku a přilehlém okolí.
+Hra probíhá v zámeckém parku a přilehlém okolí. Herní plocha je vyznačena ve webové aplikaci šedou plochou.
 
+- Je zakázáno se pohybovat jinde než v herní ploše.
 - Je zakázáno pohybovat se po vozovce určené pro auta.
 - Pohyb po chodnících je povolen.
 - Bezpečnost a fair play mají přednost před herní situací.
@@ -46,6 +47,8 @@ Každý hráč má za kalhotami šátek v barvě svého týmu.
 
 - Hráč je vyřazen, pokud mu soupeř vytrhne šátek.
 - Hráč je vyřazen i tehdy, pokud mu šátek samovolně vypadne, soupeř si toho všimne a upozorní na to.
+
+V případě, že by měl souboj probíhat na chodníku mimo zámecký park (týká se to předeším severní, východní a jižní hrany herní plochy), je nahrazen soubojem ve hře "Kámen, nůžky, papír".
 
 Vyřazený hráč:
 
