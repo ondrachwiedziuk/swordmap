@@ -2,11 +2,13 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 from .models import Zone, Team, Game
 import math
 import json
 import re
 import hashlib
+import html
 from urllib.parse import quote, unquote
 from pathlib import Path
 
@@ -33,6 +35,75 @@ def index(request):
     return render(request, 'game/index.html', {'teams': teams})
 
 
+def format_inline_markdown(text):
+    escaped = html.escape(text)
+    escaped = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', escaped)
+    escaped = re.sub(r'`([^`]+)`', r'<code>\1</code>', escaped)
+    return escaped
+
+
+def render_rules_markdown(text):
+    lines = text.splitlines()
+    html_parts = []
+    list_type = None
+    list_open = False
+
+    def close_list():
+        nonlocal list_open, list_type
+        if list_open:
+            html_parts.append(f'</{list_type}>')
+            list_open = False
+            list_type = None
+
+    for raw_line in lines:
+        line = raw_line.rstrip()
+        stripped = line.strip()
+
+        if not stripped:
+            close_list()
+            continue
+
+        if stripped.startswith('# '):
+            close_list()
+            html_parts.append(f'<h1>{format_inline_markdown(stripped[2:].strip())}</h1>')
+            continue
+        if stripped.startswith('## '):
+            close_list()
+            html_parts.append(f'<h2>{format_inline_markdown(stripped[3:].strip())}</h2>')
+            continue
+        if stripped.startswith('### '):
+            close_list()
+            html_parts.append(f'<h3>{format_inline_markdown(stripped[4:].strip())}</h3>')
+            continue
+
+        ordered_match = re.match(r'^(\d+)\.\s+(.*)$', stripped)
+        unordered_match = re.match(r'^-\s+(.*)$', stripped)
+
+        if ordered_match:
+            if not list_open or list_type != 'ol':
+                close_list()
+                html_parts.append('<ol>')
+                list_open = True
+                list_type = 'ol'
+            html_parts.append(f'<li>{format_inline_markdown(ordered_match.group(2))}</li>')
+            continue
+
+        if unordered_match:
+            if not list_open or list_type != 'ul':
+                close_list()
+                html_parts.append('<ul>')
+                list_open = True
+                list_type = 'ul'
+            html_parts.append(f'<li>{format_inline_markdown(unordered_match.group(1))}</li>')
+            continue
+
+        close_list()
+        html_parts.append(f'<p>{format_inline_markdown(stripped)}</p>')
+
+    close_list()
+    return mark_safe('\n'.join(html_parts))
+
+
 def rules_view(request):
     rules_path = Path(__file__).resolve().parent.parent / 'RULES.md'
     try:
@@ -40,7 +111,7 @@ def rules_view(request):
     except OSError:
         rules_text = 'Pravidla se nepodarilo nacist.'
 
-    return render(request, 'game/rules.html', {'rules_text': rules_text})
+    return render(request, 'game/rules.html', {'rules_html': render_rules_markdown(rules_text)})
 
 
 def stats_view(request):

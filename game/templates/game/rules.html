@@ -40,14 +40,35 @@
         border: 1px solid #444;
         border-radius: 10px;
         padding: 16px;
+        line-height: 1.6;
       }
-      pre {
-        margin: 0;
-        white-space: pre-wrap;
-        word-break: break-word;
+      .rules-box h1,
+      .rules-box h2,
+      .rules-box h3 {
+        margin: 1.1em 0 0.5em;
+      }
+      .rules-box h1:first-child,
+      .rules-box h2:first-child,
+      .rules-box h3:first-child {
+        margin-top: 0;
+      }
+      .rules-box p {
+        margin: 0 0 0.75em;
+      }
+      .rules-box ul,
+      .rules-box ol {
+        margin: 0 0 0.9em 1.4em;
+        padding: 0;
+      }
+      .rules-box li {
+        margin-bottom: 0.35em;
+      }
+      .rules-box code {
+        background: #1d1d1d;
+        border: 1px solid #333;
+        border-radius: 4px;
+        padding: 0 0.3em;
         font-family: "Consolas", "Monaco", monospace;
-        font-size: 0.95rem;
-        line-height: 1.5;
       }
     </style>
   </head>
@@ -59,7 +80,7 @@
         <a href="{% url 'stats' %}" class="tab">Statistiky</a>
       </div>
       <div class="rules-box">
-        <pre>{{ rules_text }}</pre>
+        {{ rules_html }}
       </div>
     </div>
   </body>
