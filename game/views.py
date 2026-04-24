@@ -318,6 +318,16 @@ def parse_zone_id_from_qr(qr_code):
 
     raw = str(qr_code).strip()
 
+    # Manual fallback formats for cases where camera scan fails.
+    # Accept plain numeric zone id or common labels like ZONE-12 / ZONE:12 / zone/12.
+    numeric_match = re.fullmatch(r'\d+', raw)
+    if numeric_match:
+        return int(raw)
+
+    labeled_match = re.search(r'(?:ZONE[-:/ ]?|ZONA[-:/ ]?)(\d+)', raw, flags=re.IGNORECASE)
+    if labeled_match:
+        return int(labeled_match.group(1))
+
     # Strip the base URL prefix.
     if raw.startswith(QR_BASE_URL):
         raw = raw[len(QR_BASE_URL):]

@@ -68,6 +68,25 @@
         align-items: center;
         padding: 10px;
       }
+      #qr-manual-entry {
+        display: flex;
+        gap: 8px;
+        padding: 10px;
+        border-top: 1px solid #333;
+        background: #0b0b0b;
+      }
+      #manual-qr-input {
+        flex: 1;
+        min-width: 0;
+        border-radius: 6px;
+        border: 1px solid #555;
+        background: #1a1a1a;
+        color: #fff;
+        padding: 8px 10px;
+      }
+      #manual-qr-input::placeholder {
+        color: #aaa;
+      }
       #qr-status {
         font-size: 0.9em;
         color: #ddd;
@@ -135,6 +154,10 @@
         <div id="qr-scanner-toolbar">
           <span id="qr-status">Namiř kameru na QR kód stanoviště.</span>
           <button type="button" onclick="stopQrScanner()">Zavřít</button>
+        </div>
+        <div id="qr-manual-entry">
+          <input id="manual-qr-input" type="text" placeholder="Ručně vlož kód (např. URL, ID nebo kód z papíru)" />
+          <button type="button" onclick="submitManualQrCode()">Odeslat</button>
         </div>
       </div>
     </div>
@@ -318,12 +341,16 @@
       function openQrScanner() {
         const modal = document.getElementById("qr-scanner-modal");
         const status = document.getElementById("qr-status");
+        const manualInput = document.getElementById("manual-qr-input");
         if (!modal || !status) {
           return;
         }
 
         modal.style.display = "flex";
         status.textContent = "Namiř kameru na QR kód stanoviště.";
+        if (manualInput) {
+          manualInput.value = "";
+        }
         qrScanActive = true;
 
         const config = {
@@ -338,6 +365,19 @@
 
         qrScanner = new Html5QrcodeScanner("qr-reader", config);
         qrScanner.render(onQrScanSuccess);
+      }
+
+      function submitManualQrCode() {
+        const input = document.getElementById("manual-qr-input");
+        if (!input) {
+          return;
+        }
+        const value = (input.value || "").trim();
+        if (!value) {
+          alert("Nejprve zadej kód.");
+          return;
+        }
+        submitQrCapture(value);
       }
 
       function onQrScanSuccess(decodedText) {
@@ -367,6 +407,17 @@
           modal.style.display = "none";
         }
       }
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter") {
+          return;
+        }
+        const active = document.activeElement;
+        if (active && active.id === "manual-qr-input") {
+          event.preventDefault();
+          submitManualQrCode();
+        }
+      });
 
       function submitQrCapture(qrValue) {
         if (!qrValue) {
