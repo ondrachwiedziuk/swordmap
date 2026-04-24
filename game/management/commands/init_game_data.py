@@ -34,6 +34,7 @@ class Command(BaseCommand):
         game.bottom_right_longitude = config.get('bottomRight', {}).get('longitude', game.bottom_right_longitude)
         game.bottom_right_latitude = config.get('bottomRight', {}).get('latitude', game.bottom_right_latitude)
         game.accepted_distance = config.get('accepted_distance', game.accepted_distance)
+        game.end_bonus_applied = False
         game.save()
         self.stdout.write(self.style.SUCCESS("Game instance created/exists"))
 
@@ -67,7 +68,9 @@ class Command(BaseCommand):
                 'status': 'NEUTRAL',
                 'capturing_team': None,
                 'capture_started_at': None,
-                'last_score_update': None
+                'last_score_update': None,
+                'last_lost_at': None,
+                'last_lost_by_team_name': None,
             }
             
             if zone_data.get('owner'):

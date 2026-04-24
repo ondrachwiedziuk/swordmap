@@ -30,6 +30,24 @@
         margin-bottom: 2rem;
         opacity: 0.8;
       }
+      .tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+      .tab {
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: 1px solid #555;
+        background: #2d2d2d;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .tab.active {
+        background: #4a4a4a;
+        border-color: #7a7a7a;
+      }
       .team-container {
         display: flex;
         flex-direction: column;
@@ -88,6 +106,10 @@
   </head>
   <body>
     <h1>Swordmap</h1>
+    <div class="tabs">
+      <a href="{% url 'index' %}" class="tab active">Týmy</a>
+      <a href="{% url 'rules' %}" class="tab">Pravidla</a>
+    </div>
     <p>Choose your allegiance:</p>
     <div class="team-container">
       {% for team in teams %}

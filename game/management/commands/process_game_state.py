@@ -30,9 +30,27 @@ class Command(BaseCommand):
                  continue
             
             if now > game.end_time:
-                 self.stdout.write(self.style.WARNING(f"Game has ended. Ended at {game.end_time}"))
-                 time.sleep(10)
-                 continue
+                if not game.end_bonus_applied:
+                    final_owned_zones = Zone.objects.filter(status='OWNED', owner__isnull=False)
+                    final_bonus_by_team = {}
+
+                    for zone in final_owned_zones:
+                        final_bonus_by_team[zone.owner_id] = final_bonus_by_team.get(zone.owner_id, 0) + 10
+
+                    for team in Team.objects.filter(id__in=final_bonus_by_team.keys()):
+                        bonus = final_bonus_by_team.get(team.id, 0)
+                        team.score += bonus
+                        team.save(update_fields=['score'])
+                        self.stdout.write(self.style.SUCCESS(
+                            f"End-game bonus: {team.name} +{bonus}"
+                        ))
+
+                    game.end_bonus_applied = True
+                    game.save(update_fields=['end_bonus_applied'])
+
+                self.stdout.write(self.style.WARNING(f"Game has ended. Ended at {game.end_time}"))
+                time.sleep(10)
+                continue
 
             # 1. Handle Captures
             capturing_zones = Zone.objects.filter(status='CAPTURING')
@@ -40,22 +58,48 @@ class Command(BaseCommand):
                 if zone.capture_started_at:
                     diff = now - zone.capture_started_at
                     if diff.total_seconds() >= 60: # 1 minute
+                        capturing_team = zone.capturing_team
+                        if capturing_team is None:
+                            zone.status = 'NEUTRAL'
+                            zone.capture_started_at = None
+                            zone.save(update_fields=['status', 'capture_started_at'])
+                            continue
+
+                        previous_owner = zone.owner
+                        capture_points = 5
+
+                        # Recapture rule: if the capturing team lost this zone before,
+                        # award min(minutes since loss, 5) instead of the standard +5.
+                        if (
+                            zone.last_lost_by_team_name
+                            and zone.last_lost_at
+                            and zone.last_lost_by_team_name.lower() == capturing_team.name.lower()
+                        ):
+                            minutes_since_loss = int((now - zone.last_lost_at).total_seconds() // 60)
+                            capture_points = min(max(minutes_since_loss, 0), 5)
+
+                        if previous_owner and previous_owner != capturing_team:
+                            zone.last_lost_at = now
+                            zone.last_lost_by_team_name = previous_owner.name
+
                         zone.status = 'OWNED'
-                        zone.owner = zone.capturing_team
-                        
+                        zone.owner = capturing_team
+
                         # Reward for capturing
-                        zone.owner.score += 5
-                        zone.owner.save()
+                        capturing_team.score += capture_points
+                        capturing_team.save(update_fields=['score'])
                         
                         zone.capturing_team = None
                         zone.capture_started_at = None
                         zone.last_score_update = now
                         zone.save()
-                        self.stdout.write(self.style.SUCCESS(f"Zone {zone.name} captured by {zone.owner.name} (+5 points)"))
+                        self.stdout.write(self.style.SUCCESS(
+                            f"Zone {zone.name} captured by {zone.owner.name} (+{capture_points} points)"
+                        ))
 
             # 2. Update Scores
             # Points are counted for each minute holding the point of interest (excluding bases)
-            owned_zones = Zone.objects.filter(status='OWNED', is_base=False)
+            owned_zones = Zone.objects.filter(status='OWNED', is_base=False, owner__isnull=False)
             for zone in owned_zones:
                 if zone.last_score_update:
                     diff = now - zone.last_score_update
@@ -63,7 +107,7 @@ class Command(BaseCommand):
                     
                     if minutes >= 1:
                         zone.owner.score += minutes
-                        zone.owner.save()
+                        zone.owner.save(update_fields=['score'])
                         zone.last_score_update += datetime.timedelta(minutes=minutes)
                         zone.save()
                         self.stdout.write(self.style.SUCCESS(f"Added {minutes} points to {zone.owner.name} for {zone.name}"))

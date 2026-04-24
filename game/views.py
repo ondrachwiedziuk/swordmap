@@ -8,6 +8,7 @@ import json
 import re
 import hashlib
 from urllib.parse import quote, unquote
+from pathlib import Path
 
 map_width, map_height = 1189, 1140  # Example dimensions for coordinate calculations
 
@@ -30,6 +31,16 @@ def haversine(lat1, lon1, lat2, lon2):
 def index(request):
     teams = Team.objects.all()
     return render(request, 'game/index.html', {'teams': teams})
+
+
+def rules_view(request):
+    rules_path = Path(__file__).resolve().parent.parent / 'RULES.md'
+    try:
+        rules_text = rules_path.read_text(encoding='utf-8')
+    except OSError:
+        rules_text = 'Pravidla se nepodarilo nacist.'
+
+    return render(request, 'game/rules.html', {'rules_text': rules_text})
 
 def map_view(request, role):
     game, _ = Game.objects.get_or_create(id=1)

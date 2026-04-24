@@ -24,6 +24,7 @@ class Game(models.Model):
     top_left_latitude = models.FloatField(default=0.0)
     bottom_right_longitude = models.FloatField(default=0.0)
     bottom_right_latitude = models.FloatField(default=0.0)
+    end_bonus_applied = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Game {self.id} ({'Active' if self.is_active else 'Inactive'})"
@@ -53,6 +54,9 @@ class Zone(models.Model):
     
     # For point calculation
     last_score_update = models.DateTimeField(null=True, blank=True)
+    # Used for recapture scoring: min(minutes since last loss, 5)
+    last_lost_at = models.DateTimeField(null=True, blank=True)
+    last_lost_by_team_name = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
         return self.name
