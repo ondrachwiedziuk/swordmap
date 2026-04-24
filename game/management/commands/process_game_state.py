@@ -5,15 +5,16 @@ import datetime
 import time
 
 
-def save_minute_snapshot(game, now):
+def save_minute_snapshot(game, now, minute_index=None, force=False):
     if not game.start_time or now < game.start_time:
         return
 
-    minute_index = int((now - game.start_time).total_seconds() // 60)
+    if minute_index is None:
+        minute_index = int((now - game.start_time).total_seconds() // 60)
     if minute_index < 0:
         return
 
-    if GameSnapshot.objects.filter(game=game, minute_index=minute_index).exists():
+    if not force and GameSnapshot.objects.filter(game=game, minute_index=minute_index).exists():
         return
 
     teams = Team.objects.all()
@@ -37,13 +38,24 @@ def save_minute_snapshot(game, now):
             'capturing_team': zone.capturing_team.name if zone.capturing_team else None,
         })
 
-    GameSnapshot.objects.create(
-        game=game,
-        minute_index=minute_index,
-        captured_at=now,
-        scores=scores_data,
-        zones=zones_data,
-    )
+    defaults = {
+        'captured_at': now,
+        'scores': scores_data,
+        'zones': zones_data,
+    }
+
+    if force:
+        GameSnapshot.objects.update_or_create(
+            game=game,
+            minute_index=minute_index,
+            defaults=defaults,
+        )
+    else:
+        GameSnapshot.objects.create(
+            game=game,
+            minute_index=minute_index,
+            **defaults,
+        )
 
 class Command(BaseCommand):
     help = 'Process game state: update scores and handle captures'
@@ -88,6 +100,16 @@ class Command(BaseCommand):
 
                     game.end_bonus_applied = True
                     game.save(update_fields=['end_bonus_applied'])
+
+                # Save one final snapshot after game end (including final bonuses),
+                # so statistics contain an explicit final frame/values.
+                final_minute_index = int((game.end_time - game.start_time).total_seconds() // 60)
+                save_minute_snapshot(
+                    game,
+                    now,
+                    minute_index=max(final_minute_index, 0),
+                    force=True,
+                )
 
                 self.stdout.write(self.style.WARNING(f"Game has ended. Ended at {game.end_time}"))
                 time.sleep(10)
