@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Swordmap - {{ role|title }}</title>
+    <title>KSP bojovka - {{ role|title }}</title>
     <link rel="icon" type="image/svg+xml" href="{% static 'game/favicon.svg' %}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
@@ -80,13 +80,13 @@
     <div id="info-panel">
       <div class="info-row">
         <div>
-          <h2 style="margin: 0">Team: {{ role|title }}</h2>
-          <div style="font-size: 0.95em; margin-top: 4px">Mode: <strong id="game-mode">{{ game.mode }}</strong></div>
-          <div id="game-timer" style="font-size: 1.2em; font-weight: bold; margin-top: 5px">Time: <span id="time-remaining">--:--</span></div>
+          <h2 style="margin: 0">Tým: {{ role|title }}</h2>
+          <div style="font-size: 0.95em; margin-top: 4px">Režim: <strong id="game-mode">{{ game.mode }}</strong></div>
+          <div id="game-timer" style="font-size: 1.2em; font-weight: bold; margin-top: 5px">Čas: <span id="time-remaining">--:--</span></div>
         </div>
         <div class="info-box" style="display: flex; align-items: center; gap: 8px">
-          <button type="button" id="scan-qr-btn" onclick="scanQrAndCapture()" style="display: none">Scan QR</button>
-          <small id="scan-qr-hint" style="display: none; color: #555">Scan zone QR code to capture.</small>
+          <button type="button" id="scan-qr-btn" onclick="scanQrAndCapture()" style="display: none">Skenovat QR</button>
+          <small id="scan-qr-hint" style="display: none; color: #555">Naskenuj QR kód stanoviště pro obsazení.</small>
         </div>
         {% if role == 'admin2536' %}
         <div class="info-box" style="flex: 1; display: flex; justify-content: center">
@@ -94,14 +94,14 @@
             {% csrf_token %}
             <input type="datetime-local" name="start_time" value="{{ game.start_time|date:'Y-m-d\TH:i' }}" required style="flex: 1; min-width: 0" />
             <input type="number" name="duration" value="{{ game.duration_minutes }}" required style="width: 70px" placeholder="Min" />
-            <button type="submit">Set</button>
+            <button type="submit">Nastavit</button>
           </form>
         </div>
         {% endif %}
       </div>
 
       <div class="info-box">
-        <h3 style="margin-top: 0">Scores</h3>
+        <h3 style="margin-top: 0">Skóre</h3>
         <ul id="scores-list" style="list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 15px">
           {% for team in teams %}
           <li style="color: {{ team.color }}; font-weight: bold;">{{ team.name }}: <span id="score-{{ team.name }}">{{ team.score }}</span></li>
@@ -110,7 +110,7 @@
       </div>
 
       <div class="info-box" style="flex: 1">
-        <h3 style="margin-top: 0">Active Captures</h3>
+        <h3 style="margin-top: 0">Probíhající obsazování</h3>
         <div id="captures-list">
           {% if capturing_zones %}
           <ul style="list-style: none; padding: 0; margin: 0">
@@ -118,12 +118,12 @@
             <li style="margin-bottom: 5px">
               <strong>{{ zone.name }}</strong>:
               <span style="color: {{ zone.capturing_team.color }}; font-weight: bold;">{{ zone.capturing_team.name }}</span>
-              <br /><small>Started: {{ zone.capture_started_at|time:"H:i:s" }}</small>
+              <br /><small>Zahájeno: {{ zone.capture_started_at|time:"H:i:s" }}</small>
             </li>
             {% endfor %}
           </ul>
           {% else %}
-          <p style="margin: 0">No active captures.</p>
+          <p style="margin: 0">Žádné probíhající obsazování.</p>
           {% endif %}
         </div>
       </div>
@@ -133,8 +133,8 @@
       <div id="qr-scanner-panel">
         <div id="qr-reader"></div>
         <div id="qr-scanner-toolbar">
-          <span id="qr-status">Point camera at a zone QR code.</span>
-          <button type="button" onclick="stopQrScanner()">Close</button>
+          <span id="qr-status">Namiř kameru na QR kód stanoviště.</span>
+          <button type="button" onclick="stopQrScanner()">Zavřít</button>
         </div>
       </div>
     </div>
@@ -308,7 +308,7 @@
 
       function scanQrAndCapture() {
         if (GAME_MODE !== "QR") {
-          alert("QR scan is available only in QR mode.");
+          alert("Skenování QR je dostupné pouze v režimu QR.");
           return;
         }
 
@@ -323,7 +323,7 @@
         }
 
         modal.style.display = "flex";
-        status.textContent = "Point camera at a zone QR code.";
+        status.textContent = "Namiř kameru na QR kód stanoviště.";
         qrScanActive = true;
 
         const config = {
@@ -395,19 +395,19 @@
             stopQrScanner();
           })
           .catch(() => {
-            alert("QR capture request failed.");
+            alert("Požadavek na QR obsazení se nezdařil.");
             stopQrScanner();
           });
       }
 
       function handleZoneClick(zoneId) {
         if (GAME_MODE === "QR") {
-          alert("QR mode is active. Capture by scanning a QR code.");
+          alert("Je zapnutý režim QR. Stanoviště obsazuj naskenováním QR kódu.");
           return;
         }
 
         if (currentLatitude === null || currentLongitude === null) {
-          alert("Waiting for GPS location...");
+          alert("Čekám na GPS polohu...");
           return;
         }
 
@@ -465,12 +465,12 @@
                   html += `<li style="margin-bottom: 5px;">
                     <strong>${cap.name}</strong>: 
                     <span style="color: ${cap.team_color}; font-weight: bold;">${cap.team_name}</span>
-                    <br><small>Capturing in: ${cap.remaining_seconds}s</small>
+                    <br><small>Obsazení za: ${cap.remaining_seconds}s</small>
                   </li>`;
                 });
                 html += "</ul>";
               } else {
-                html = "<p>No active captures.</p>";
+                html = "<p>Žádné probíhající obsazování.</p>";
               }
               logContainer.innerHTML = html;
             }
@@ -497,7 +497,7 @@
             if (timeEl && data.game_remaining_seconds !== undefined) {
               const seconds = data.game_remaining_seconds;
               if (seconds <= 0) {
-                timeEl.innerText = "ENDED";
+                timeEl.innerText = "KONEC";
                 timeEl.style.color = "red";
               } else {
                 const m = Math.floor(seconds / 60);

@@ -42,6 +42,10 @@ def rules_view(request):
 
     return render(request, 'game/rules.html', {'rules_text': rules_text})
 
+
+def stats_view(request):
+    return render(request, 'game/stats.html')
+
 def map_view(request, role):
     game, _ = Game.objects.get_or_create(id=1)
     mean_lat = (game.top_left_latitude + game.bottom_right_latitude) / 2

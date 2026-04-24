@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.utils import timezone
-from .models import Zone, Team, Game
+from .models import Zone, Team, Game, GameSnapshot
 
 def game_state(request):
     zones = Zone.objects.all()
@@ -55,4 +55,51 @@ def game_state(request):
         'capturing': capturing_data,
         'scores': scores,
         'game_remaining_seconds': game_remaining_seconds
+    })
+
+
+def stats_timeline(request):
+    game = Game.objects.first()
+    teams = Team.objects.all()
+    zones = Zone.objects.all().order_by('id')
+    snapshots = GameSnapshot.objects.select_related('game').order_by('minute_index')
+
+    teams_data = [
+        {
+            'name': team.name,
+            'color': team.color,
+        }
+        for team in teams
+    ]
+
+    zones_data = [
+        {
+            'id': zone.id,
+            'name': zone.name,
+            'lat': zone.latitude,
+            'lng': zone.longitude,
+            'adjacent': list(zone.adjacent_zones.values_list('id', flat=True)),
+            'is_base': zone.is_base,
+        }
+        for zone in zones
+    ]
+
+    timeline = [
+        {
+            'minute_index': snapshot.minute_index,
+            'captured_at': snapshot.captured_at.isoformat(),
+            'scores': snapshot.scores,
+            'zones': snapshot.zones,
+        }
+        for snapshot in snapshots
+    ]
+
+    return JsonResponse({
+        'game': {
+            'start_time': game.start_time.isoformat() if game and game.start_time else None,
+            'end_time': game.end_time.isoformat() if game and game.end_time else None,
+        },
+        'teams': teams_data,
+        'zones': zones_data,
+        'timeline': timeline,
     })

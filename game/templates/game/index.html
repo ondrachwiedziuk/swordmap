@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Swordmap - Select Team</title>
+    <title>KSP bojovka - Výběr týmu</title>
     <link rel="icon" type="image/svg+xml" href="{% static 'game/favicon.svg' %}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
@@ -105,16 +105,17 @@
     </style>
   </head>
   <body>
-    <h1>Swordmap</h1>
+    <h1>KSP bojovka</h1>
     <div class="tabs">
       <a href="{% url 'index' %}" class="tab active">Týmy</a>
       <a href="{% url 'rules' %}" class="tab">Pravidla</a>
+      <a href="{% url 'stats' %}" class="tab">Statistiky</a>
     </div>
-    <p>Choose your allegiance:</p>
+    <p>Vyber si svůj tým:</p>
     <div class="team-container">
       {% for team in teams %}
       <a href="{% url 'map' team.name|lower %}" class="btn" style="background-color: {{ team.color }}; border-color: {{ team.color }}; color: {% if team.color == '#FFFF00' or team.color == 'YELLOW' %}black{% else %}white{% endif %};">
-        {{ team.name }} Team
+        Tým {{ team.name }}
       </a>
       {% endfor %}
 

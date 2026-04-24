@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Swordmap - Capture Zone</title>
+    <title>KSP bojovka - Obsazení stanoviště</title>
     <link rel="icon" type="image/svg+xml" href="{% static 'game/favicon.svg' %}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
@@ -51,16 +51,16 @@
     {% if error %}
       <p class="error">{{ error }}</p>
       {% if not teams %}
-        <a href="/" style="color: #aaa;">Back to home</a>
+        <a href="/" style="color: #aaa;">Zpět na hlavní stránku</a>
       {% endif %}
     {% endif %}
 
     {% if zone %}
-      <p class="zone-name">Zone: <strong>{{ zone.name }}</strong></p>
+      <p class="zone-name">Stanoviště: <strong>{{ zone.name }}</strong></p>
     {% endif %}
 
     {% if teams and code %}
-      <p>Select your team to capture this zone:</p>
+      <p>Vyber svůj tým pro obsazení tohoto stanoviště:</p>
       <div class="team-container">
         {% for team in teams %}
         <form method="post" action="{% url 'qr_link' code %}" style="margin: 0;">

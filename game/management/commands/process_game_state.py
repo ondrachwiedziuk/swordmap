@@ -1,8 +1,49 @@
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-from game.models import Zone, Team, Game
+from game.models import Zone, Team, Game, GameSnapshot
 import datetime
 import time
+
+
+def save_minute_snapshot(game, now):
+    if not game.start_time or now < game.start_time:
+        return
+
+    minute_index = int((now - game.start_time).total_seconds() // 60)
+    if minute_index < 0:
+        return
+
+    if GameSnapshot.objects.filter(game=game, minute_index=minute_index).exists():
+        return
+
+    teams = Team.objects.all()
+    zones = Zone.objects.all()
+
+    scores_data = {
+        team.name: {
+            'score': team.score,
+            'color': team.color,
+        }
+        for team in teams
+    }
+
+    zones_data = []
+    for zone in zones:
+        zones_data.append({
+            'id': zone.id,
+            'owner': zone.owner.name if zone.owner else None,
+            'status': zone.status,
+            'is_base': zone.is_base,
+            'capturing_team': zone.capturing_team.name if zone.capturing_team else None,
+        })
+
+    GameSnapshot.objects.create(
+        game=game,
+        minute_index=minute_index,
+        captured_at=now,
+        scores=scores_data,
+        zones=zones_data,
+    )
 
 class Command(BaseCommand):
     help = 'Process game state: update scores and handle captures'
@@ -114,5 +155,8 @@ class Command(BaseCommand):
                 else:
                     zone.last_score_update = now
                     zone.save()
+
+            # 3. Persist one snapshot per minute for statistics and replay.
+            save_minute_snapshot(game, now)
             
             time.sleep(1)

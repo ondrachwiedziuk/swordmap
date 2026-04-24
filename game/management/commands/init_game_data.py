@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from game.models import Team, Zone, Game
+from game.models import Team, Zone, Game, GameSnapshot
 import json
 import os
 from django.conf import settings
@@ -36,6 +36,7 @@ class Command(BaseCommand):
         game.accepted_distance = config.get('accepted_distance', game.accepted_distance)
         game.end_bonus_applied = False
         game.save()
+        GameSnapshot.objects.filter(game=game).delete()
         self.stdout.write(self.style.SUCCESS("Game instance created/exists"))
 
         # 1. Extract Teams from Bases
