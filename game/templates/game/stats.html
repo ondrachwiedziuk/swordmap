@@ -105,9 +105,20 @@
 
     <script>
       const map = L.map("replay-map", { zoomControl: true });
+      map.createPane("edgesPane");
+      map.getPane("edgesPane").style.zIndex = 410;
+      map.createPane("zonesPane");
+      map.getPane("zonesPane").style.zIndex = 420;
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 20,
+        attribution: "&copy; OpenStreetMap contributors",
+      }).addTo(map);
+
       let chart = null;
       let zoneLayers = new Map();
       let zoneMeta = new Map();
+      let edgeLayers = new Map();
       let timelineData = [];
       let isPlaying = false;
       let playTimer = null;
@@ -133,7 +144,7 @@
         if (zoneState && zoneState.owner && teamsByName[zoneState.owner]) {
           fill = teamsByName[zoneState.owner].color;
         }
-        let stroke = zoneInfo.is_base ? "#550000" : "#333";
+        let stroke = "#333";
         let weight = zoneInfo.is_base ? 4 : 2;
 
         if (zoneState && zoneState.status === "CAPTURING" && zoneState.capturing_team && teamsByName[zoneState.capturing_team]) {
@@ -167,6 +178,14 @@
           layer.setStyle(zoneStyleForState(info, zoneState, teamsByName));
         });
 
+        edgeLayers.forEach((edge) => {
+          const s1 = byZoneId[edge.a];
+          const s2 = byZoneId[edge.b];
+          const c1 = s1 && s1.owner && teamsByName[s1.owner] ? teamsByName[s1.owner].color : null;
+          const c2 = s2 && s2.owner && teamsByName[s2.owner] ? teamsByName[s2.owner].color : null;
+          edge.inner.setStyle({ color: c1 && c2 && c1 === c2 ? c1 : "#ffffff" });
+        });
+
         const label = document.getElementById("time-label");
         const mm = Math.floor(second / 60);
         const ss = second % 60;
@@ -189,6 +208,7 @@
         const bounds = L.latLngBounds([]);
         zones.forEach((zone) => {
           const layer = L.circleMarker([zone.lat, zone.lng], {
+            pane: "zonesPane",
             color: "#333",
             weight: zone.is_base ? 4 : 2,
             fillColor: "#FFFFFF",
@@ -218,13 +238,34 @@
             if (!other) {
               return;
             }
-            L.polyline(
+
+            const outer = L.polyline(
               [
                 [zone.lat, zone.lng],
                 [other.lat, other.lng],
               ],
-              { color: "#666", weight: 3, opacity: 0.8 },
+              {
+                pane: "edgesPane",
+                color: "#333",
+                weight: 6,
+                opacity: 0.9,
+              },
             ).addTo(map);
+
+            const inner = L.polyline(
+              [
+                [zone.lat, zone.lng],
+                [other.lat, other.lng],
+              ],
+              {
+                pane: "edgesPane",
+                color: "#fff",
+                weight: 4,
+                opacity: 0.95,
+              },
+            ).addTo(map);
+
+            edgeLayers.set(key, { outer, inner, a, b });
           });
         });
 
