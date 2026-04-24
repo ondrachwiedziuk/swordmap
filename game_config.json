@@ -81,8 +81,8 @@
     {
       "id": 1,
       "name": "Matúš Púll",
-      "latitude": 50.628296,
-      "longitude": 15.605501,
+      "latitude": 50.628315,
+      "longitude": 15.605578,
       "is_base": true,
       "owner": "Matúš Púll",
       "color": "#dc143c",
@@ -95,8 +95,8 @@
     {
       "id": 2,
       "name": "Klášter",
-      "latitude": 50.62892,
-      "longitude": 15.606036,
+      "latitude": 50.628986,
+      "longitude": 15.605976,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
@@ -108,8 +108,8 @@
     {
       "id": 3,
       "name": "Zahrada",
-      "latitude": 50.627975,
-      "longitude": 15.60662,
+      "latitude": 50.627895,
+      "longitude": 15.606574,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
@@ -121,8 +121,8 @@
     {
       "id": 4,
       "name": "U jezírka",
-      "latitude": 50.627453,
-      "longitude": 15.607298,
+      "latitude": 50.627438,
+      "longitude": 15.607402,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
@@ -135,8 +135,8 @@
     {
       "id": 5,
       "name": "KRNAP",
-      "latitude": 50.626945,
-      "longitude": 15.606515,
+      "latitude": 50.627007,
+      "longitude": 15.606425,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
@@ -149,8 +149,8 @@
     {
       "id": 6,
       "name": "Pod stromy",
-      "latitude": 50.626877,
-      "longitude": 15.607789,
+      "latitude": 50.62687,
+      "longitude": 15.607724,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
@@ -163,8 +163,8 @@
     {
       "id": 7,
       "name": "Zámek",
-      "latitude": 50.627262,
-      "longitude": 15.60877,
+      "latitude": 50.627186,
+      "longitude": 15.608561,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
@@ -178,8 +178,8 @@
     {
       "id": 8,
       "name": "Betlém",
-      "latitude": 50.6279,
-      "longitude": 15.609119,
+      "latitude": 50.627632,
+      "longitude": 15.609344,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
@@ -191,8 +191,8 @@
     {
       "id": 9,
       "name": "Zdenda Půlříše",
-      "latitude": 50.627647,
-      "longitude": 15.610147,
+      "latitude": 50.62756,
+      "longitude": 15.610292,
       "is_base": true,
       "owner": "Zdenda Půlříše",
       "color": "#daa520",
@@ -205,8 +205,8 @@
     {
       "id": 10,
       "name": "Okruh",
-      "latitude": 50.626884,
-      "longitude": 15.609747,
+      "latitude": 50.62689,
+      "longitude": 15.609901,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
@@ -219,8 +219,8 @@
     {
       "id": 11,
       "name": "Za zámkem",
-      "latitude": 50.626595,
-      "longitude": 15.608661,
+      "latitude": 50.626534,
+      "longitude": 15.608948,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
@@ -259,8 +259,8 @@
     {
       "id": 14,
       "name": "Rozcestí",
-      "latitude": 50.625725,
-      "longitude": 15.61016,
+      "latitude": 50.62576,
+      "longitude": 15.610185,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
@@ -285,8 +285,8 @@
     {
       "id": 16,
       "name": "U zdi",
-      "latitude": 50.625088,
-      "longitude": 15.607833,
+      "latitude": 50.624977,
+      "longitude": 15.607855,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
@@ -313,8 +313,8 @@
     {
       "id": 18,
       "name": "Jih",
-      "latitude": 50.62453,
-      "longitude": 15.609673,
+      "latitude": 50.624565,
+      "longitude": 15.609896,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
@@ -326,8 +326,8 @@
     {
       "id": 19,
       "name": "Hálka",
-      "latitude": 50.62436,
-      "longitude": 15.61181,
+      "latitude": 50.624306,
+      "longitude": 15.611964,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
@@ -338,8 +338,8 @@
     {
       "id": 20,
       "name": "Průchod",
-      "latitude": 50.625362,
-      "longitude": 15.612019,
+      "latitude": 50.625355,
+      "longitude": 15.611972,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
@@ -351,8 +351,8 @@
     {
       "id": 21,
       "name": "Krbalova",
-      "latitude": 50.62639,
-      "longitude": 15.611632,
+      "latitude": 50.626244,
+      "longitude": 15.611629,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
@@ -363,7 +363,7 @@
     {
       "id": 22,
       "name": "Čecha",
-      "latitude": 50.62711,
+      "latitude": 50.62709,
       "longitude": 15.611044,
       "is_base": false,
       "color": "#FFFFFF",
@@ -375,8 +375,8 @@
     {
       "id": 23,
       "name": "Socha",
-      "latitude": 50.62624,
-      "longitude": 15.607338,
+      "latitude": 50.62623,
+      "longitude": 15.607302,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
@@ -389,8 +389,8 @@
     {
       "id": 24,
       "name": "Před průchodem",
-      "latitude": 50.625164,
-      "longitude": 15.610713,
+      "latitude": 50.6252,
+      "longitude": 15.610951,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
@@ -402,8 +402,8 @@
     {
       "id": 25,
       "name": "Parkoviště",
-      "latitude": 50.628475,
-      "longitude": 15.607767,
+      "latitude": 50.628498,
+      "longitude": 15.607693,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
