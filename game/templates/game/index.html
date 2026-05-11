@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Swordmap - Select Team</title>
+    <title>KSP bojovka - Výběr týmu</title>
     <link rel="icon" type="image/svg+xml" href="{% static 'game/favicon.svg' %}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
@@ -29,6 +29,24 @@
         font-size: 1.1rem;
         margin-bottom: 2rem;
         opacity: 0.8;
+      }
+      .tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+      .tab {
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: 1px solid #555;
+        background: #2d2d2d;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .tab.active {
+        background: #4a4a4a;
+        border-color: #7a7a7a;
       }
       .team-container {
         display: flex;
@@ -87,12 +105,17 @@
     </style>
   </head>
   <body>
-    <h1>Swordmap</h1>
-    <p>Choose your allegiance:</p>
+    <h1>KSP bojovka</h1>
+    <div class="tabs">
+      <a href="{% url 'index' %}" class="tab active">Týmy</a>
+      <a href="{% url 'rules' %}" class="tab">Pravidla</a>
+      <a href="{% url 'stats' %}" class="tab">Statistiky</a>
+    </div>
+    <p>Vyber si svůj tým:</p>
     <div class="team-container">
       {% for team in teams %}
       <a href="{% url 'map' team.name|lower %}" class="btn" style="background-color: {{ team.color }}; border-color: {{ team.color }}; color: {% if team.color == '#FFFF00' or team.color == 'YELLOW' %}black{% else %}white{% endif %};">
-        {{ team.name }} Team
+        Tým {{ team.name }}
       </a>
       {% endfor %}
 

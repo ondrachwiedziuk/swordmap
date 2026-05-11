@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from game.models import Team, Zone, Game
+from game.models import Team, Zone, Game, GameSnapshot
 import json
 import os
 from django.conf import settings
@@ -16,16 +16,27 @@ class Command(BaseCommand):
         with open(config_path, 'r') as f:
             config = json.load(f)
 
-        # Ensure Game instance exists
-        Game.objects.get_or_create(
+        # Ensure Game instance exists and update config values when it already exists.
+        game, _ = Game.objects.get_or_create(
             id=1,
-            mode=config.get('mode', 'Standard'),
-            top_left_longitude=config.get('topLeft', {}).get('longitude', 0.0),
-            top_left_latitude=config.get('topLeft', {}).get('latitude', 0.0),
-            bottom_right_longitude=config.get('bottomRight', {}).get('longitude', 0.0),
-            bottom_right_latitude=config.get('bottomRight', {}).get('latitude', 0.0),
-            accepted_distance=config.get('accepted_distance', 5)
+            defaults={
+                'mode': config.get('mode', 'STANDARD').upper(),
+                'top_left_longitude': config.get('topLeft', {}).get('longitude', 0.0),
+                'top_left_latitude': config.get('topLeft', {}).get('latitude', 0.0),
+                'bottom_right_longitude': config.get('bottomRight', {}).get('longitude', 0.0),
+                'bottom_right_latitude': config.get('bottomRight', {}).get('latitude', 0.0),
+                'accepted_distance': config.get('accepted_distance', 5),
+            },
         )
+        game.mode = config.get('mode', game.mode).upper()
+        game.top_left_longitude = config.get('topLeft', {}).get('longitude', game.top_left_longitude)
+        game.top_left_latitude = config.get('topLeft', {}).get('latitude', game.top_left_latitude)
+        game.bottom_right_longitude = config.get('bottomRight', {}).get('longitude', game.bottom_right_longitude)
+        game.bottom_right_latitude = config.get('bottomRight', {}).get('latitude', game.bottom_right_latitude)
+        game.accepted_distance = config.get('accepted_distance', game.accepted_distance)
+        game.end_bonus_applied = False
+        game.save()
+        GameSnapshot.objects.filter(game=game).delete()
         self.stdout.write(self.style.SUCCESS("Game instance created/exists"))
 
         # 1. Extract Teams from Bases
@@ -58,7 +69,9 @@ class Command(BaseCommand):
                 'status': 'NEUTRAL',
                 'capturing_team': None,
                 'capture_started_at': None,
-                'last_score_update': None
+                'last_score_update': None,
+                'last_lost_at': None,
+                'last_lost_by_team_name': None,
             }
             
             if zone_data.get('owner'):

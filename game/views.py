@@ -1,10 +1,16 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 from .models import Zone, Team, Game
 import math
 import json
+import re
+import hashlib
+import html
+from urllib.parse import quote, unquote
+from pathlib import Path
 
 map_width, map_height = 1189, 1140  # Example dimensions for coordinate calculations
 
@@ -28,12 +34,108 @@ def index(request):
     teams = Team.objects.all()
     return render(request, 'game/index.html', {'teams': teams})
 
+
+def format_inline_markdown(text):
+    escaped = html.escape(text)
+    escaped = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', escaped)
+    escaped = re.sub(r'`([^`]+)`', r'<code>\1</code>', escaped)
+    return escaped
+
+
+def render_rules_markdown(text):
+    lines = text.splitlines()
+    html_parts = []
+    list_type = None
+    list_open = False
+
+    def close_list():
+        nonlocal list_open, list_type
+        if list_open:
+            html_parts.append(f'</{list_type}>')
+            list_open = False
+            list_type = None
+
+    for raw_line in lines:
+        line = raw_line.rstrip()
+        stripped = line.strip()
+
+        if not stripped:
+            close_list()
+            continue
+
+        if stripped.startswith('# '):
+            close_list()
+            html_parts.append(f'<h1>{format_inline_markdown(stripped[2:].strip())}</h1>')
+            continue
+        if stripped.startswith('## '):
+            close_list()
+            html_parts.append(f'<h2>{format_inline_markdown(stripped[3:].strip())}</h2>')
+            continue
+        if stripped.startswith('### '):
+            close_list()
+            html_parts.append(f'<h3>{format_inline_markdown(stripped[4:].strip())}</h3>')
+            continue
+
+        ordered_match = re.match(r'^(\d+)\.\s+(.*)$', stripped)
+        unordered_match = re.match(r'^-\s+(.*)$', stripped)
+
+        if ordered_match:
+            if not list_open or list_type != 'ol':
+                close_list()
+                html_parts.append('<ol>')
+                list_open = True
+                list_type = 'ol'
+            html_parts.append(f'<li>{format_inline_markdown(ordered_match.group(2))}</li>')
+            continue
+
+        if unordered_match:
+            if not list_open or list_type != 'ul':
+                close_list()
+                html_parts.append('<ul>')
+                list_open = True
+                list_type = 'ul'
+            html_parts.append(f'<li>{format_inline_markdown(unordered_match.group(1))}</li>')
+            continue
+
+        close_list()
+        html_parts.append(f'<p>{format_inline_markdown(stripped)}</p>')
+
+    close_list()
+    return mark_safe('\n'.join(html_parts))
+
+
+def rules_view(request):
+    rules_path = Path(__file__).resolve().parent.parent / 'RULES.md'
+    try:
+        rules_text = rules_path.read_text(encoding='utf-8')
+    except OSError:
+        rules_text = 'Pravidla se nepodarilo nacist.'
+
+    return render(request, 'game/rules.html', {'rules_html': render_rules_markdown(rules_text)})
+
+
+def stats_view(request):
+    return render(request, 'game/stats.html')
+
 def map_view(request, role):
     game, _ = Game.objects.get_or_create(id=1)
     mean_lat = (game.top_left_latitude + game.bottom_right_latitude) / 2
     scale = math.cos(math.radians(mean_lat))
 
-    game.diameter = 2 * round(game.accepted_distance * math.sqrt(map_height**2 + map_width**2) / haversine(game.top_left_latitude, game.top_left_longitude, game.bottom_right_latitude, game.bottom_right_longitude))
+    map_diagonal_distance = haversine(
+        game.top_left_latitude,
+        game.top_left_longitude,
+        game.bottom_right_latitude,
+        game.bottom_right_longitude,
+    )
+    if map_diagonal_distance > 0:
+        game.diameter = 2 * round(
+            game.accepted_distance
+            * math.sqrt(map_height**2 + map_width**2)
+            / map_diagonal_distance
+        )
+    else:
+        game.diameter = 0
 
     if role == 'admin2536' and request.method == 'POST':
         start_time_str = request.POST.get('start_time')
@@ -54,21 +156,52 @@ def map_view(request, role):
                 pass
 
     zones = Zone.objects.all()
+    longitude_span = (game.bottom_right_longitude - game.top_left_longitude) * scale
+    latitude_span = game.top_left_latitude - game.bottom_right_latitude
     for zone in zones:
-        zone.x_coordinate = (
-            (zone.longitude - game.top_left_longitude) * scale
-            / ((game.bottom_right_longitude - game.top_left_longitude) * scale)
-            * map_width
-        )
+        if longitude_span:
+            zone.x_coordinate = (
+                (zone.longitude - game.top_left_longitude) * scale
+                / longitude_span
+                * map_width
+            )
+        else:
+            zone.x_coordinate = map_width / 2
 
-        zone.y_coordinate = (
-            (game.top_left_latitude - zone.latitude)
-            / (game.top_left_latitude - game.bottom_right_latitude)
-            * map_height
-        )    
+        if latitude_span:
+            zone.y_coordinate = (
+                (game.top_left_latitude - zone.latitude)
+                / latitude_span
+                * map_height
+            )
+        else:
+            zone.y_coordinate = map_height / 2
         
     capturing_zones = Zone.objects.filter(status='CAPTURING')
     teams = Team.objects.all()
+
+    play_area_vertices = []
+    config_path = Path(__file__).resolve().parent.parent / 'game_config.json'
+    try:
+        config_data = json.loads(config_path.read_text(encoding='utf-8'))
+        raw_vertices = config_data.get('play_area_vertices', [])
+        if isinstance(raw_vertices, list):
+            for vertex in raw_vertices:
+                if not isinstance(vertex, dict):
+                    continue
+                lat = vertex.get('latitude')
+                lng = vertex.get('longitude')
+                if lat is None or lng is None:
+                    continue
+                try:
+                    play_area_vertices.append({
+                        'latitude': float(lat),
+                        'longitude': float(lng),
+                    })
+                except (TypeError, ValueError):
+                    continue
+    except (OSError, json.JSONDecodeError):
+        play_area_vertices = []
     
     from django.conf import settings
     context = {
@@ -78,8 +211,12 @@ def map_view(request, role):
         'game': game,
         'teams': teams,
         'TIME_ZONE': settings.TIME_ZONE,
+        'play_area_vertices_json': json.dumps(play_area_vertices),
     }
-    return render(request, 'game/map.html', context)
+    response = render(request, 'game/map.html', context)
+    if role != 'admin2536':
+        response.set_cookie('swordmap_team', quote(role), max_age=60 * 60 * 24)
+    return response
 
 def is_connected_to_base(team, target_zone):
     """
@@ -147,9 +284,104 @@ def can_interact(team, zone, game_mode='standard'):
     
     return is_adjacent_to_connected
 
+
+def process_zone_interaction(team, zone):
+    # Game logic shared by GPS and QR flows.
+    if zone.status == 'NEUTRAL':
+        zone.status = 'CAPTURING'
+        zone.capturing_team = team
+        zone.capture_started_at = timezone.now()
+        zone.save()
+        return JsonResponse({'status': 'capturing_started', 'team': team.name})
+
+    if zone.status == 'CAPTURING':
+        if zone.capturing_team == team:
+            return JsonResponse({'status': 'already_capturing'})
+
+        # Hostile team stops it
+        if zone.owner:
+            zone.status = 'OWNED'
+        else:
+            zone.status = 'NEUTRAL'
+
+        zone.capturing_team = None
+        zone.capture_started_at = None
+        zone.save()
+        return JsonResponse({'status': 'capture_stopped'})
+
+    if zone.status == 'OWNED':
+        if zone.owner == team:
+            return JsonResponse({'status': 'already_owned'})
+
+        # Hostile team attacks owned zone
+        zone.status = 'CAPTURING'
+        # Owner remains until capture is complete
+        zone.capturing_team = team
+        zone.capture_started_at = timezone.now()
+        zone.save()
+        return JsonResponse({'status': 'capturing_started', 'team': team.name})
+
+    return JsonResponse({'status': 'ok'})
+
+
+QR_SECRET = "swordmap-tajny-klic"
+QR_BASE_URL = "https://smazeny.pull.cz/c/"
+
+
+def make_signature(zone_id: str) -> str:
+    return hashlib.sha256(f"{zone_id}-{QR_SECRET}".encode()).hexdigest()[:3].upper()
+
+
+def parse_zone_id_from_qr(qr_code):
+    """Parse a QR URL like https://smazeny.pull.cz/c/<zone_id><3-char-signature>.
+
+    Returns the integer zone_id on success, None on failure.
+    """
+    if not qr_code:
+        return None
+
+    raw = str(qr_code).strip()
+
+    # Manual fallback formats for cases where camera scan fails.
+    # Accept plain numeric zone id or common labels like ZONE-12 / ZONE:12 / zone/12.
+    numeric_match = re.fullmatch(r'\d+', raw)
+    if numeric_match:
+        return int(raw)
+
+    labeled_match = re.search(r'(?:ZONE[-:/ ]?|ZONA[-:/ ]?)(\d+)', raw, flags=re.IGNORECASE)
+    if labeled_match:
+        return int(labeled_match.group(1))
+
+    # Strip the base URL prefix.
+    if raw.startswith(QR_BASE_URL):
+        raw = raw[len(QR_BASE_URL):]
+    elif raw.startswith("http"):
+        # Wrong domain / path – reject.
+        return None
+
+    if len(raw) < 4:
+        # Need at least 1 char zone_id + 3 char signature.
+        return None
+
+    zone_id_part = raw[:-3]
+    sig_part = raw[-3:]
+
+    expected_sig = make_signature(zone_id_part)
+    if sig_part.upper() != expected_sig:
+        return None
+
+    # zone_id_part may be a plain integer or a spare code like "S1".
+    if zone_id_part.isdigit():
+        return int(zone_id_part)
+
+    return None
+
 def zone_click(request, zone_id):
     if request.method == 'POST':
-        data = json.loads(request.body)
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON payload'}, status=400)
         role = data.get('role')
         longitude = data.get('longitude')
         latitude = data.get('latitude')
@@ -171,6 +403,9 @@ def zone_click(request, zone_id):
              return JsonResponse({'error': f'Game has not started yet. Start: {game.start_time}, Now: {now}'}, status=400)
         if now > game.end_time:
              return JsonResponse({'error': f'Game is over. End: {game.end_time}, Now: {now}'}, status=400)
+
+        if game.mode == 'QR':
+            return JsonResponse({'error': 'QR mode is active. Capture zones by scanning QR codes.'}, status=400)
             
         try:
             team = Team.objects.get(name__iexact=role)
@@ -189,41 +424,163 @@ def zone_click(request, zone_id):
         if not can_interact(team, zone, game.mode):
              return JsonResponse({'error': 'Zone is not reachable from your base!'}, status=400)
 
-        # Game logic
-        if zone.status == 'NEUTRAL':
-            zone.status = 'CAPTURING'
-            zone.capturing_team = team
-            zone.capture_started_at = timezone.now()
-            zone.save()
-            return JsonResponse({'status': 'capturing_started', 'team': team.name})
-            
-        elif zone.status == 'CAPTURING':
-            if zone.capturing_team == team:
-                return JsonResponse({'status': 'already_capturing'})
-            else:
-                # Hostile team stops it
-                if zone.owner:
-                    zone.status = 'OWNED'
-                else:
-                    zone.status = 'NEUTRAL'
-                
-                zone.capturing_team = None
-                zone.capture_started_at = None
-                zone.save()
-                return JsonResponse({'status': 'capture_stopped'})
-                
-        elif zone.status == 'OWNED':
-            if zone.owner == team:
-                return JsonResponse({'status': 'already_owned'})
-            else:
-                # Hostile team attacks owned zone
-                zone.status = 'CAPTURING'
-                # Owner remains until capture is complete
-                zone.capturing_team = team
-                zone.capture_started_at = timezone.now()
-                zone.save()
-                return JsonResponse({'status': 'capturing_started', 'team': team.name})
-                
-        return JsonResponse({'status': 'ok'})
+        return process_zone_interaction(team, zone)
     return JsonResponse({'error': 'Method not allowed'}, status=405)
 
+
+def zone_scan_qr(request):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON payload'}, status=400)
+    role = data.get('role')
+    qr_code = data.get('qr_code')
+
+    if role == 'admin2536':
+        return JsonResponse({'status': 'admin_action'})
+
+    if not qr_code:
+        return JsonResponse({'error': 'Missing QR code value'}, status=400)
+
+    game = Game.objects.first()
+    now = timezone.now()
+    if not game or not game.start_time or not game.end_time:
+        return JsonResponse({'error': 'Game not configured'}, status=400)
+    if now < game.start_time:
+        return JsonResponse({'error': f'Game has not started yet. Start: {game.start_time}, Now: {now}'}, status=400)
+    if now > game.end_time:
+        return JsonResponse({'error': f'Game is over. End: {game.end_time}, Now: {now}'}, status=400)
+
+    if game.mode != 'QR':
+        return JsonResponse({'error': 'QR capture is available only when game mode is QR.'}, status=400)
+
+    try:
+        team = Team.objects.get(name__iexact=role)
+    except Team.DoesNotExist:
+        return JsonResponse({'error': 'Invalid team'}, status=400)
+
+    zone_id = parse_zone_id_from_qr(qr_code)
+    if zone_id is None:
+        return JsonResponse({'error': 'Invalid QR code – bad URL or signature.'}, status=400)
+
+    zone = get_object_or_404(Zone, id=zone_id)
+
+    if zone.is_base:
+        return JsonResponse({'error': 'Cannot capture base'}, status=400)
+
+    if not can_interact(team, zone, game.mode):
+        return JsonResponse({'error': 'Zone is not reachable from your base!'}, status=400)
+
+    response = process_zone_interaction(team, zone)
+    response.set_cookie('swordmap_team', quote(team.name), max_age=60 * 60 * 24)
+    return response
+
+
+def _do_qr_capture(team, zone, game):
+    """Attempt capture and return a redirect response to the map (with team cookie set)."""
+    if not can_interact(team, zone, game.mode):
+        return None, 'Zone is not reachable from your base!'
+
+    process_zone_interaction(team, zone)
+    response = redirect('map', role=team.name.lower())
+    response.set_cookie('swordmap_team', quote(team.name), max_age=60 * 60 * 24)
+    return response, None
+
+
+def qr_link(request, code):
+    """Handle direct QR link opened from an external QR scanner app.
+
+    URL: /c/<zone_id><signature>
+
+    If the team is cached in a cookie, capture immediately and redirect to map.
+    Otherwise show team-selection; on POST store the cookie and redirect to map.
+    """
+    qr_url = QR_BASE_URL + code
+    zone_id = parse_zone_id_from_qr(qr_url)
+
+    if zone_id is None:
+        return render(request, 'game/qr_capture.html', {
+            'error': 'Invalid QR code.',
+        })
+
+    zone = get_object_or_404(Zone, id=zone_id)
+    teams = Team.objects.all()
+
+    game = Game.objects.first()
+    now = timezone.now()
+
+    # Validate game state.
+    game_error = None
+    if not game or not game.start_time or not game.end_time:
+        game_error = 'Game not configured.'
+    elif now < game.start_time:
+        game_error = 'Game has not started yet.'
+    elif now > game.end_time:
+        game_error = 'Game is over.'
+    elif game.mode != 'QR':
+        game_error = 'QR capture is not active right now.'
+
+    if game_error:
+        return render(request, 'game/qr_capture.html', {
+            'error': game_error,
+            'zone': zone,
+        })
+
+    if zone.is_base:
+        return render(request, 'game/qr_capture.html', {
+            'error': 'Cannot capture a base zone.',
+            'zone': zone,
+        })
+
+    # --- Try cached team (cookie) on GET ---
+    if request.method == 'GET':
+        cached_team_name = unquote(request.COOKIES.get('swordmap_team', '')).strip()
+        if cached_team_name:
+            try:
+                team = Team.objects.get(name__iexact=cached_team_name)
+                response, error = _do_qr_capture(team, zone, game)
+                if response:
+                    return response
+                # Capture failed (unreachable) – fall through to team picker
+                # with the error so the user sees what happened.
+                return render(request, 'game/qr_capture.html', {
+                    'error': error,
+                    'zone': zone,
+                    'teams': teams,
+                    'code': code,
+                })
+            except Team.DoesNotExist:
+                pass  # stale cookie – fall through to team picker
+
+    # --- POST: explicit team selection ---
+    if request.method == 'POST':
+        team_name = request.POST.get('team', '').strip()
+        try:
+            team = Team.objects.get(name__iexact=team_name)
+        except Team.DoesNotExist:
+            return render(request, 'game/qr_capture.html', {
+                'error': 'Invalid team.',
+                'zone': zone,
+                'teams': teams,
+                'code': code,
+            })
+
+        response, error = _do_qr_capture(team, zone, game)
+        if response:
+            return response
+        return render(request, 'game/qr_capture.html', {
+            'error': error,
+            'zone': zone,
+            'teams': teams,
+            'code': code,
+        })
+
+    # GET without cached team – show team picker.
+    return render(request, 'game/qr_capture.html', {
+        'zone': zone,
+        'teams': teams,
+        'code': code,
+    })

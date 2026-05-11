@@ -1,758 +1,459 @@
 {
-  "mode": "Free",
+  "mode": "QR",
   "accepted_distance": 25,
   "topLeft": {
-    "latitude": 49.2166536,
-    "longitude": 16.5895847
+    "latitude": 50.629044,
+    "longitude": 15.604924
   },
   "bottomRight": {
-    "latitude": 49.2006639,
-    "longitude": 16.6150014
+    "latitude": 50.623955,
+    "longitude": 15.612298
   },
+  "play_area_vertices": [
+    {
+      "latitude": 50.628845,
+      "longitude": 15.604924
+    },
+    {
+      "latitude": 50.629044,
+      "longitude": 15.605987
+    },
+    {
+      "latitude": 50.629005,
+      "longitude": 15.606931
+    },
+    {
+      "latitude": 50.62895,
+      "longitude": 15.607631
+    },
+    {
+      "latitude": 50.628628,
+      "longitude": 15.608325
+    },
+    {
+      "latitude": 50.628254,
+      "longitude": 15.609161
+    },
+    {
+      "latitude": 50.628006,
+      "longitude": 15.609398
+    },
+    {
+      "latitude": 50.627953,
+      "longitude": 15.610064
+    },
+    {
+      "latitude": 50.627407,
+      "longitude": 15.610767
+    },
+    {
+      "latitude": 50.62693,
+      "longitude": 15.611196
+    },
+    {
+      "latitude": 50.626373,
+      "longitude": 15.611662
+    },
+    {
+      "latitude": 50.62571,
+      "longitude": 15.611915
+    },
+    {
+      "latitude": 50.62501,
+      "longitude": 15.612126
+    },
+    {
+      "latitude": 50.62429,
+      "longitude": 15.612298
+    },
+    {
+      "latitude": 50.6242,
+      "longitude": 15.610672
+    },
+    {
+      "latitude": 50.623955,
+      "longitude": 15.60877
+    },
+    {
+      "latitude": 50.624107,
+      "longitude": 15.608272
+    },
+    {
+      "latitude": 50.624912,
+      "longitude": 15.607947
+    },
+    {
+      "latitude": 50.625435,
+      "longitude": 15.607492
+    },
+    {
+      "latitude": 50.62661,
+      "longitude": 15.606759
+    },
+    {
+      "latitude": 50.62622,
+      "longitude": 15.607119
+    },
+    {
+      "latitude": 50.626972,
+      "longitude": 15.606379
+    },
+    {
+      "latitude": 50.627373,
+      "longitude": 15.605772
+    },
+    {
+      "latitude": 50.62811,
+      "longitude": 15.605303
+    }
+  ],
   "teams": [
-    { "name": "bigbs", "color": "#dc143c" },
-    { "name": "boricivkrytu", "color": "#4169e1" },
-    { "name": "deltaforce", "color": "#daa520" },
-    { "name": "dementniksickari", "color": "#50c878" },
-    { "name": "interso0b", "color": "#8a2be2" },
-    { "name": "martinkovakryptografickacetavoliii", "color": "#ff8c00" },
-    { "name": "mnamaciiii", "color": "#008080" },
-    { "name": "morekdvorek", "color": "#ff00ff" },
-    { "name": "olomouckadelegace", "color": "#4b0082" },
-    { "name": "prestiznigorale", "color": "#ff7f50" },
-    { "name": "rztrozjedemeto", "color": "#32cd32" },
-    { "name": "smigusdyngus", "color": "#00ced1" },
-    { "name": "sobota", "color": "#ffbf00" },
-    { "name": "sp3", "color": "#5c5b5b" },
-    { "name": "squadraporcellinoaljaguaromozzarellpazitkini", "color": "#ff2400" },
-    { "name": "stodolapumpa", "color": "#8e4585" },
-    { "name": "straznictidraci", "color": "#6a5acd" },
-    { "name": "skrabani", "color": "#808000" },
-    { "name": "tecenamdobot", "color": "#7b3f00" },
-    { "name": "tikterinevi", "color": "#4682b4" },
-    { "name": "uhloprickyavasek", "color": "#000000" },
-    { "name": "mama", "color": "#e60073" }
+    {
+      "name": "Matúš Púll",
+      "color": "#dc143c"
+    },
+    {
+      "name": "Jan Tuňák",
+      "color": "#4169e1"
+    },
+    {
+      "name": "Zdenda Půlříše",
+      "color": "#daa520"
+    }
   ],
   "zones": [
     {
       "id": 1,
-      "name": "1",
-      "latitude": 49.21183,
-      "longitude": 16.596981,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
+      "name": "Matúš Púll",
+      "latitude": 50.628315,
+      "longitude": 15.605578,
+      "is_base": true,
+      "owner": "Matúš Púll",
+      "color": "#dc143c",
+      "adjacent_zones": [
+        2,
+        3,
+        5
+      ]
     },
     {
       "id": 2,
-      "name": "2",
-      "latitude": 49.211059,
-      "longitude": 16.593582,
+      "name": "Klášter",
+      "latitude": 50.628986,
+      "longitude": 15.605976,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [
+        1,
+        3,
+        25
+      ]
     },
     {
       "id": 3,
-      "name": "3",
-      "latitude": 49.213878,
-      "longitude": 16.592364,
+      "name": "Zahrada",
+      "latitude": 50.627895,
+      "longitude": 15.606574,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [
+        1,
+        2,
+        4
+      ]
     },
     {
       "id": 4,
-      "name": "4",
-      "latitude": 49.215112,
-      "longitude": 16.597665,
+      "name": "U jezírka",
+      "latitude": 50.627438,
+      "longitude": 15.607402,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [
+        3,
+        5,
+        6,
+        7
+      ]
     },
     {
       "id": 5,
-      "name": "5",
-      "latitude": 49.213401,
-      "longitude": 16.595934,
+      "name": "KRNAP",
+      "latitude": 50.627007,
+      "longitude": 15.606425,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [
+        1,
+        4,
+        6,
+        23
+      ]
     },
     {
       "id": 6,
-      "name": "6",
-      "latitude": 49.212952,
-      "longitude": 16.601064,
+      "name": "Pod stromy",
+      "latitude": 50.62687,
+      "longitude": 15.607724,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [
+        4,
+        5,
+        7,
+        23
+      ]
     },
     {
       "id": 7,
-      "name": "7",
-      "latitude": 49.210554,
-      "longitude": 16.597836,
+      "name": "Zámek",
+      "latitude": 50.627186,
+      "longitude": 15.608561,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [
+        4,
+        6,
+        8,
+        10,
+        11
+      ]
     },
     {
       "id": 8,
-      "name": "8",
-      "latitude": 49.209838,
-      "longitude": 16.595955,
+      "name": "Betlém",
+      "latitude": 50.627632,
+      "longitude": 15.609344,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [
+        7,
+        9,
+        25
+      ]
     },
     {
       "id": 9,
-      "name": "9",
-      "latitude": 49.21096,
-      "longitude": 16.594779,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
+      "name": "Zdenda Půlříše",
+      "latitude": 50.62756,
+      "longitude": 15.610292,
+      "is_base": true,
+      "owner": "Zdenda Půlříše",
+      "color": "#daa520",
+      "adjacent_zones": [
+        8,
+        10,
+        22
+      ]
     },
     {
       "id": 10,
-      "name": "10",
-      "latitude": 49.209754,
-      "longitude": 16.591359,
+      "name": "Okruh",
+      "latitude": 50.62689,
+      "longitude": 15.609901,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [
+        7,
+        9,
+        11,
+        14
+      ]
     },
     {
       "id": 11,
-      "name": "11",
-      "latitude": 49.20981,
-      "longitude": 16.600166,
+      "name": "Za zámkem",
+      "latitude": 50.626534,
+      "longitude": 15.608948,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [
+        7,
+        10,
+        12
+      ]
     },
     {
       "id": 12,
-      "name": "12",
-      "latitude": 49.209726,
-      "longitude": 16.603287,
+      "name": "Křižovatka",
+      "latitude": 50.626102,
+      "longitude": 15.608298,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [
+        11,
+        13,
+        23
+      ]
     },
     {
       "id": 13,
-      "name": "13",
-      "latitude": 49.209586,
-      "longitude": 16.604954,
+      "name": "U jezera",
+      "latitude": 50.62576,
+      "longitude": 15.608683,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [
+        12,
+        14,
+        15,
+        16
+      ]
     },
     {
       "id": 14,
-      "name": "14",
-      "latitude": 49.211269,
-      "longitude": 16.605831,
+      "name": "Rozcestí",
+      "latitude": 50.62576,
+      "longitude": 15.610185,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [
+        10,
+        13,
+        14
+      ]
     },
     {
       "id": 15,
-      "name": "15",
-      "latitude": 49.2088,
-      "longitude": 16.607349,
+      "name": "Cesta",
+      "latitude": 50.62511,
+      "longitude": 15.609155,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [
+        13,
+        17,
+        18
+      ]
     },
     {
       "id": 16,
-      "name": "16",
-      "latitude": 49.208183,
-      "longitude": 16.607947,
+      "name": "U zdi",
+      "latitude": 50.624977,
+      "longitude": 15.607855,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [
+        23,
+        13,
+        17
+      ]
     },
     {
       "id": 17,
-      "name": "17",
-      "latitude": 49.207272,
-      "longitude": 16.607541,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
+      "name": "Jan Tuňák",
+      "latitude": 50.624195,
+      "longitude": 15.608305,
+      "is_base": true,
+      "owner": "Jan Tuňák",
+      "color": "#4169e1",
+      "adjacent_zones": [
+        16,
+        15,
+        18,
+        19
+      ]
     },
     {
       "id": 18,
-      "name": "18",
-      "latitude": 49.206486,
-      "longitude": 16.610619,
+      "name": "Jih",
+      "latitude": 50.624565,
+      "longitude": 15.609896,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [
+        17,
+        15,
+        24
+      ]
     },
     {
       "id": 19,
-      "name": "19",
-      "latitude": 49.208099,
-      "longitude": 16.609935,
+      "name": "Hálka",
+      "latitude": 50.624306,
+      "longitude": 15.611964,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [
+        17,
+        20
+      ]
     },
     {
       "id": 20,
-      "name": "20",
-      "latitude": 49.205645,
-      "longitude": 16.608546,
+      "name": "Průchod",
+      "latitude": 50.625355,
+      "longitude": 15.611972,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [
+        24,
+        19,
+        21
+      ]
     },
     {
       "id": 21,
-      "name": "21",
-      "latitude": 49.204971,
-      "longitude": 16.606707,
+      "name": "Krbalova",
+      "latitude": 50.626244,
+      "longitude": 15.611629,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [
+        20,
+        22
+      ]
     },
     {
       "id": 22,
-      "name": "22",
-      "latitude": 49.205252,
-      "longitude": 16.61156,
+      "name": "Čecha",
+      "latitude": 50.62709,
+      "longitude": 15.611044,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [
+        21,
+        9
+      ]
     },
     {
       "id": 23,
-      "name": "23",
-      "latitude": 49.20347,
-      "longitude": 16.612714,
+      "name": "Socha",
+      "latitude": 50.62623,
+      "longitude": 15.607302,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [
+        5,
+        6,
+        12,
+        16
+      ]
     },
     {
       "id": 24,
-      "name": "24",
-      "latitude": 49.203793,
-      "longitude": 16.610662,
+      "name": "Před průchodem",
+      "latitude": 50.6252,
+      "longitude": 15.610951,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [
+        14,
+        20,
+        18
+      ]
     },
     {
       "id": 25,
-      "name": "25",
-      "latitude": 49.203499,
-      "longitude": 16.605767,
+      "name": "Parkoviště",
+      "latitude": 50.628498,
+      "longitude": 15.607693,
       "is_base": false,
       "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 26,
-      "name": "26",
-      "latitude": 49.202685,
-      "longitude": 16.603052,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 27,
-      "name": "27",
-      "latitude": 49.207847,
-      "longitude": 16.593839,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 28,
-      "name": "28",
-      "latitude": 49.206107,
-      "longitude": 16.593603,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 29,
-      "name": "29",
-      "latitude": 49.205715,
-      "longitude": 16.597216,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 30,
-      "name": "30",
-      "latitude": 49.207426,
-      "longitude": 16.597729,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 31,
-      "name": "31",
-      "latitude": 49.20448,
-      "longitude": 16.601043,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 32,
-      "name": "32",
-      "latitude": 49.203709,
-      "longitude": 16.599546,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 33,
-      "name": "33",
-      "latitude": 49.202404,
-      "longitude": 16.595784,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 34,
-      "name": "34",
-      "latitude": 49.206781,
-      "longitude": 16.600166,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 35,
-      "name": "35",
-      "latitude": 49.208885,
-      "longitude": 16.600679,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 36,
-      "name": "36",
-      "latitude": 49.211942,
-      "longitude": 16.599311,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 37,
-      "name": "37",
-      "latitude": 49.205238,
-      "longitude": 16.602838,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 38,
-      "name": "38",
-      "latitude": 49.204593,
-      "longitude": 16.595784,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 39,
-      "name": "39",
-      "latitude": 49.206121,
-      "longitude": 16.606365,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 40,
-      "name": "40",
-      "latitude": 49.207706,
-      "longitude": 16.60551,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 41,
-      "name": "41",
-      "latitude": 49.202124,
-      "longitude": 16.612693,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 42,
-      "name": "42",
-      "latitude": 49.208927,
-      "longitude": 16.596938,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 43,
-      "name": "43",
-      "latitude": 49.207117,
-      "longitude": 16.601662,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 44,
-      "name": "44",
-      "latitude": 49.21089,
-      "longitude": 16.604142,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 45,
-      "name": "45",
-      "latitude": 49.211592,
-      "longitude": 16.608332,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 46,
-      "name": "46",
-      "latitude": 49.206865,
-      "longitude": 16.60923,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 47,
-      "name": "47",
-      "latitude": 49.209095,
-      "longitude": 16.608802,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 48,
-      "name": "48",
-      "latitude": 49.206654,
-      "longitude": 16.594822,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 49,
-      "name": "49",
-      "latitude": 49.207987,
-      "longitude": 16.591658,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 50,
-      "name": "50",
-      "latitude": 49.202657,
-      "longitude": 16.60209,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 51,
-      "name": "51",
-      "latitude": 49.206037,
-      "longitude": 16.600658,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 52,
-      "name": "52",
-      "latitude": 49.205674,
-      "longitude": 16.604548,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 53,
-      "name": "53",
-      "latitude": 49.208591,
-      "longitude": 16.598969,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 54,
-      "name": "54",
-      "latitude": 49.210569,
-      "longitude": 16.599632,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 55,
-      "name": "55",
-      "latitude": 49.206081,
-      "longitude": 16.607391,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 56,
-      "name": "56",
-      "latitude": 49.202714,
-      "longitude": 16.604399,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 57,
-      "name": "57",
-      "latitude": 49.202153,
-      "longitude": 16.601385,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 58,
-      "name": "58",
-      "latitude": 49.204874,
-      "longitude": 16.598199,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 59,
-      "name": "59",
-      "latitude": 49.20998,
-      "longitude": 16.606558,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 60,
-      "name": "60",
-      "latitude": 49.208366,
-      "longitude": 16.59495,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 61,
-      "name": "61",
-      "latitude": 49.212545,
-      "longitude": 16.592577,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 62,
-      "name": "62",
-      "latitude": 49.210918,
-      "longitude": 16.596724,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 63,
-      "name": "63",
-      "latitude": 49.211465,
-      "longitude": 16.595249,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 64,
-      "name": "64",
-      "latitude": 49.206907,
-      "longitude": 16.595827,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 65,
-      "name": "65",
-      "latitude": 49.203428,
-      "longitude": 16.602689,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 66,
-      "name": "66",
-      "latitude": 49.206248,
-      "longitude": 16.609272,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 67,
-      "name": "67",
-      "latitude": 49.207734,
-      "longitude": 16.608097,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 68,
-      "name": "68",
-      "latitude": 49.204719,
-      "longitude": 16.608332,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 69,
-      "name": "69",
-      "latitude": 49.202797,
-      "longitude": 16.612693,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 70,
-      "name": "70",
-      "latitude": 49.209347,
-      "longitude": 16.598392,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 71,
-      "name": "71",
-      "latitude": 49.211339,
-      "longitude": 16.600123,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 72,
-      "name": "72",
-      "latitude": 49.203218,
-      "longitude": 16.598648,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 73,
-      "name": "73",
-      "latitude": 49.200791,
-      "longitude": 16.6007,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 74,
-      "name": "74",
-      "latitude": 49.207314,
-      "longitude": 16.594223,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 75,
-      "name": "75",
-      "latitude": 49.205574,
-      "longitude": 16.592556,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 76,
-      "name": "76",
-      "latitude": 49.207145,
-      "longitude": 16.591188,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 77,
-      "name": "77",
-      "latitude": 49.208183,
-      "longitude": 16.594052,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 78,
-      "name": "78",
-      "latitude": 49.208352,
-      "longitude": 16.605617,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 79,
-      "name": "79",
-      "latitude": 49.209361,
-      "longitude": 16.602346,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
-    },
-    {
-      "id": 80,
-      "name": "80",
-      "latitude": 49.21204,
-      "longitude": 16.603544,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": []
+      "adjacent_zones": [
+        2,
+        8
+      ]
     }
   ]
 }

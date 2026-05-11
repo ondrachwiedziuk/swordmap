@@ -2,36 +2,74 @@
 <!doctype html>
 <html>
   <head>
-    <title>Swordmap - {{ role|title }}</title>
+    <title>KSP bojovka - {{ role|title }}</title>
     <link rel="icon" type="image/svg+xml" href="{% static 'game/favicon.svg' %}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script src="{% static 'game/html5-qrcode.min.js' %}"></script>
     <style>
+      :root {
+        --bg: #222;
+        --panel: #111;
+        --panel-border: #444;
+        --text: #f1f5f9;
+        --muted: #cbd5e1;
+        --tab-bg: #2d2d2d;
+        --tab-active: #4a4a4a;
+      }
       body {
         margin: 0;
-        padding: 0;
-        font-family: sans-serif;
-        background-color: #333;
+        padding: 20px;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--bg);
+        color: var(--text);
+        box-sizing: border-box;
       }
-      #map-scroll-container {
-        position: relative;
-        background-color: #333;
-        width: 100%;
+      *, *::before, *::after {
+        box-sizing: inherit;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+      .tab {
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: 1px solid #555;
+        background: var(--tab-bg);
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .tab.active {
+        background: var(--tab-active);
+        border-color: #7a7a7a;
+      }
+      .map-panel {
+        border: 1px solid var(--panel-border);
+        border-radius: 10px;
         overflow: hidden;
       }
-      .map-container {
-        position: relative;
-        width: 1189px;
-        height: 1140px;
-        background-image: url("{% static 'game/map.png' %}");
-        background-size: cover;
-        transform-origin: top left;
+      #map {
+        width: 100%;
+        height: 68vh;
+        min-height: 420px;
       }
       #info-panel {
-        background: #f8f9fa;
-        padding: 10px;
+        background: var(--panel);
+        padding: 14px;
         display: flex;
         flex-direction: column;
         gap: 10px;
+        border: 1px solid var(--panel-border);
+        border-radius: 10px;
+        margin-top: 12px;
       }
       .info-row {
         display: flex;
@@ -41,128 +79,122 @@
         gap: 10px;
       }
       .info-box {
-        border: 1px solid #ccc;
+        border: 1px solid var(--panel-border);
         padding: 10px;
-        background: white;
-        border-radius: 4px;
+        background: #1a1a1a;
+        border-radius: 8px;
       }
-      svg {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
+      .info-box h3,
+      .info-box strong,
+      .info-box li,
+      .info-box p,
+      .info-box small,
+      .info-box span,
+      #game-timer,
+      #game-mode {
+        color: var(--text);
       }
-      .zone {
-        position: absolute;
-        width: {{ game.diameter }}px;
-        height: {{ game.diameter }}px;
-        transform: translate(-50%, -50%);
-        border-radius: 50%;
-        border: 2px solid #333;
+      #scan-qr-hint {
+        color: var(--muted) !important;
+      }
+      button,
+      input[type="datetime-local"],
+      input[type="number"] {
+        border-radius: 8px;
+        border: 1px solid #555;
+        background: #202020;
+        color: #fff;
+        padding: 8px 10px;
+        font-family: inherit;
+      }
+      button {
         cursor: pointer;
-        display: flex;
+      }
+      button:hover {
+        filter: brightness(1.08);
+      }
+      #game-mode {
+        padding: 2px 8px;
+        border-radius: 999px;
+        border: 1px solid #555;
+        background: #202020;
+      }
+      #qr-scanner-modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 3000;
+        display: none;
         align-items: center;
         justify-content: center;
-        font-weight: bold;
-        text-align: center;
-        font-size: 8px;
-        line-height: 1.1;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
+        padding: 16px;
       }
-      .zone.base {
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        width: 60px;
-        height: 60px;
-        z-index: 10;
+      #qr-scanner-panel {
+        width: min(520px, 100%);
+        background: #111;
+        color: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid #444;
       }
-
-      /* GPS marker */
-      #player-location {
-        position: absolute;
-        width: 9px;
-        height: 9px;
-        transform: translate(-50%, -50%);
-        border-radius: 50%;
-        background: #1e90ff;
-        border: 3px solid white;
-        box-shadow:
-          0 0 0 2px #1e90ff,
-          0 0 12px rgba(30, 144, 255, 0.7);
-        z-index: 1000;
-        pointer-events: none;
-        display: none;
+      #qr-reader {
+        width: 100%;
       }
-
-      #player-location::after {
-        content: "";
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        width: 36px;
-        height: 36px;
-        transform: translate(-50%, -50%);
-        border-radius: 50%;
-        background: rgba(30, 144, 255, 0.18);
+      #qr-scanner-toolbar {
+        display: flex;
+        gap: 8px;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+      }
+      #qr-manual-entry {
+        display: flex;
+        gap: 8px;
+        padding: 10px;
+        border-top: 1px solid #333;
+        background: #0b0b0b;
+      }
+      #manual-qr-input {
+        flex: 1;
+        min-width: 0;
+        border-radius: 6px;
+        border: 1px solid #555;
+        background: #1a1a1a;
+        color: #fff;
+        padding: 8px 10px;
+      }
+      #manual-qr-input::placeholder {
+        color: #aaa;
+      }
+      #qr-status {
+        font-size: 0.9em;
+        color: #ddd;
       }
     </style>
   </head>
   <body>
-    <div id="map-scroll-container">
-      <div id="map-wrapper" style="position: relative; width: 100%">
-        <div class="map-container" id="map">
-          <svg>
-            {% for zone in zones %} {% for neighbor in zone.adjacent_zones.all %} {% if zone.id < neighbor.id %} {% with z_color=zone.owner.color|default:"#FFFFFF" n_color=neighbor.owner.color|default:"#FFFFFF" %}
-            <line x1="{{ zone.x_coordinate }}" y1="{{ zone.y_coordinate }}" x2="{{ neighbor.x_coordinate }}" y2="{{ neighbor.y_coordinate }}" stroke="#333" stroke-width="6" />
-            <line
-              id="line-inner-{{ zone.id }}-{{ neighbor.id }}"
-              x1="{{ zone.x_coordinate }}"
-              y1="{{ zone.y_coordinate }}"
-              x2="{{ neighbor.x_coordinate }}"
-              y2="{{ neighbor.y_coordinate }}"
-              stroke="{% if z_color == n_color %}{{ z_color }}{% else %}white{% endif %}"
-              stroke-width="4"
-            />
-            {% endwith %} {% endif %} {% endfor %} {% endfor %}
-          </svg>
-
-          {% for zone in zones %} {% with zone_color=zone.owner.color|default:zone.default_color %}
-          <div
-            class="zone {% if zone.is_base %}base{% endif %}"
-            id="zone-{{ zone.id }}"
-            style="left: {{ zone.x_coordinate }}px; top: {{ zone.y_coordinate }}px; 
-                            background-color: {{ zone_color }};
-                            color: {% if zone_color == 'BLACK' or zone_color == 'BLUE' or zone_color == '#000000' or zone_color == '#0000FF' %}white{% else %}black{% endif %};
-                            {% if zone.is_base %}
-                                {% if zone.owner.name|lower == role|lower %}
-                                    border: 4px solid darkgreen;
-                                {% else %}
-                                    border: 4px solid darkred;
-                                {% endif %}
-                            {% else %}
-                                border: 2px solid #333;
-                            {% endif %}"
-            onclick="handleZoneClick({{ zone.id }})"
-          >
-            {{ zone.name }}
-          </div>
-          {% endwith %} {% endfor %}
-
-          <!-- GPS marker -->
-          <div id="player-location" title="Your location"></div>
-        </div>
+    <div class="container">
+      <div class="tabs">
+        <a href="{% url 'index' %}" class="tab">Týmy</a>
+        <a href="{% url 'rules' %}" class="tab">Pravidla</a>
+        <a href="{% url 'stats' %}" class="tab">Statistiky</a>
+        <span class="tab active">Hra: {{ role|title }}</span>
       </div>
-    </div>
+
+      <div class="map-panel">
+        <div id="map"></div>
+      </div>
 
     <div id="info-panel">
       <div class="info-row">
         <div>
-          <h2 style="margin: 0">Team: {{ role|title }}</h2>
-          <div id="game-timer" style="font-size: 1.2em; font-weight: bold; margin-top: 5px">Time: <span id="time-remaining">--:--</span></div>
+          <h2 style="margin: 0">Tým: {{ role|title }}</h2>
+          <div style="font-size: 0.95em; margin-top: 4px">Režim: <strong id="game-mode">{{ game.mode }}</strong></div>
+          <div id="game-timer" style="font-size: 1.2em; font-weight: bold; margin-top: 5px">Čas: <span id="time-remaining">--:--</span></div>
+        </div>
+        <div class="info-box" style="display: flex; align-items: center; gap: 8px">
+          <button type="button" id="scan-qr-btn" onclick="scanQrAndCapture()" style="display: none">Skenovat QR</button>
+          <small id="scan-qr-hint" style="display: none; color: #555">Naskenuj QR kód stanoviště pro obsazení.</small>
         </div>
         {% if role == 'admin2536' %}
         <div class="info-box" style="flex: 1; display: flex; justify-content: center">
@@ -170,14 +202,14 @@
             {% csrf_token %}
             <input type="datetime-local" name="start_time" value="{{ game.start_time|date:'Y-m-d\TH:i' }}" required style="flex: 1; min-width: 0" />
             <input type="number" name="duration" value="{{ game.duration_minutes }}" required style="width: 70px" placeholder="Min" />
-            <button type="submit">Set</button>
+            <button type="submit">Nastavit</button>
           </form>
         </div>
         {% endif %}
       </div>
 
       <div class="info-box">
-        <h3 style="margin-top: 0">Scores</h3>
+        <h3 style="margin-top: 0">Skóre</h3>
         <ul id="scores-list" style="list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 15px">
           {% for team in teams %}
           <li style="color: {{ team.color }}; font-weight: bold;">{{ team.name }}: <span id="score-{{ team.name }}">{{ team.score }}</span></li>
@@ -186,7 +218,7 @@
       </div>
 
       <div class="info-box" style="flex: 1">
-        <h3 style="margin-top: 0">Active Captures</h3>
+        <h3 style="margin-top: 0">Probíhající obsazování</h3>
         <div id="captures-list">
           {% if capturing_zones %}
           <ul style="list-style: none; padding: 0; margin: 0">
@@ -194,35 +226,359 @@
             <li style="margin-bottom: 5px">
               <strong>{{ zone.name }}</strong>:
               <span style="color: {{ zone.capturing_team.color }}; font-weight: bold;">{{ zone.capturing_team.name }}</span>
-              <br /><small>Started: {{ zone.capture_started_at|time:"H:i:s" }}</small>
+              <br /><small>Zahájeno: {{ zone.capture_started_at|time:"H:i:s" }}</small>
             </li>
             {% endfor %}
           </ul>
           {% else %}
-          <p style="margin: 0">No active captures.</p>
+          <p style="margin: 0">Žádné probíhající obsazování.</p>
           {% endif %}
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <div id="qr-scanner-modal">
+      <div id="qr-scanner-panel">
+        <div id="qr-reader"></div>
+        <div id="qr-scanner-toolbar">
+          <span id="qr-status">Namiř kameru na QR kód stanoviště.</span>
+          <button type="button" onclick="stopQrScanner()">Zavřít</button>
+        </div>
+        <div id="qr-manual-entry">
+          <input id="manual-qr-input" type="text" placeholder="Ručně vlož kód (např. URL, ID nebo kód z papíru)" />
+          <button type="button" onclick="submitManualQrCode()">Odeslat</button>
         </div>
       </div>
     </div>
 
     <script>
       const role = "{{ role }}";
+      const GAME_MODE = "{{ game.mode|default:'STANDARD' }}";
+      const csrfToken = "{{ csrf_token }}";
+      const GAME_AREA_VERTICES = JSON.parse("{{ play_area_vertices_json|escapejs }}");
 
-      // Map GPS bounds from Django
-      const MAP_TOP_LEFT_LAT = parseFloat("{{ game.top_left_latitude|default:'0' }}");
-      const MAP_TOP_LEFT_LNG = parseFloat("{{ game.top_left_longitude|default:'0' }}");
-      const MAP_BOTTOM_RIGHT_LAT = parseFloat("{{ game.bottom_right_latitude|default:'0' }}");
-      const MAP_BOTTOM_RIGHT_LNG = parseFloat("{{ game.bottom_right_longitude|default:'0' }}");
+      const zoneSeed = [
+        {% for zone in zones %}
+          {
+            id: {{ zone.id }},
+            name: "{{ zone.name|escapejs }}",
+            lat: {{ zone.latitude }},
+            lng: {{ zone.longitude }},
+            is_base: {% if zone.is_base %}true{% else %}false{% endif %},
+            owner: {% if zone.owner %}"{{ zone.owner.name|escapejs }}"{% else %}null{% endif %},
+            color: "{{ zone.owner.color|default:zone.default_color }}",
+            adjacent: [{% for neighbor in zone.adjacent_zones.all %}{{ neighbor.id }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+          }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+      ];
 
-      const MAP_WIDTH = 1189;
-      const MAP_HEIGHT = 1140;
+      const map = L.map("map", {
+        zoomControl: true,
+      });
+      map.createPane("playAreaPane");
+      map.getPane("playAreaPane").style.zIndex = 390;
+      map.createPane("edgesPane");
+      map.getPane("edgesPane").style.zIndex = 410;
+      map.createPane("zonesPane");
+      map.getPane("zonesPane").style.zIndex = 420;
+      const bounds = [
+        [parseFloat("{{ game.bottom_right_latitude|default:'0' }}"), parseFloat("{{ game.top_left_longitude|default:'0' }}")],
+        [parseFloat("{{ game.top_left_latitude|default:'0' }}"), parseFloat("{{ game.bottom_right_longitude|default:'0' }}")],
+      ];
+      map.fitBounds(bounds, { padding: [10, 10] });
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 20,
+        attribution: "&copy; OpenStreetMap contributors",
+      }).addTo(map);
+
+      const zoneLayers = new Map();
+      const zoneMeta = new Map();
+      const edgeLayers = new Map();
+
+      function drawPlayArea() {
+        if (!Array.isArray(GAME_AREA_VERTICES) || GAME_AREA_VERTICES.length < 3) {
+          return;
+        }
+
+        const points = GAME_AREA_VERTICES
+          .map((v) => ({ lat: Number(v.latitude), lng: Number(v.longitude) }))
+          .filter((v) => Number.isFinite(v.lat) && Number.isFinite(v.lng));
+
+        if (points.length < 3) {
+          return;
+        }
+
+        L.polygon(
+          points.map((p) => [p.lat, p.lng]),
+          {
+            pane: "playAreaPane",
+            color: "#4b5563",
+            weight: 1,
+            fillColor: "#4b5563",
+            fillOpacity: 0.45,
+            interactive: false,
+          },
+        ).addTo(map);
+      }
 
       let currentLatitude = null;
       let currentLongitude = null;
+      let playerMarker = null;
+      let playerAccuracy = null;
+      let qrScanner = null;
+      let qrScanActive = false;
+      let lastDecodedText = "";
+      let lastDecodedTime = new Date();
+
+      function isDarkColor(color) {
+        const c = (color || "").toUpperCase();
+        return ["BLACK", "BLUE", "#000000", "#0000FF"].includes(c);
+      }
+
+      function getZoneStyle(zone, state) {
+        const fillColor = state && state.color ? state.color : zone.color;
+        let strokeColor = "#333";
+        let strokeWeight = zone.is_base ? 4 : 2;
+
+        if (state && state.is_capturing && state.capturing_color) {
+          strokeColor = state.capturing_color;
+          strokeWeight = 5;
+        } else if (zone.is_base) {
+          const ownerName = (state && state.owner ? state.owner : zone.owner) || "";
+          if (ownerName && ownerName.toLowerCase() === role.toLowerCase()) {
+            strokeColor = "darkgreen";
+          } else {
+            strokeColor = "darkred";
+          }
+        }
+
+        return {
+          color: strokeColor,
+          weight: strokeWeight,
+          fillColor: fillColor,
+          fillOpacity: 0.9,
+          radius: zone.is_base ? 16 : 11,
+        };
+      }
+
+      function drawEdges() {
+        const seen = new Set();
+        zoneSeed.forEach((zone) => {
+          zone.adjacent.forEach((otherId) => {
+            const a = Math.min(zone.id, otherId);
+            const b = Math.max(zone.id, otherId);
+            const key = `${a}-${b}`;
+            if (seen.has(key)) {
+              return;
+            }
+            seen.add(key);
+
+            const other = zoneMeta.get(otherId);
+            if (!other) {
+              return;
+            }
+
+            const outer = L.polyline(
+              [
+                [zone.lat, zone.lng],
+                [other.lat, other.lng],
+              ],
+              {
+                pane: "edgesPane",
+                color: "#333",
+                weight: 6,
+                opacity: 0.9,
+              },
+            ).addTo(map);
+
+            const inner = L.polyline(
+              [
+                [zone.lat, zone.lng],
+                [other.lat, other.lng],
+              ],
+              {
+                pane: "edgesPane",
+                color: "#fff",
+                weight: 4,
+                opacity: 0.95,
+              },
+            ).addTo(map);
+
+            edgeLayers.set(key, { outer, inner, a, b });
+          });
+        });
+      }
+
+      function drawZones() {
+        zoneSeed.forEach((zone) => {
+          zoneMeta.set(zone.id, zone);
+          const layer = L.circleMarker([zone.lat, zone.lng], {
+            ...getZoneStyle(zone),
+            pane: "zonesPane",
+          }).addTo(map);
+          layer.bindTooltip(zone.name, {
+            direction: "top",
+            offset: [0, -10],
+            permanent: true,
+            className: "zone-label",
+          });
+          layer.on("click", () => handleZoneClick(zone.id));
+          zoneLayers.set(zone.id, layer);
+        });
+      }
+
+      drawPlayArea();
+      drawZones();
+      drawEdges();
+
+      function setupModeUi() {
+        const scanBtn = document.getElementById("scan-qr-btn");
+        const scanHint = document.getElementById("scan-qr-hint");
+        if (!scanBtn || !scanHint) {
+          return;
+        }
+
+        if (GAME_MODE === "QR") {
+          scanBtn.style.display = "inline-block";
+          scanHint.style.display = "inline";
+        } else {
+          scanBtn.style.display = "none";
+          scanHint.style.display = "none";
+        }
+      }
+
+      function scanQrAndCapture() {
+        if (GAME_MODE !== "QR") {
+          alert("Skenování QR je dostupné pouze v režimu QR.");
+          return;
+        }
+
+        openQrScanner();
+      }
+
+      function openQrScanner() {
+        const modal = document.getElementById("qr-scanner-modal");
+        const status = document.getElementById("qr-status");
+        const manualInput = document.getElementById("manual-qr-input");
+        if (!modal || !status) {
+          return;
+        }
+
+        modal.style.display = "flex";
+        status.textContent = "Namiř kameru na QR kód stanoviště.";
+        if (manualInput) {
+          manualInput.value = "";
+        }
+        qrScanActive = true;
+
+        const config = {
+          fps: 10,
+          qrbox: function (width, height) {
+            return { width: width - 20, height: height - 20 };
+          },
+          rememberLastUsedCamera: true,
+          supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
+          formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
+        };
+
+        qrScanner = new Html5QrcodeScanner("qr-reader", config);
+        qrScanner.render(onQrScanSuccess);
+      }
+
+      function submitManualQrCode() {
+        const input = document.getElementById("manual-qr-input");
+        if (!input) {
+          return;
+        }
+        const value = (input.value || "").trim();
+        if (!value) {
+          alert("Nejprve zadej kód.");
+          return;
+        }
+        submitQrCapture(value);
+      }
+
+      function onQrScanSuccess(decodedText) {
+        if (!qrScanActive) {
+          return;
+        }
+        qrScanActive = false;
+
+        if (qrScanner) {
+          qrScanner.clear().catch(() => {});
+          qrScanner = null;
+        }
+
+        submitQrCapture(decodedText.trim());
+      }
+
+      function stopQrScanner() {
+        const modal = document.getElementById("qr-scanner-modal");
+        qrScanActive = false;
+
+        if (qrScanner) {
+          qrScanner.clear().catch(() => {});
+          qrScanner = null;
+        }
+
+        if (modal) {
+          modal.style.display = "none";
+        }
+      }
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter") {
+          return;
+        }
+        const active = document.activeElement;
+        if (active && active.id === "manual-qr-input") {
+          event.preventDefault();
+          submitManualQrCode();
+        }
+      });
+
+      function submitQrCapture(qrValue) {
+        if (!qrValue) {
+          stopQrScanner();
+          return;
+        }
+
+        fetch(`/api/zone/scan-qr/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken,
+          },
+          body: JSON.stringify({
+            role: role,
+            qr_code: qrValue,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.error) {
+              alert(data.error);
+            } else {
+              updateGameState();
+            }
+            stopQrScanner();
+          })
+          .catch(() => {
+            alert("Požadavek na QR obsazení se nezdařil.");
+            stopQrScanner();
+          });
+      }
 
       function handleZoneClick(zoneId) {
+        if (GAME_MODE === "QR") {
+          alert("Je zapnutý režim QR. Stanoviště obsazuj naskenováním QR kódu.");
+          return;
+        }
+
         if (currentLatitude === null || currentLongitude === null) {
-          alert("Waiting for GPS location...");
+          alert("Čekám na GPS polohu...");
           return;
         }
 
@@ -230,7 +586,7 @@
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "X-CSRFToken": "{{ csrf_token }}",
+            "X-CSRFToken": csrfToken,
           },
           body: JSON.stringify({
             role: role,
@@ -253,41 +609,21 @@
         fetch('{% url "game_state" %}')
           .then((r) => r.json())
           .then((data) => {
-            for (const [id, zone] of Object.entries(data.zones)) {
-              const el = document.getElementById(`zone-${id}`);
-              if (el) {
-                el.style.backgroundColor = zone.color;
-                if (["BLACK", "BLUE", "#000000", "#0000FF"].includes(zone.color)) {
-                  el.style.color = "white";
-                } else {
-                  el.style.color = "black";
-                }
-
-                if (zone.is_capturing && zone.capturing_color) {
-                  el.style.border = `5px solid ${zone.capturing_color}`;
-                } else {
-                  if (zone.is_base) {
-                    if (zone.owner && zone.owner.toLowerCase() === role.toLowerCase()) {
-                      el.style.border = "4px solid darkgreen";
-                    } else {
-                      el.style.border = "4px solid darkred";
-                    }
-                  } else {
-                    el.style.border = "2px solid #333";
-                  }
-                }
+            for (const [idStr, state] of Object.entries(data.zones)) {
+              const id = Number(idStr);
+              const zone = zoneMeta.get(id);
+              const layer = zoneLayers.get(id);
+              if (!zone || !layer) {
+                continue;
               }
+              layer.setStyle(getZoneStyle(zone, state));
             }
 
-            const lines = document.querySelectorAll('line[id^="line-inner-"]');
-            lines.forEach((line) => {
-              const parts = line.id.split("-");
-              const id1 = parts[2];
-              const id2 = parts[3];
-              if (data.zones[id1] && data.zones[id2]) {
-                const c1 = data.zones[id1].color;
-                const c2 = data.zones[id2].color;
-                line.setAttribute("stroke", c1 === c2 ? c1 : "white");
+            edgeLayers.forEach((edge) => {
+              const s1 = data.zones[String(edge.a)];
+              const s2 = data.zones[String(edge.b)];
+              if (s1 && s2) {
+                edge.inner.setStyle({ color: s1.color === s2.color ? s1.color : "#ffffff" });
               }
             });
 
@@ -300,12 +636,12 @@
                   html += `<li style="margin-bottom: 5px;">
                     <strong>${cap.name}</strong>: 
                     <span style="color: ${cap.team_color}; font-weight: bold;">${cap.team_name}</span>
-                    <br><small>Capturing in: ${cap.remaining_seconds}s</small>
+                    <br><small>Obsazení za: ${cap.remaining_seconds}s</small>
                   </li>`;
                 });
                 html += "</ul>";
               } else {
-                html = "<p>No active captures.</p>";
+                html = "<p>Žádné probíhající obsazování.</p>";
               }
               logContainer.innerHTML = html;
             }
@@ -320,7 +656,7 @@
                 let html = "";
                 sortedScores.forEach((team, index) => {
                   html += `<li style="margin-bottom: 5px; color: ${team.color}; font-weight: bold;">
-                    <span style="color: black; margin-right: 5px;">${index + 1}.</span>
+                    <span style="color: #e5e7eb; margin-right: 5px;">${index + 1}.</span>
                     ${team.name}: <span id="score-${team.name}">${team.score}</span>
                   </li>`;
                 });
@@ -332,13 +668,13 @@
             if (timeEl && data.game_remaining_seconds !== undefined) {
               const seconds = data.game_remaining_seconds;
               if (seconds <= 0) {
-                timeEl.innerText = "ENDED";
+                timeEl.innerText = "KONEC";
                 timeEl.style.color = "red";
               } else {
                 const m = Math.floor(seconds / 60);
                 const s = seconds % 60;
                 timeEl.innerText = `${m}:${s.toString().padStart(2, "0")}`;
-                timeEl.style.color = seconds < 60 ? "red" : "black";
+                timeEl.style.color = seconds < 60 ? "red" : "#e5e7eb";
               }
             }
           });
@@ -348,32 +684,31 @@
         return Math.min(Math.max(value, min), max);
       }
 
-      function gpsToMapCoordinates(latitude, longitude) {
-        const latRange = MAP_TOP_LEFT_LAT - MAP_BOTTOM_RIGHT_LAT;
-        const lngRange = MAP_BOTTOM_RIGHT_LNG - MAP_TOP_LEFT_LNG;
-
-        if (latRange === 0 || lngRange === 0) {
-          return null;
+      function drawPlayerLocation(latitude, longitude) {
+        const latLng = [latitude, longitude];
+        if (!playerMarker) {
+          playerMarker = L.circleMarker(latLng, {
+            radius: 7,
+            color: "#fff",
+            weight: 2,
+            fillColor: "#1e90ff",
+            fillOpacity: 1,
+          }).addTo(map);
+        } else {
+          playerMarker.setLatLng(latLng);
         }
 
-        const xRatio = (longitude - MAP_TOP_LEFT_LNG) / lngRange;
-        const yRatio = (MAP_TOP_LEFT_LAT - latitude) / latRange;
-
-        const x = clamp(xRatio, 0, 1) * MAP_WIDTH;
-        const y = clamp(yRatio, 0, 1) * MAP_HEIGHT;
-
-        return { x, y };
-      }
-
-      function drawPlayerLocation(latitude, longitude) {
-        const marker = document.getElementById("player-location");
-        const point = gpsToMapCoordinates(latitude, longitude);
-
-        if (!marker || !point) return;
-
-        marker.style.left = `${point.x}px`;
-        marker.style.top = `${point.y}px`;
-        marker.style.display = "block";
+        if (!playerAccuracy) {
+          playerAccuracy = L.circle(latLng, {
+            radius: 18,
+            color: "#1e90ff",
+            weight: 1,
+            fillColor: "#1e90ff",
+            fillOpacity: 0.2,
+          }).addTo(map);
+        } else {
+          playerAccuracy.setLatLng(latLng);
+        }
       }
 
       function startGpsTracking() {
@@ -401,29 +736,14 @@
       }
 
       setInterval(updateGameState, 1000);
-
-      function resizeMap() {
-        const map = document.getElementById("map");
-        const wrapper = document.getElementById("map-wrapper");
-        const container = document.getElementById("map-scroll-container");
-
-        if (!map || !wrapper || !container) return;
-
-        const originalWidth = 1189;
-        const originalHeight = 1140;
-        const availableWidth = container.getBoundingClientRect().width;
-        const scale = availableWidth / originalWidth;
-
-        map.style.transform = `scale(${scale})`;
-        wrapper.style.height = `${originalHeight * scale}px`;
-      }
-
-      window.addEventListener("resize", resizeMap);
       window.addEventListener("load", () => {
-        resizeMap();
+        setupModeUi();
         startGpsTracking();
+        updateGameState();
       });
-      resizeMap();
+      window.addEventListener("resize", () => {
+        map.invalidateSize();
+      });
     </script>
   </body>
 </html>
