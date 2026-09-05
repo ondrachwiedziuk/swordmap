@@ -24,13 +24,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-17fm!5nj(gzjv)u6)yg^eo0whgi_(5f3q8c7=az_17rs9@2t1f'
+SECRET_KEY = '17fm!5nj(gzjv)uvtffhijj9ojgrderfh90kbte2(5f3q8c7=az_17rs9@2t1f'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['https://smazeny.pull.cz']
+CSRF_TRUSTED_ORIGINS = ['https://game.itoncek.space']
 # OSM tile servers require an HTTP Referer for usage policy compliance.
 SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
 
@@ -82,11 +82,9 @@ WSGI_APPLICATION = 'swordmap_project.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'swordmap',
-        'USER': 'jksp2026-bojovka',
-        'HOST': '',  # empty string = Unix domain socket
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "db",
     }
 }
 
