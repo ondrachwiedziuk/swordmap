@@ -2,340 +2,250 @@
   "mode": "QR",
   "accepted_distance": 25,
   "topLeft": {
-    "latitude": 50.629044,
-    "longitude": 15.604924
+    "latitude": 49.028978,
+    "longitude": 15.145581
   },
   "bottomRight": {
-    "latitude": 50.623955,
-    "longitude": 15.612298
+    "latitude": 49.024294,
+    "longitude": 15.153029
   },
-  "play_area_vertices": [
-    {
-      "latitude": 50.628845,
-      "longitude": 15.604924
-    },
-    {
-      "latitude": 50.629044,
-      "longitude": 15.605987
-    },
-    {
-      "latitude": 50.629005,
-      "longitude": 15.606931
-    },
-    {
-      "latitude": 50.62895,
-      "longitude": 15.607631
-    },
-    {
-      "latitude": 50.628628,
-      "longitude": 15.608325
-    },
-    {
-      "latitude": 50.628254,
-      "longitude": 15.609161
-    },
-    {
-      "latitude": 50.628006,
-      "longitude": 15.609398
-    },
-    {
-      "latitude": 50.627953,
-      "longitude": 15.610064
-    },
-    {
-      "latitude": 50.627407,
-      "longitude": 15.610767
-    },
-    {
-      "latitude": 50.62693,
-      "longitude": 15.611196
-    },
-    {
-      "latitude": 50.626373,
-      "longitude": 15.611662
-    },
-    {
-      "latitude": 50.62571,
-      "longitude": 15.611915
-    },
-    {
-      "latitude": 50.62501,
-      "longitude": 15.612126
-    },
-    {
-      "latitude": 50.62429,
-      "longitude": 15.612298
-    },
-    {
-      "latitude": 50.6242,
-      "longitude": 15.610672
-    },
-    {
-      "latitude": 50.623955,
-      "longitude": 15.60877
-    },
-    {
-      "latitude": 50.624107,
-      "longitude": 15.608272
-    },
-    {
-      "latitude": 50.624912,
-      "longitude": 15.607947
-    },
-    {
-      "latitude": 50.625435,
-      "longitude": 15.607492
-    },
-    {
-      "latitude": 50.62661,
-      "longitude": 15.606759
-    },
-    {
-      "latitude": 50.62622,
-      "longitude": 15.607119
-    },
-    {
-      "latitude": 50.626972,
-      "longitude": 15.606379
-    },
-    {
-      "latitude": 50.627373,
-      "longitude": 15.605772
-    },
-    {
-      "latitude": 50.62811,
-      "longitude": 15.605303
-    }
-  ],
+  "play_area_vertices": [],
   "teams": [
     {
-      "name": "Matúš Púll",
-      "color": "#dc143c"
+      "name": "Červení",
+      "color": "#FF0000"
     },
     {
-      "name": "Jan Tuňák",
-      "color": "#4169e1"
+      "name": "Žlutí",
+      "color": "#FFFF00"
     },
     {
-      "name": "Zdenda Půlříše",
-      "color": "#daa520"
+      "name": "Zelení",
+      "color": "#00FF00"
+    },
+    {
+      "name": "Modří",
+      "color": "#0066FF"
+    },
+    {
+      "name": "Fialoví",
+      "color": "#BF00FF"
     }
   ],
   "zones": [
     {
       "id": 1,
-      "name": "Matúš Púll",
-      "latitude": 50.628315,
-      "longitude": 15.605578,
+      "name": "Červení",
+      "latitude": 49.026963,
+      "longitude": 15.147079,
       "is_base": true,
-      "owner": "Matúš Púll",
-      "color": "#dc143c",
+      "owner": "Červení",
+      "color": "#ff0000",
       "adjacent_zones": [
         2,
-        3,
-        5
+        3
       ]
     },
     {
       "id": 2,
-      "name": "Klášter",
-      "latitude": 50.628986,
-      "longitude": 15.605976,
+      "name": "Bouda",
+      "latitude": 49.026461,
+      "longitude": 15.147195,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
         1,
-        3,
-        25
+        4,
+        5
       ]
     },
     {
       "id": 3,
-      "name": "Zahrada",
-      "latitude": 50.627895,
-      "longitude": 15.606574,
+      "name": "Volejbal",
+      "latitude": 49.027,
+      "longitude": 15.148533,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
         1,
-        2,
+        23,
         4
       ]
     },
     {
       "id": 4,
-      "name": "U jezírka",
-      "latitude": 50.627438,
-      "longitude": 15.607402,
+      "name": "Tennis",
+      "latitude": 49.02653,
+      "longitude": 15.147878,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
         3,
         5,
         6,
-        7
+        2
       ]
     },
     {
       "id": 5,
-      "name": "KRNAP",
-      "latitude": 50.627007,
-      "longitude": 15.606425,
+      "name": "Beach",
+      "latitude": 49.026154,
+      "longitude": 15.147929,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
-        1,
+        2,
         4,
         6,
-        23
+        12
       ]
     },
     {
       "id": 6,
-      "name": "Pod stromy",
-      "latitude": 50.62687,
-      "longitude": 15.607724,
+      "name": "Stožár",
+      "latitude": 49.026368,
+      "longitude": 15.148732,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
         4,
         5,
-        7,
-        23
-      ]
-    },
-    {
-      "id": 7,
-      "name": "Zámek",
-      "latitude": 50.627186,
-      "longitude": 15.608561,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": [
-        4,
-        6,
-        8,
-        10,
         11
       ]
     },
     {
-      "id": 8,
-      "name": "Betlém",
-      "latitude": 50.627632,
-      "longitude": 15.609344,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": [
-        7,
-        9,
-        25
-      ]
-    },
-    {
-      "id": 9,
-      "name": "Zdenda Půlříše",
-      "latitude": 50.62756,
-      "longitude": 15.610292,
+      "id": 7,
+      "name": "Molo",
+      "latitude": 49.027824,
+      "longitude": 15.148854,
       "is_base": true,
-      "owner": "Zdenda Půlříše",
-      "color": "#daa520",
+      "color": "#bf00ff",
       "adjacent_zones": [
         8,
-        10,
-        22
+        25,
+        9
       ]
     },
     {
-      "id": 10,
-      "name": "Okruh",
-      "latitude": 50.62689,
-      "longitude": 15.609901,
+      "id": 8,
+      "name": "Loděnice",
+      "latitude": 49.027712,
+      "longitude": 15.14934,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
         7,
-        9,
-        11,
-        14
-      ]
-    },
-    {
-      "id": 11,
-      "name": "Za zámkem",
-      "latitude": 50.626534,
-      "longitude": 15.608948,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": [
-        7,
-        10,
-        12
-      ]
-    },
-    {
-      "id": 12,
-      "name": "Křižovatka",
-      "latitude": 50.626102,
-      "longitude": 15.608298,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": [
-        11,
-        13,
-        23
-      ]
-    },
-    {
-      "id": 13,
-      "name": "U jezera",
-      "latitude": 50.62576,
-      "longitude": 15.608683,
-      "is_base": false,
-      "color": "#FFFFFF",
-      "adjacent_zones": [
-        12,
-        14,
-        15,
         16
       ]
     },
     {
-      "id": 14,
-      "name": "Rozcestí",
-      "latitude": 50.62576,
-      "longitude": 15.610185,
+      "id": 9,
+      "name": "Klubovna",
+      "latitude": 49.02681,
+      "longitude": 15.149554,
+      "is_base": false,
+      "color": "#ffffff",
+      "adjacent_zones": [
+        7,
+        15,
+        13,
+        10,
+        3
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Plachta",
+      "latitude": 49.026613,
+      "longitude": 15.149183,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
+        9,
+        11,
+        13
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Chata 14",
+      "latitude": 49.026342,
+      "longitude": 15.14927,
+      "is_base": false,
+      "color": "#FFFFFF",
+      "adjacent_zones": [
+        6,
         10,
-        13,
+        12,
         14
       ]
     },
     {
-      "id": 15,
-      "name": "Cesta",
-      "latitude": 50.62511,
-      "longitude": 15.609155,
+      "id": 12,
+      "name": "Plot",
+      "latitude": 49.025584,
+      "longitude": 15.148575,
+      "is_base": true,
+      "owner": "Žlutí"
+      "color": "#FFFF00",
+      "adjacent_zones": [
+        5,
+        11,
+        21
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Lesík",
+      "latitude": 49.026487,
+      "longitude": 15.14965,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
+        9,
+        10,
+        14,
+        22
+      ]
+    },
+    {
+      "id": 14,
+      "name": "Záchody",
+      "latitude": 49.026004,
+      "longitude": 15.149709,
+      "is_base": false,
+      "color": "#FFFFFF",
+      "adjacent_zones": [
+        11,
         13,
+        20,
+        22
+      ]
+    },
+    {
+      "id": 15,
+      "name": "Popelnice",
+      "latitude": 49.026856,
+      "longitude": 15.150494,
+      "is_base": false,
+      "color": "#FFFFFF",
+      "adjacent_zones": [
+        16,
         17,
-        18
+        18,
+        9
       ]
     },
     {
       "id": 16,
-      "name": "U zdi",
-      "latitude": 50.624977,
-      "longitude": 15.607855,
+      "name": "Pařez",
+      "latitude": 49.027127,
+      "longitude": 15.151088,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
-        23,
-        13,
+        8,
+        15,
         17
       ]
     },
