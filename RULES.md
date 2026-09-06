@@ -1,6 +1,6 @@
 # Pravidla
 
-Hráči jsou rozděleni do 6 týmů. Cílem je obsazovat a držet stanoviště, získávat body a mít na konci hry nejvyšší skóre. Hra trvá 60 minut, vítězí tým s nejvyšším počtem bodů na konci.
+Hráči jsou rozděleni do 5 týmů. Cílem je obsazovat a držet stanoviště, získávat body a mít na konci hry nejvyšší skóre. Hra trvá 60 minut, vítězí tým s nejvyšším počtem bodů na konci.
 
 Vybavení každého hráče se skládá z mobilního telefonu s webovou aplikací na adrese game.matfyzak.cz, a ruličky krepového papíru.
 
@@ -34,7 +34,7 @@ Při soubojích je zvláště důležité dbát základního pravidla hry, tedy 
 
 Za stržení pásky může být považováno i její samovolné spadnutí (či případné nechtěné stržení spoluhráčem), a to zejména v důsledku souboje. Pokud hráči samovolně spadne páska, aniž by se účastnil jakéhokoliv souboje, má protihráč právo stejně jako v souboji nahlásit její spadnutí a hráče zajmout, avšak smí tak učinit pouze v případě, když by mohl za jinak nezměněných podmínek pásky-prostého hráče reálně napadnout, a absence pásky by tak mu znemožňovala jeho potenciální zajetí. Pokud hráči samovolně spadne páska, aniž by se účastnil jakéhokoliv souboje a není nahlášen protihráčem, má tento hráč právo si pásku znovu nasadit. Bez pásky však nesmí vědomě podnikat žádné akce vedoucí k hernímu prospěchu.
 
-Poražený hráč se následně odebere k základně svého týmu, kde si obnoví svůj pásek. Během toho má zvednutou ruku na znamení toho, že je vyřazen. Vyřazený hráč nesmí zahajovat, rušit obléhání ani jinak zasahovat do průběhu hry.
+Poražený hráč se následně odebere k základně svého týmu, kde si naskenuje QR kód základny a obnoví si svůj pásek. Během toho má zvednutou ruku na znamení toho, že je vyřazen. Vyřazený hráč nesmí zahajovat, rušit obléhání ani jinak zasahovat do průběhu hry.
 
 ## Ostatní
 
