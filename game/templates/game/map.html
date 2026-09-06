@@ -572,37 +572,7 @@
       }
 
       function handleZoneClick(zoneId) {
-        if (GAME_MODE === "QR") {
-          alert("Je zapnutý režim QR. Stanoviště obsazuj naskenováním QR kódu.");
-          return;
-        }
-
-        if (currentLatitude === null || currentLongitude === null) {
-          alert("Čekám na GPS polohu...");
-          return;
-        }
-
-        fetch(`/api/zone/${zoneId}/click/`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrfToken,
-          },
-          body: JSON.stringify({
-            role: role,
-            latitude: currentLatitude,
-            longitude: currentLongitude,
-          }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-            if (data.error) {
-              alert(data.error);
-            } else {
-              updateGameState();
-            }
-          });
+        return
       }
 
       function updateGameState() {
