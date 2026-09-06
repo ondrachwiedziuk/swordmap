@@ -68,14 +68,14 @@
       "color": "#FFFFFF",
       "adjacent_zones": [
         1,
-        23,
+        25,
         4
       ]
     },
     {
       "id": 4,
       "name": "Tennis",
-      "latitude": 49.02653,
+      "latitude":49.02653,
       "longitude": 15.147878,
       "is_base": false,
       "color": "#FFFFFF",
@@ -248,7 +248,7 @@
       "adjacent_zones": [
         15,
         16,
-        25
+        24
       ]
     },
     {
@@ -280,7 +280,7 @@
     },
     {
       "id": 19,
-      "name": "Stan XX",
+      "name": "Stan 22",
       "latitude": 49.025997,
       "longitude": 15.150635,
       "is_base": false,
@@ -336,7 +336,8 @@
       "name": "Pole",
       "latitude": 49.025708,
       "longitude": 15.15158,
-      "is_base": false,
+      "is_base": true,
+      "owner": "Zelení"
       "color": "#FFFFFF",
       "adjacent_zones": [
         24,
