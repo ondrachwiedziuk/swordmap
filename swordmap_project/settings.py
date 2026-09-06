@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'swordmap_project.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "public",
+        "NAME": "matfyzgame",
         "USER": "postgres",
         "PASSWORD": "postgres",
         "HOST": "db",
