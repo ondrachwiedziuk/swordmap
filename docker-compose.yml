@@ -12,10 +12,6 @@ services:
       - ./assets:/app/assets
     env_file:
       - .env
-    depends_on:
-      - db
-    networks:
-      - matfyzgame
 
   game_loop:
     build: .
@@ -27,22 +23,3 @@ services:
       - .env
     depends_on:
       - web
-      - db
-    networks:
-      - matfyzgame
-  db:
-    image: postgres:15-alpine
-    environment:
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgres"
-      POSTGRES_DB: "matfyzgame"
-    volumes:
-      - "db-data:/var/lib/postgresql/data"
-    networks:
-      - matfyzgame
-
-volumes:
-  db-data:
-
-networks:
-  matfyzgame:
