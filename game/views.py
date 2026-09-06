@@ -469,6 +469,8 @@ def zone_scan_qr(request):
     zone = get_object_or_404(Zone, id=zone_id)
 
     if zone.is_base:
+        if zone.owner == team:
+            return JsonResponse({'error': 'You have been revived!'}, status=400)
         return JsonResponse({'error': 'Cannot capture base'}, status=400)
 
     if not can_interact(team, zone, game.mode):

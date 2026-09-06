@@ -7,8 +7,8 @@ import argparse
 import subprocess
 import os
 
-SECRET = "swordmap-tajny-klic"
-BASE_URL = "https://smazeny.pull.cz/c/"
+SECRET = "17fm!5nj(gzjv)uvtffhijj9ojgrderfh90kbte2(5f3q8c7=az_17rs9@2t1f"
+BASE_URL = "https://game.matfyzak.cz/c/"
 CONFIG = os.path.join(os.path.dirname(__file__), "..", "game_config.json")
 
 
@@ -124,6 +124,17 @@ def main():
     parser.add_argument("-s", "--spare", type=int, default=10, help="Number of spare blank pages")
     parser.add_argument("-o", "--output", default="zone-papers.tex", help="Output .tex file")
     args = parser.parse_args()
+
+    config = json.load(open(args.config))
+
+    for zone in config["zones"]:
+        zid = str(zone["id"])
+        sig = make_signature(zid)
+        name = zone["name"]
+        url = f"{BASE_URL}{zid}{sig}"
+        print(url)
+
+    return
 
     tex = generate_tex(args.config, args.spare)
 

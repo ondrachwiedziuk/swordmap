@@ -1,0 +1,858 @@
+\input ucwmac2.tex
+\input qrcode.tex
+\qrset{height=8cm, level=H, tight, silent}
+
+\hsize=98mm
+\pdfpagewidth=148mm
+\vsize=145mm
+\pdfpageheight=210mm
+
+\ucwmodule{ofs}
+\chyph
+\advance\hsize 3cm \hoffset -1.5cm
+\advance\vsize 4cm \voffset -2cm
+\parskip = 5pt
+\parindent = 0pt
+
+\def\center{\leftskip=0pt plus 1fill\relax\rightskip=\leftskip\relax}
+
+\pdfximage height 2cm {hippo_game.epdf}
+\edef\hippoimg{\the\pdflastximage}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Zeď}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/13E1}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}13E1}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Bouda}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/27AC}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}27AC}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Volejbal}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/390E}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}390E}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Tennis}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/4F32}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}4F32}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Beach}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/5F46}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}5F46}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Stožár}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/685B}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}685B}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Molo}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/7190}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}7190}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Loděnice}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/86D8}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}86D8}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Klubovna}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/9370}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}9370}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Plachta}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/10669}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}10669}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Chata 14}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/11E83}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}11E83}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Plot}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/1292B}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}1292B}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Lesík}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/13EB0}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}13EB0}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Záchody}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/1444D}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}1444D}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Sprchy}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/15578}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}15578}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Pařez}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/17666}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}17666}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Tři Břízy}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/166CE}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}166CE}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Ohniště}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/188D8}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}188D8}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Stan 22}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/19F4A}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}19F4A}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Antuka}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/20E4E}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}20E4E}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Vjezd}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/2162D}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}2162D}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Veverka}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/227AE}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}227AE}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Pole}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/23FD4}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}23FD4}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Plechovka}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/24AE1}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}24AE1}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Pěšina}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/257C8}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}257C8}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Provázek}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/26D1C}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}26D1C}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}Osika}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/278A9}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}278A9}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+{\settextsize{50}U Buku}
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/28B91}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}28B91}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+\vskip 50pt
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/S1E57}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}S1E57}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+\vskip 50pt
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/S2E98}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}S2E98}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+\vskip 50pt
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/S3038}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}S3038}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+\vskip 50pt
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/S4626}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}S4626}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+\vskip 50pt
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/S5615}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}S5615}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+\vskip 50pt
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/S6191}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}S6191}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+\vskip 50pt
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/S7CEC}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}S7CEC}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+\vskip 50pt
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/S8E5B}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}S8E5B}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+\vskip 50pt
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/S9723}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}S9723}
+
+\vfill\break
+}
+
+
+\hbox to \hsize{\vbox{\hsize=0.7\hsize Toto je stanoviště pro hru na soustředění Korespondenčního semináře z programování pořádaného Matematicko-fyzikální fakultou Univerzity Karlovy. Prosím neničte jej. Sami je odstraníme nejpozději 25.\thinspace 4.\thinspace 2026. Děkujeme.}\hfil\vbox{\pdfrefximage\hippoimg}}
+\vskip 2pt
+\hrule
+\vskip 30pt
+\vfill
+
+{
+\center
+\vskip 50pt
+
+\vskip 40pt
+
+\hbox to \hsize{\hfil\qrcode{https://game.maftyzak.cz/c/S108B7}\hfil}
+
+\vskip 40pt
+
+{\settextsize{50}S108B7}
+
+\vfill\break
+}
+
+\bye
