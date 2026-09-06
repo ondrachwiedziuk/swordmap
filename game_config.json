@@ -396,9 +396,9 @@
       "owner":"Modří",
       "color": "#FFFFFF",
       "adjacent_zones": [
-        3,
-        7,
-        8
+        28,
+        16,
+        17
       ]
     },
     {
@@ -409,9 +409,9 @@
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
-        3,
-        7,
-        8
+        17,
+        27,
+        24
       ]
     }
   ]
