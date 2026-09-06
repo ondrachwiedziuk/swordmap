@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'swordmap_project.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "db",
+        "NAME": "/opt/db",
     }
 }
 
