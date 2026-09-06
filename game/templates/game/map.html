@@ -644,7 +644,10 @@
                 timeEl.innerText = "KONEC";
                 timeEl.style.color = "red";
               } else if (now < (start ? start.getTime() : 0)) {
-                timeEl.innerText = "Začíná za chvíli";
+                const secondsUntilStart = Math.floor(((start ? start.getTime() : 0) - now) / 1000);
+                const m = Math.floor(secondsUntilStart / 60);
+                const s = secondsUntilStart % 60;
+                timeEl.innerText = `Začíná za ${m}:${s.toString().padStart(2, "0")}`;
                 timeEl.style.color = "lightblue";
               } else {
                 const m = Math.floor(seconds / 60);
