@@ -12,23 +12,23 @@
   "play_area_vertices": [],
   "teams": [
     {
-      "name": "Červení",
+      "name": "Red",
       "color": "#FF0000"
     },
     {
-      "name": "Žlutí",
+      "name": "Yellow",
       "color": "#FFFF00"
     },
     {
-      "name": "Zelení",
+      "name": "Green",
       "color": "#00FF00"
     },
     {
-      "name": "Modří",
+      "name": "Blue",
       "color": "#0066FF"
     },
     {
-      "name": "Fialoví",
+      "name": "Purple",
       "color": "#BF00FF"
     }
   ],
@@ -39,7 +39,7 @@
       "latitude": 49.026963,
       "longitude": 15.147079,
       "is_base": true,
-      "owner": "Červení",
+      "owner": "Red",
       "color": "#ff0000",
       "adjacent_zones": [
         2,
@@ -120,7 +120,7 @@
       "latitude": 49.027824,
       "longitude": 15.148854,
       "is_base": true,
-      "owner": "Fialoví",
+      "owner":"Purple",
       "color": "#bf00ff",
       "adjacent_zones": [
         8,
@@ -189,7 +189,7 @@
       "latitude": 49.025584,
       "longitude": 15.148575,
       "is_base": true,
-      "owner": "Žlutí",
+      "owner": "Yellow",
       "color": "#FFFF00",
       "adjacent_zones": [
         5,
@@ -339,7 +339,7 @@
       "latitude": 49.025708,
       "longitude": 15.15158,
       "is_base": true,
-      "owner": "Zelení",
+      "owner": "Green",
       "color": "#FFFFFF",
       "adjacent_zones": [
         24,
@@ -392,7 +392,7 @@
       "latitude": 49.027739, 
       "longitude": 15.151654,
       "is_base": true,
-      "owner":"Modří",
+      "owner":"Blue",
       "color": "#FFFFFF",
       "adjacent_zones": [
         28,
