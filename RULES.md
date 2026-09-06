@@ -44,4 +44,4 @@ Je zakázáno používat v průběhu hry jakýchkoliv vozidel, létajících str
 
 Ačkoliv kooperaci mezi teamy pravidla explicitně nezakazují, je vhodné se jí v zájmu dodržení ducha pravidel vyhnout.
 
-Veškeré spory, stížnosti hráčů a nejasnosti v pravidlech řeší organizátor hry, který je představen před hrou. Případné poupravení pravidel může rozhodčí vykonat pouze při přerušení hry, a to jen tehdy, může-li s ním seznámit všechny hráče. Stejně tak může upřesnit výklad pravidel, pokud hráčům není zřejmý.
+Veškeré spory, stížnosti hráčů a nejasnosti v pravidlech řeší organizátor hry, který je představen před hrou. Případné poupravení pravidel může organizátor vykonat pouze při přerušení hry, a to jen tehdy, může-li s ním seznámit všechny hráče. Stejně tak může upřesnit výklad pravidel, pokud hráčům není zřejmý.
