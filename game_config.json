@@ -245,11 +245,12 @@
       "latitude": 49.027127,
       "longitude": 15.151088,
       "is_base": false,
-      "color": "#0000ff",
+      "color": "#ffffff",
       "adjacent_zones": [
         15,
         16,
-        24
+        24,
+        27
       ]
     },
     {
