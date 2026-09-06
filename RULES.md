@@ -10,7 +10,7 @@ Vybavení každého hráče se skládá z mobilního telefonu s webovou aplikac�
 
 Hra probíhá v areálu Albeře. Pokud se ocitnete na silnici, jste mimo herní plán. Je zakázáno se pohybovat jinde než v herní ploše. Na herním plánu je spousta kořenů, větví a ostružiní, takže při běhání si dávejte pozor, ať se nezraníte. Dodržujte pravidlo NK.
 
-Na herní ploše se nachází stanoviště s QR kódy, jakožto i základny jednotlivých týmů, které jsou propojeny pomocí hran v aplikaci. Každý tým má svoji základnu. Základny cizích týmů nejde dobývat, slouží především k oživování. Ostatní stanoviště však již dobývast lze.
+Na herní ploše se nachází stanoviště s QR kódy, jakožto i základny jednotlivých týmů, které jsou propojeny pomocí hran v aplikaci. Každý tým má svoji základnu. Základny cizích týmů nejde dobývat, slouží především k oživování. Ostatní stanoviště však již dobývat lze.
 
 ## Obsazování stanovišť
 
