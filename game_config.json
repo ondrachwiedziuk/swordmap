@@ -402,9 +402,9 @@
     },
     {
       "id": 28,
-      "name": "Pěšina",
-      "latitude": 49.027449,
-      "longitude": 15.148444,
+      "name": "U Buku",
+      "latitude": 49.026818, 
+      "longitude": 15.152213,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
