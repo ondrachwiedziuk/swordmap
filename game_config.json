@@ -17,19 +17,19 @@
     },
     {
       "name": "Yellow",
-      "color": "#FFFF00"
+      "color": "#FFBF00"
     },
     {
-      "name": "Green",
-      "color": "#00FF00"
+      "name": "Black",
+      "color": "#404040"
     },
     {
       "name": "Blue",
-      "color": "#0066FF"
+      "color": "#6495ED"
     },
     {
-      "name": "Purple",
-      "color": "#BF00FF"
+      "name": "White",
+      "color": "#E4E4E4"
     }
   ],
   "zones": [
@@ -120,8 +120,8 @@
       "latitude": 49.027824,
       "longitude": 15.148854,
       "is_base": true,
-      "owner":"Purple",
-      "color": "#bf00ff",
+      "owner":"White",
+      "color": "#E4E4E4",
       "adjacent_zones": [
         8,
         25,
@@ -190,7 +190,7 @@
       "longitude": 15.148575,
       "is_base": true,
       "owner": "Yellow",
-      "color": "#FFFF00",
+      "color": "#FFBF00",
       "adjacent_zones": [
         5,
         26,
@@ -339,8 +339,8 @@
       "latitude": 49.025708,
       "longitude": 15.15158,
       "is_base": true,
-      "owner": "Green",
-      "color": "#FFFFFF",
+      "owner": "Black",
+      "color": "#404040",
       "adjacent_zones": [
         24,
         19,
@@ -393,7 +393,7 @@
       "longitude": 15.151654,
       "is_base": true,
       "owner":"Blue",
-      "color": "#FFFFFF",
+      "color": "#6495ED",
       "adjacent_zones": [
         28,
         16,
