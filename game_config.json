@@ -120,6 +120,7 @@
       "latitude": 49.027824,
       "longitude": 15.148854,
       "is_base": true,
+      "owner": "Fialoví",
       "color": "#bf00ff",
       "adjacent_zones": [
         8,
