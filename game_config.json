@@ -29,7 +29,7 @@
     },
     {
       "name": "White",
-      "color": "#E4E4E4"
+      "color": "#D3D3D3"
     }
   ],
   "zones": [
@@ -121,7 +121,7 @@
       "longitude": 15.148854,
       "is_base": true,
       "owner":"White",
-      "color": "#E4E4E4",
+      "color": "#D3D3D3",
       "adjacent_zones": [
         8,
         25,
