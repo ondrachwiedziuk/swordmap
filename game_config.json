@@ -35,7 +35,7 @@
   "zones": [
     {
       "id": 1,
-      "name": "Červení",
+      "name": "Zeď",
       "latitude": 49.026963,
       "longitude": 15.147079,
       "is_base": true,
