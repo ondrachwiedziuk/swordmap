@@ -54,7 +54,9 @@ def game_state(request):
         'zones': zones_data,
         'capturing': capturing_data,
         'scores': scores,
-        'game_remaining_seconds': game_remaining_seconds
+        'game_remaining_seconds': game_remaining_seconds,
+        'game_start_time': game.start_time.isoformat() if game and game.start_time else None,
+        'game_end_time': game.end_time.isoformat() if game and game.end_time else
     })
 
 

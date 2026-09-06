@@ -637,9 +637,15 @@
             const timeEl = document.getElementById("time-remaining");
             if (timeEl && data.game_remaining_seconds !== undefined) {
               const seconds = data.game_remaining_seconds;
-              if (seconds <= 0) {
+              const start = data.game_start_time ? new Date(data.game_start_time) : null
+              const end = data.game_end_time ? new Date(data.game_end_time) : null;
+              const now = Date.now();
+              if (now > (end ? end.getTime() : Infinity)) {
                 timeEl.innerText = "KONEC";
                 timeEl.style.color = "red";
+              } else if (now < (start ? start.getTime() : 0)) {
+                timeEl.innerText = "Začíná za chvíli";
+                timeEl.style.color = "lightblue";
               } else {
                 const m = Math.floor(seconds / 60);
                 const s = seconds % 60;
