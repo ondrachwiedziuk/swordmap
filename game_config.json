@@ -255,9 +255,9 @@
     },
     {
       "id": 16,
-      "name": "Kanál",
-      "latitude": 49.027484,
-      "longitude": 15.149952,
+      "name": "Tři Břízy",
+      "latitude": 49.027591, 
+      "longitude": 15.150374,
       "is_base": false,
       "color": "#ffffff",
       "adjacent_zones": [
