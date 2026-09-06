@@ -324,7 +324,7 @@ def process_zone_interaction(team, zone):
     return JsonResponse({'status': 'ok'})
 
 QR_SECRET = "17fm!5nj(gzjv)uvtffhijj9ojgrderfh90kbte2(5f3q8c7=az_17rs9@2t1f"
-QR_BASE_URL = "https://game.maftyzak.cz/c/"
+QR_BASE_URL = "https://game.matfyzak.cz/c/"
 
 def make_signature(zone_id: str) -> str:
     return hashlib.sha256(f"{zone_id}-{QR_SECRET}".encode()).hexdigest()[:3].upper()
