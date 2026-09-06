@@ -135,7 +135,8 @@
       "color": "#FFFFFF",
       "adjacent_zones": [
         7,
-        16
+        16,
+        25
       ]
     },
     {
@@ -237,131 +238,135 @@
       ]
     },
     {
-      "id": 16,
+      "id": 17,
       "name": "Pařez",
       "latitude": 49.027127,
       "longitude": 15.151088,
-      "is_base": false,
-      "color": "#FFFFFF",
+      "is_base": true,
+      "owner": "Modří"
+      "color": "#0000ff",
       "adjacent_zones": [
-        8,
         15,
-        17
+        16,
+        25
       ]
     },
     {
-      "id": 17,
-      "name": "Jan Tuňák",
-      "latitude": 50.624195,
-      "longitude": 15.608305,
-      "is_base": true,
-      "owner": "Jan Tuňák",
-      "color": "#4169e1",
+      "id": 16,
+      "name": "Kanál",
+      "latitude": 49.027484,
+      "longitude": 15.149952,
+      "is_base": false,
+      "color": "#ffffff",
       "adjacent_zones": [
-        16,
+        17,
         15,
-        18,
-        19
+        8
       ]
     },
     {
       "id": 18,
-      "name": "Jih",
-      "latitude": 50.624565,
-      "longitude": 15.609896,
+      "name": "Ohniště",
+      "latitude": 49.026476,
+      "longitude": 15.151023,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
-        17,
+        19,
         15,
+        22,
         24
       ]
     },
     {
       "id": 19,
-      "name": "Hálka",
-      "latitude": 50.624306,
-      "longitude": 15.611964,
+      "name": "Stan XX",
+      "latitude": 49.025997,
+      "longitude": 15.150635,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
-        17,
-        20
+        18,
+        20,
+        23
       ]
     },
     {
       "id": 20,
-      "name": "Průchod",
-      "latitude": 50.625355,
-      "longitude": 15.611972,
+      "name": "Antuka",
+      "latitude": 49.025597,
+      "longitude": 15.150401,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
-        24,
+        14,
         19,
+        23,
         21
       ]
     },
     {
       "id": 21,
-      "name": "Krbalova",
-      "latitude": 50.626244,
-      "longitude": 15.611629,
+      "name": "Vjezd",
+      "latitude": 49.025458,
+      "longitude": 15.149667,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
         20,
-        22
+        21,
+        14
       ]
     },
     {
       "id": 22,
-      "name": "Čecha",
-      "latitude": 50.62709,
-      "longitude": 15.611044,
+      "name": "Veverka",
+      "latitude": 49.026451,
+      "longitude": 15.150099,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
-        21,
-        9
+        18,
+        13,
+        14
       ]
     },
     {
       "id": 23,
-      "name": "Socha",
-      "latitude": 50.62623,
-      "longitude": 15.607302,
+      "name": "Pole",
+      "latitude": 49.025708,
+      "longitude": 15.15158,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
-        5,
-        6,
-        12,
-        16
+        24,
+        19,
+        20
       ]
     },
     {
       "id": 24,
-      "name": "Před průchodem",
-      "latitude": 50.6252,
-      "longitude": 15.610951,
+      "name": "Plechovka",
+      "latitude": 49.026178,
+      "longitude": 15.151997,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
-        14,
-        20,
+        17,
+        23,
         18
       ]
     },
     {
       "id": 25,
-      "name": "Parkoviště",
-      "latitude": 50.628498,
-      "longitude": 15.607693,
+      "name": "Pěšina",
+      "latitude": 49.027449,
+      "longitude": 15.148444,
       "is_base": false,
       "color": "#FFFFFF",
       "adjacent_zones": [
-        2,
+        3,
+        7,
         8
       ]
     }
