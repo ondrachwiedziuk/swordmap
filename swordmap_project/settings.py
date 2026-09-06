@@ -30,7 +30,7 @@ SECRET_KEY = '17fm!5nj(gzjv)uvtffhijj9ojgrderfh90kbte2(5f3q8c7=az_17rs9@2t1f'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['https://game.itoncek.space']
+CSRF_TRUSTED_ORIGINS = ['https://game.matfyzak.cz']
 # OSM tile servers require an HTTP Referer for usage policy compliance.
 SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
 
