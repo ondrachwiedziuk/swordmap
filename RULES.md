@@ -42,4 +42,4 @@ Je zakázáno používat v průběhu hry jakýchkoliv vozidel, létajících str
 
 Ačkoliv kooperaci mezi teamy pravidla explicitně nezakazují, je vhodné se jí v zájmu dodržení ducha pravidel vyhnout.
 
-Veškeré spory, stížnosti hráčů a nejasnosti v pravidlech řeší organizátor hry. Stejně tak může upřesnit výklad pravidel, pokud hráčům není zřejmý.
+Veškeré spory, stížnosti hráčů a nejasnosti v pravidlech řeší organizátor hry. Stejně tak může upřesnit výklad pravidel, pokud hráčům není zřejmý. Organizátor se nachází v jídelně. V případě, že dojde krepový papír na základně, organizátor na vyžádání dodá další. Stejně tak ho kontaktujte, pokud dojde k poškození stanoviště.
