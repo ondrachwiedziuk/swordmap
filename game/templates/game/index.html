@@ -102,6 +102,17 @@
         font-size: 1rem;
         border-color: #555;
       }
+      .btn-feedback {
+        background-color: #444;
+        font-size: 1rem;
+        border-color: #555;
+      }
+      .divider {
+        width: 100%;
+        border: none;
+        border-top: 1px solid #555;
+        margin: 10px 0;
+      }
     </style>
   </head>
   <body>
@@ -118,6 +129,9 @@
         Tým {{ team.name }}
       </a>
       {% endfor %}
+
+      <hr class="divider" />
+      <a href="https://forms.gle/VMnHTdaUUSWqKruU7" class="btn btn-feedback">Zpětná vazba</a>
 
       <!-- <a href="{% url 'map' 'admin' %}" class="btn btn-admin">Admin Dashboard</a> -->
     </div>
